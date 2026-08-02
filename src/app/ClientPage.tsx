@@ -741,10 +741,36 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
 
             <div className="footer-contact-col">
               <h4>{t('footer_col_contact')}</h4>
-              <p><i className="fa-solid fa-envelope red-text" aria-hidden="true"></i> Info@emep-egy.com</p>
-              <p><i className="fa-brands fa-whatsapp whatsapp-text" aria-hidden="true"></i> {t('channel_whatsapp_val')}</p>
+              <p className="mb-2"><i className="fa-solid fa-envelope red-text" aria-hidden="true"></i> Info@emep-egy.com</p>
+              
+              {/* WhatsApp Eng. Osama Mohamed */}
+              <a 
+                href="https://wa.me/201111079467?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry." 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-[#25D366] transition-colors block mb-1.5"
+              >
+                <p className="flex items-center gap-2 text-sm">
+                  <i className="fa-brands fa-whatsapp whatsapp-text text-base flex-shrink-0" aria-hidden="true"></i>
+                  <span>{isAr ? 'مهندس أسامة محمد (01111079467)' : 'Eng. Osama Mohamed (01111079467)'}</span>
+                </p>
+              </a>
+
+              {/* WhatsApp Eng. Ali Rabie */}
+              <a 
+                href="https://wa.me/201030834372?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry." 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-[#25D366] transition-colors block mb-2"
+              >
+                <p className="flex items-center gap-2 text-sm">
+                  <i className="fa-brands fa-whatsapp whatsapp-text text-base flex-shrink-0" aria-hidden="true"></i>
+                  <span>{isAr ? 'مهندس علي ربيع (01030834372)' : 'Eng. Ali Rabie (01030834372)'}</span>
+                </p>
+              </a>
+
               <a href="https://maps.app.goo.gl/3kx4MnDFTmaykXjCA?g_st=ac" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF1E27] transition-colors block">
-                <p><i className="fa-solid fa-location-dot red-text" aria-hidden="true"></i> {t('channel_address_val')}</p>
+                <p className="flex items-start gap-2 text-sm"><i className="fa-solid fa-location-dot red-text text-base flex-shrink-0 mt-1" aria-hidden="true"></i> <span>{t('channel_address_val')}</span></p>
               </a>
               
               <div className="footer-social-row flex items-center gap-2.5 mt-4">
