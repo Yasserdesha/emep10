@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
+}
+
+/* Import E-MEP Legacy Custom CSS Modules */
+@import "../styles/variables.css";
+@import "../styles/hero.css";
+@import "../styles/sections.css";
+
+/* Additional Next.js specific overrides */
+:root {
+  --background: #0A0A0C;
+  --foreground: #F8FAFC;
+  --font-en: var(--font-inter), var(--font-outfit), sans-serif;
+  --font-ar: var(--font-cairo), sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Custom Webkit scrollbar for premium dark aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050507;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #22222b;
+  border-radius: 4px;
+  border: 1px solid #131317;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF1E27;
+}
+
+/* Custom scrollbar utility for independent CMS panel scrolling */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 30, 39, 0.5) rgba(19, 19, 23, 0.8);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(19, 19, 23, 0.8);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 30, 39, 0.5);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 30, 39, 0.9);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D31019;
+}
+
+/* 1. Suppress Paused Floating Chat Widgets / Banners */
+.floating-chat-widget,
+.paused-chat-banner,
+#chat-widget-container,
+[data-chat-widget="true"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 2. Site-Wide Email Hover Tooltip Suppression */
+a[href^="mailto:"],
+a[href^="mailto:"]:hover,
+a[href^="mailto:"]::before,
+a[href^="mailto:"]::after {
+  content: none !important;
+}
+
+/* 3. Cross-Browser Button Normalization Reset */
+button,
+.btn {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  border-style: solid;
+}
+
+button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid #FF1E27 !important;
+  outline-offset: 2px !important;
+}
+

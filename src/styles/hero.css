@@ -1,0 +1,135 @@
+/* Pinned Scroll-Lock Hero Section Styling */
+
+/* Tall scroll track (350vh) allowing full 185-frame scroll sequence */
+.hero-track {
+  position: relative;
+  height: 350vh;
+  background: var(--clr-bg-main);
+}
+
+/* Sticky Viewport Container - Pins the Canvas in View */
+.hero-sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+/* High Performance Canvas */
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#heroCanvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.canvas-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(10, 10, 12, 0.05) 0%, rgba(10, 10, 12, 0.65) 75%, #0A0A0C 100%);
+  pointer-events: none;
+}
+
+/* Centered Logo & Contact CTA Overlay */
+.hero-centered-logo-overlay {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  pointer-events: auto;
+}
+
+.hero-logo-white-glass {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15), 0 8px 25px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: logoPulseFloat 4s ease-in-out infinite alternate;
+}
+
+.hero-pure-logo {
+  max-width: 150px;
+  width: 35vw;
+  height: auto !important;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8));
+}
+
+@keyframes logoPulseFloat {
+  0% {
+    transform: translateY(0px) scale(1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1), 0 8px 20px rgba(0, 0, 0, 0.45);
+  }
+  100% {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 15px 30px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Request Access / Contact Us Hero CTA Button */
+.hero-cta-btn {
+  background: linear-gradient(135deg, #FF1E27, #D31019) !important;
+  background-color: #D31019 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 25px rgba(211, 16, 25, 0.5), 0 0 15px rgba(255, 30, 39, 0.4) !important;
+  border: 1px solid #FF1E27 !important;
+  padding: 0.85rem 1.85rem;
+  font-size: 0.92rem;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+  text-transform: none;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  forced-color-adjust: none !important;
+}
+
+.hero-cta-btn:hover {
+  background: linear-gradient(135deg, #FF3B44, #FF1E27) !important;
+  background-color: #FF1E27 !important;
+  color: #ffffff !important;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(211, 16, 25, 0.7), 0 0 25px rgba(255, 30, 39, 0.6) !important;
+}
+
+@media (max-width: 768px) {
+  .hero-logo-white-glass {
+    padding: 0.5rem 1rem;
+  }
+  .hero-pure-logo {
+    max-width: 100px;
+    width: 40vw;
+    height: auto !important;
+  }
+  .hero-cta-btn {
+    padding: 0.7rem 1.4rem;
+    font-size: 0.82rem;
+  }
+}
