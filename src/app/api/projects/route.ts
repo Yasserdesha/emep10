@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
 import { verifySessionToken } from '../admin/login/route';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 interface ProjectItem {
   id: number;
@@ -16,6 +18,32 @@ interface ProjectItem {
 }
 
 const getJsonPath = () => path.join(process.cwd(), 'src/data/projects.json');
+
+// In-memory cache fallback for serverless environments when local filesystem is read-only
+let inMemoryData: { projects: ProjectItem[] } | null = null;
+
+async function readLocalData(): Promise<{ projects: ProjectItem[] }> {
+  if (inMemoryData) return inMemoryData;
+  try {
+    const jsonPath = getJsonPath();
+    const fileContent = await fs.readFile(jsonPath, 'utf8');
+    inMemoryData = JSON.parse(fileContent);
+    return inMemoryData!;
+  } catch (error) {
+    console.error('Failed to read local projects database:', error);
+    return inMemoryData || { projects: [] };
+  }
+}
+
+async function saveLocalData(data: { projects: ProjectItem[] }) {
+  inMemoryData = data;
+  try {
+    const jsonPath = getJsonPath();
+    await fs.writeFile(jsonPath, JSON.stringify(data, null, 2), 'utf8');
+  } catch (fsErr) {
+    console.warn('fs.writeFile failed (read-only / Vercel serverless environment):', fsErr);
+  }
+}
 
 // Helper to verify admin authorization via HttpOnly session cookie or Bearer header
 function isAuthorized(req: NextRequest): boolean {
@@ -32,13 +60,46 @@ function isAuthorized(req: NextRequest): boolean {
   );
 }
 
-// GET handler: reads and returns the projects data
+// Helper mapper from Supabase snake_case to app camelCase
+function mapSupabaseToProjectItem(row: any): ProjectItem {
+  return {
+    id: Number(row.id),
+    image: row.image,
+    titleEn: row.title_en,
+    titleAr: row.title_ar,
+    category: row.category,
+    catEn: row.cat_en,
+    catAr: row.cat_ar,
+    descEn: row.desc_en,
+    descAr: row.desc_ar,
+  };
+}
+
+// GET handler: reads and returns the projects data (with Supabase primary & JSON fallback)
 export async function GET() {
   try {
-    const jsonPath = getJsonPath();
-    const fileContent = await fs.readFile(jsonPath, 'utf8');
-    const data = JSON.parse(fileContent);
-    return NextResponse.json(data);
+    if (isSupabaseConfigured() && supabase) {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (!error && data && data.length > 0) {
+        const projects = data.map(mapSupabaseToProjectItem);
+        return NextResponse.json({ projects }, {
+          headers: {
+            'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+          },
+        });
+      }
+    }
+
+    const data = await readLocalData();
+    return NextResponse.json(data, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+      },
+    });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Unknown error';
     console.error('Failed to read projects database:', error);
@@ -59,22 +120,42 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { titleEn, titleAr, category, catEn, catAr, descEn, descAr, image } = body;
 
-    // Validate inputs
     if (!titleEn || !titleAr || !category || !catEn || !catAr || !descEn || !descAr) {
       return NextResponse.json({ message: 'All text fields are required' }, { status: 400 });
     }
 
-    const jsonPath = getJsonPath();
-    const fileContent = await fs.readFile(jsonPath, 'utf8');
-    const data = JSON.parse(fileContent);
+    let createdProject: ProjectItem | null = null;
 
-    // Generate new ID
-    const newId = data.projects.length > 0 
-      ? Math.max(...data.projects.map((p: ProjectItem) => p.id)) + 1 
-      : 1;
+    if (isSupabaseConfigured() && supabase) {
+      const { data, error } = await supabase
+        .from('projects')
+        .insert([{
+          image: image || '/assets/projects/portfolio-2_page-0004.jpg',
+          title_en: titleEn.trim(),
+          title_ar: titleAr.trim(),
+          category: category.trim(),
+          cat_en: catEn.trim(),
+          cat_ar: catAr.trim(),
+          desc_en: descEn.trim(),
+          desc_ar: descAr.trim(),
+        }])
+        .select()
+        .single();
 
-    // Build new project object
-    const newProject: ProjectItem = {
+      if (!error && data) {
+        createdProject = mapSupabaseToProjectItem(data);
+      } else if (error) {
+        console.error('Supabase insert error:', error);
+      }
+    }
+
+    // Always update local data / memory fallback
+    const localData = await readLocalData();
+    const newId = createdProject
+      ? createdProject.id
+      : (localData.projects.length > 0 ? Math.max(...localData.projects.map((p: ProjectItem) => p.id)) + 1 : 1);
+
+    const newProject: ProjectItem = createdProject || {
       id: newId,
       image: image || '/assets/projects/portfolio-2_page-0004.jpg',
       titleEn: titleEn.trim(),
@@ -86,9 +167,12 @@ export async function POST(req: NextRequest) {
       descAr: descAr.trim(),
     };
 
-    // Append and save
-    data.projects.push(newProject);
-    await fs.writeFile(jsonPath, JSON.stringify(data, null, 2), 'utf8');
+    localData.projects.push(newProject);
+    await saveLocalData(localData);
+
+    // Invalidate Next.js cache for immediate update
+    revalidatePath('/');
+    revalidatePath('/api/projects');
 
     return NextResponse.json({ message: 'Project added successfully', project: newProject }, { status: 201 });
   } catch (error: unknown) {
@@ -115,33 +199,54 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: 'Project ID is required for editing' }, { status: 400 });
     }
 
-    const jsonPath = getJsonPath();
-    const fileContent = await fs.readFile(jsonPath, 'utf8');
-    const data = JSON.parse(fileContent);
+    const targetId = Number(id);
 
-    const index = data.projects.findIndex((p: ProjectItem) => p.id === Number(id));
-    if (index === -1) {
-      return NextResponse.json({ message: 'Project not found' }, { status: 404 });
+    if (isSupabaseConfigured() && supabase) {
+      const updates: any = {};
+      if (titleEn) updates.title_en = titleEn.trim();
+      if (titleAr) updates.title_ar = titleAr.trim();
+      if (category) updates.category = category.trim();
+      if (catEn) updates.cat_en = catEn.trim();
+      if (catAr) updates.cat_ar = catAr.trim();
+      if (descEn) updates.desc_en = descEn.trim();
+      if (descAr) updates.desc_ar = descAr.trim();
+      if (image) updates.image = image.trim();
+      updates.updated_at = new Date().toISOString();
+
+      const { error } = await supabase
+        .from('projects')
+        .update(updates)
+        .eq('id', targetId);
+
+      if (error) {
+        console.error('Supabase update error:', error);
+      }
     }
 
-    // Update existing project
-    data.projects[index] = {
-      ...data.projects[index],
-      titleEn: titleEn ? titleEn.trim() : data.projects[index].titleEn,
-      titleAr: titleAr ? titleAr.trim() : data.projects[index].titleAr,
-      category: category ? category.trim() : data.projects[index].category,
-      catEn: catEn ? catEn.trim() : data.projects[index].catEn,
-      catAr: catAr ? catAr.trim() : data.projects[index].catAr,
-      descEn: descEn ? descEn.trim() : data.projects[index].descEn,
-      descAr: descAr ? descAr.trim() : data.projects[index].descAr,
-      image: image ? image.trim() : data.projects[index].image,
-    };
+    // Always update local memory/file fallback
+    const localData = await readLocalData();
+    const index = localData.projects.findIndex((p: ProjectItem) => p.id === targetId);
+    if (index !== -1) {
+      localData.projects[index] = {
+        ...localData.projects[index],
+        titleEn: titleEn ? titleEn.trim() : localData.projects[index].titleEn,
+        titleAr: titleAr ? titleAr.trim() : localData.projects[index].titleAr,
+        category: category ? category.trim() : localData.projects[index].category,
+        catEn: catEn ? catEn.trim() : localData.projects[index].catEn,
+        catAr: catAr ? catAr.trim() : localData.projects[index].catAr,
+        descEn: descEn ? descEn.trim() : localData.projects[index].descEn,
+        descAr: descAr ? descAr.trim() : localData.projects[index].descAr,
+        image: image ? image.trim() : localData.projects[index].image,
+      };
+      await saveLocalData(localData);
+    }
 
-    await fs.writeFile(jsonPath, JSON.stringify(data, null, 2), 'utf8');
+    // Invalidate Next.js cache for immediate update
+    revalidatePath('/');
+    revalidatePath('/api/projects');
 
     return NextResponse.json({ 
-      message: 'Project updated successfully', 
-      project: data.projects[index] 
+      message: 'Project updated successfully' 
     }, { status: 200 });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Unknown error';
@@ -172,19 +277,27 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Project ID is required for deletion' }, { status: 400 });
     }
 
-    const jsonPath = getJsonPath();
-    const fileContent = await fs.readFile(jsonPath, 'utf8');
-    const data = JSON.parse(fileContent);
-
     const targetId = Number(idToDelete);
-    const initialLength = data.projects.length;
-    data.projects = data.projects.filter((p: ProjectItem) => p.id !== targetId);
 
-    if (data.projects.length === initialLength) {
-      return NextResponse.json({ message: 'Project not found' }, { status: 404 });
+    if (isSupabaseConfigured() && supabase) {
+      const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', targetId);
+
+      if (error) {
+        console.error('Supabase delete error:', error);
+      }
     }
 
-    await fs.writeFile(jsonPath, JSON.stringify(data, null, 2), 'utf8');
+    // Update local memory/file fallback
+    const localData = await readLocalData();
+    localData.projects = localData.projects.filter((p: ProjectItem) => p.id !== targetId);
+    await saveLocalData(localData);
+
+    // Invalidate Next.js cache for immediate update
+    revalidatePath('/');
+    revalidatePath('/api/projects');
 
     return NextResponse.json({ message: 'Project deleted successfully' }, { status: 200 });
   } catch (error: unknown) {

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
-
 import { verifySessionToken } from '../admin/login/route';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // Helper to verify admin authorization via HttpOnly session cookie or Bearer header
 function isAuthorized(req: NextRequest): boolean {
@@ -37,30 +37,76 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Uploaded file must be an image' }, { status: 400 });
     }
 
-    // Ensure uploads directory exists
-    const uploadsDir = path.join(process.cwd(), 'public/uploads/projects');
-    await fs.mkdir(uploadsDir, { recursive: true });
-
-    // Generate safe unique filename
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    
     const sanitizeFilename = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
     const filename = `proj_${Date.now()}_${sanitizeFilename}`;
-    const filePath = path.join(uploadsDir, filename);
 
-    // Save to disk
-    await fs.writeFile(filePath, buffer);
+    // 1. Try Supabase Storage upload first if configured
+    if (isSupabaseConfigured() && supabase) {
+      try {
+        const { error: uploadError } = await supabase.storage
+          .from('projects')
+          .upload(filename, buffer, {
+            contentType: file.type,
+            upsert: true,
+          });
 
-    const publicUrl = `/uploads/projects/${filename}`;
+        if (!uploadError) {
+          const { data: publicUrlData } = supabase.storage
+            .from('projects')
+            .getPublicUrl(filename);
 
-    return NextResponse.json({
-      message: 'File uploaded successfully',
-      url: publicUrl,
-      filename,
-      size: file.size,
-      type: file.type,
-    }, { status: 201 });
+          if (publicUrlData?.publicUrl) {
+            return NextResponse.json({
+              message: 'File uploaded successfully to Supabase Storage',
+              url: publicUrlData.publicUrl,
+              filename,
+              size: file.size,
+              type: file.type,
+            }, { status: 201 });
+          }
+        } else {
+          console.warn('Supabase storage upload error:', uploadError);
+        }
+      } catch (sbErr) {
+        console.warn('Supabase storage upload exception:', sbErr);
+      }
+    }
+
+    // 2. Try local disk write (local development)
+    try {
+      const uploadsDir = path.join(process.cwd(), 'public/uploads/projects');
+      await fs.mkdir(uploadsDir, { recursive: true });
+
+      const filePath = path.join(uploadsDir, filename);
+      await fs.writeFile(filePath, buffer);
+
+      const publicUrl = `/uploads/projects/${filename}`;
+
+      return NextResponse.json({
+        message: 'File uploaded successfully (Local storage)',
+        url: publicUrl,
+        filename,
+        size: file.size,
+        type: file.type,
+      }, { status: 201 });
+    } catch (fsErr) {
+      // 3. Fallback for read-only / serverless environment (Vercel)
+      console.warn('Local filesystem write failed (serverless environment). Using Base64 data URL fallback:', fsErr);
+      
+      const mimeType = file.type || 'image/png';
+      const base64Data = buffer.toString('base64');
+      const dataUrl = `data:${mimeType};base64,${base64Data}`;
+
+      return NextResponse.json({
+        message: 'File uploaded successfully (Base64 data URL)',
+        url: dataUrl,
+        filename: file.name,
+        size: file.size,
+        type: file.type,
+      }, { status: 201 });
+    }
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('File upload failed:', error);

@@ -84,7 +84,11 @@ export async function POST(req: NextRequest) {
       brandLogos: brandLogosToSave
     };
 
-    await fs.writeFile(jsonPath, JSON.stringify(dataToSave, null, 2), 'utf8');
+    try {
+      await fs.writeFile(jsonPath, JSON.stringify(dataToSave, null, 2), 'utf8');
+    } catch (fsErr) {
+      console.warn('fs.writeFile failed on backup restore (read-only environment):', fsErr);
+    }
 
     return NextResponse.json({ 
       message: 'Projects database successfully restored', 
