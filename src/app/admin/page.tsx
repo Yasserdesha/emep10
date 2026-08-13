@@ -23,6 +23,7 @@ export default function AdminPage() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isVerifyingSession, setIsVerifyingSession] = useState(true);
+  const [email, setEmail] = useState('admin@emep-egy.com');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
@@ -136,8 +137,8 @@ export default function AdminPage() {
     e.preventDefault();
     setLoginError('');
 
-    if (!password) {
-      setLoginError(isAr ? 'الرجاء إدخال رمز الدخول' : 'Please enter access key');
+    if (!email || !password) {
+      setLoginError(isAr ? 'الرجاء إدخال البريد الإلكتروني وكلمة السر' : 'Please enter email and password');
       return;
     }
 
@@ -145,13 +146,13 @@ export default function AdminPage() {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: password.trim() }),
+        body: JSON.stringify({ email: email.trim(), password: password.trim() }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || (isAr ? 'رمز الدخول غير صحيح' : 'Invalid access key'));
+        throw new Error(data.message || (isAr ? 'بيانات الدخول غير صحيحة' : 'Invalid login credentials'));
       }
 
       setIsLoggedIn(true);
@@ -494,8 +495,28 @@ export default function AdminPage() {
 
               <form onSubmit={handleLogin} className="space-y-4" autoComplete="off">
                 <div>
-                  <label htmlFor="admin_pass" className="block text-sm font-semibold mb-2 text-[#94A3B8]">
-                    {isAr ? 'رمز الدخول الخاص بالإدارة' : 'Access Key'}
+                  <label htmlFor="admin_email" className="block text-xs font-bold uppercase mb-1.5 text-[#94A3B8]">
+                    {isAr ? 'البريد الإلكتروني للإدارة' : 'Admin Email'}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      id="admin_email"
+                      name="admin_email_input"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-[#131317] border border-white/10 rounded-md p-3 text-white focus:border-[#D31019] outline-none transition-colors pr-10 rtl:pl-10 rtl:pr-3 text-sm"
+                      placeholder="admin@emep-egy.com"
+                      autoComplete="username"
+                      required
+                    />
+                    <i className="fa-solid fa-envelope absolute right-3 top-3.5 text-xs text-[#64748B] rtl:right-auto rtl:left-3"></i>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="admin_pass" className="block text-xs font-bold uppercase mb-1.5 text-[#94A3B8]">
+                    {isAr ? 'كلمة السر' : 'Password'}
                   </label>
                   <div className="relative">
                     <input
@@ -504,9 +525,9 @@ export default function AdminPage() {
                       name="admin_pass_input"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-[#131317] border border-white/10 rounded-md p-3 text-white focus:border-[#D31019] outline-none transition-colors pr-10 rtl:pl-10 rtl:pr-3"
+                      className="w-full bg-[#131317] border border-white/10 rounded-md p-3 text-white focus:border-[#D31019] outline-none transition-colors pr-10 rtl:pl-10 rtl:pr-3 text-sm"
                       placeholder="••••••••"
-                      autoComplete="new-password"
+                      autoComplete="current-password"
                       required
                     />
                     <i className="fa-solid fa-key absolute right-3 top-3.5 text-xs text-[#64748B] rtl:right-auto rtl:left-3"></i>
@@ -525,7 +546,7 @@ export default function AdminPage() {
                   className="btn btn-primary w-full py-3 rounded font-bold text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
                 >
                   <i className="fa-solid fa-shield-halved"></i>
-                  <span>{isAr ? 'تسجيل الدخول المشفر' : 'Secure Login'}</span>
+                  <span>{isAr ? 'تسجيل الدخول (Supabase Auth)' : 'Login via Supabase Auth'}</span>
                 </button>
               </form>
             </div>

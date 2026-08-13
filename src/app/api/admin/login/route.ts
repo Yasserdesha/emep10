@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // In-memory rate limiting map for brute-force protection
 const loginAttempts = new Map<string, { count: number; lockUntil: number }>();
@@ -47,35 +48,71 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { password } = await req.json();
+    const body = await req.json();
+    const { email, password } = body;
 
     if (!password || typeof password !== 'string') {
-      return NextResponse.json({ message: 'رمز الدخول مطلوب' }, { status: 400 });
+      return NextResponse.json({ message: 'كلمة السر مطلوبة' }, { status: 400 });
     }
 
-    const expectedPassword = process.env.ADMIN_PASSWORD || 'E@mep301997';
+    let isAuthenticated = false;
+    let userEmail = email ? email.trim() : 'admin@emep-egy.com';
 
-    const passwordBuffer = Buffer.from(password.trim());
-    const expectedBuffer = Buffer.from(expectedPassword);
+    // 1. Authenticate via Supabase Auth if Supabase is configured and email is provided
+    if (isSupabaseConfigured() && supabase && email) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password.trim(),
+      });
 
-    const isMatch = passwordBuffer.length === expectedBuffer.length &&
-      crypto.timingSafeEqual(passwordBuffer, expectedBuffer);
+      if (!error && data?.user) {
+        isAuthenticated = true;
+        userEmail = data.user.email || userEmail;
+      } else if (error) {
+        // Record failed attempt
+        const currentCount = (attempt && attempt.lockUntil <= now ? 0 : attempt?.count || 0) + 1;
+        let lockUntil = 0;
+        if (currentCount >= MAX_ATTEMPTS) {
+          lockUntil = now + LOCK_TIME_MS;
+        }
+        loginAttempts.set(ip, { count: currentCount, lockUntil });
 
-    if (!isMatch) {
-      // Record failed attempt
-      const currentCount = (attempt && attempt.lockUntil <= now ? 0 : attempt?.count || 0) + 1;
-      let lockUntil = 0;
-      if (currentCount >= MAX_ATTEMPTS) {
-        lockUntil = now + LOCK_TIME_MS;
+        const remaining = MAX_ATTEMPTS - currentCount;
+        const warning = remaining > 0 
+          ? `بيانات الدخول غير صحيحة. متبقي ${remaining} محاولات قبل الحظر المؤقت.`
+          : `تم حظر المحاولات من هذا الجهاز لمدة 15 دقيقة لحماية الموقع.`;
+
+        return NextResponse.json({ message: warning }, { status: 401 });
       }
-      loginAttempts.set(ip, { count: currentCount, lockUntil });
+    }
 
-      const remaining = MAX_ATTEMPTS - currentCount;
-      const warning = remaining > 0 
-        ? `رمز الدخول غير صحيح. متبقي ${remaining} محاولات قبل الحظر المؤقت.`
-        : `تم حظر المحاولات من هذا الجهاز لمدة 15 دقيقة لحماية الموقع.`;
+    // 2. Fallback authentication using ADMIN_PASSWORD if Supabase Auth wasn't used
+    if (!isAuthenticated) {
+      const expectedPassword = process.env.ADMIN_PASSWORD || 'E@mep301997';
+      const passwordBuffer = Buffer.from(password.trim());
+      const expectedBuffer = Buffer.from(expectedPassword);
 
-      return NextResponse.json({ message: warning }, { status: 401 });
+      const isMatch = passwordBuffer.length === expectedBuffer.length &&
+        crypto.timingSafeEqual(passwordBuffer, expectedBuffer);
+
+      if (isMatch) {
+        isAuthenticated = true;
+      } else {
+        // Record failed attempt
+        const currentCount = (attempt && attempt.lockUntil <= now ? 0 : attempt?.count || 0) + 1;
+        let lockUntil = 0;
+        if (currentCount >= MAX_ATTEMPTS) {
+          lockUntil = now + LOCK_TIME_MS;
+        }
+        loginAttempts.set(ip, { count: currentCount, lockUntil });
+
+        const remaining = MAX_ATTEMPTS - currentCount;
+        const warning = remaining > 0 
+          ? `كلمة السر غير صحيحة. متبقي ${remaining} محاولات قبل الحظر المؤقت.`
+          : `تم حظر المحاولات من هذا الجهاز لمدة 15 دقيقة لحماية الموقع.`;
+
+        return NextResponse.json({ message: warning }, { status: 401 });
+      }
     }
 
     // Clear failed attempts on successful login
@@ -87,7 +124,8 @@ export async function POST(req: NextRequest) {
     // Create HTTP-Only, Secure, SameSite=Strict cookie response
     const response = NextResponse.json({ 
       message: 'تم تسجيل الدخول بنجاح', 
-      authenticated: true 
+      authenticated: true,
+      email: userEmail
     }, { status: 200 });
 
     response.cookies.set({
@@ -105,4 +143,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'خطأ في عملية التحقق من الهوية' }, { status: 500 });
   }
 }
-
