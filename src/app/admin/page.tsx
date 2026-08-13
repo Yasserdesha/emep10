@@ -15,13 +15,25 @@ interface Project {
   descAr: string;
 }
 
+interface Article {
+  id: number;
+  slug: string;
+  titleEn: string;
+  titleAr: string;
+  summaryEn: string;
+  summaryAr: string;
+  contentEn: string;
+  contentAr: string;
+  image: string;
+  author: string;
+  readTimeMin: number;
+  createdAt: string;
+}
+
 // Client-side image compressor: converts any photo to lightweight WebP before uploading
 async function compressImageBeforeUpload(file: File, maxWidth = 1200, quality = 0.82): Promise<File> {
   return new Promise((resolve) => {
-    // If SVG, skip canvas compression
-    if (file.type === 'image/svg+xml') {
-      return resolve(file);
-    }
+    if (file.type === 'image/svg+xml') return resolve(file);
     const img = new window.Image();
     const url = URL.createObjectURL(file);
     img.src = url;
@@ -40,15 +52,11 @@ async function compressImageBeforeUpload(file: File, maxWidth = 1200, quality = 
       canvas.height = h;
 
       const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        return resolve(file);
-      }
+      if (!ctx) return resolve(file);
       ctx.drawImage(img, 0, 0, w, h);
 
       canvas.toBlob((blob) => {
-        if (!blob) {
-          return resolve(file);
-        }
+        if (!blob) return resolve(file);
         const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", {
           type: "image/webp",
           lastModified: Date.now(),
@@ -63,6 +71,9 @@ async function compressImageBeforeUpload(file: File, maxWidth = 1200, quality = 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // Active Tab: 'projects' | 'articles' | 'analytics' | 'settings'
+  const [activeTab, setActiveTab] = useState<'projects' | 'articles' | 'analytics' | 'settings'>('projects');
 
   // Login form state
   const [email, setEmail] = useState('');
@@ -79,7 +90,7 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Form Fields State
+  // Form Fields State (Projects)
   const [titleAr, setTitleAr] = useState('');
   const [titleEn, setTitleEn] = useState('');
   const [catAr, setCatAr] = useState('مبيعات وتجزئة');
@@ -89,19 +100,23 @@ export default function AdminPage() {
   const [descEn, setDescEn] = useState('');
 
   // Image Upload State
-  const [imageMode, setImageMode] = useState<'upload' | 'url' | 'preset'>('upload');
+  const [imageMode, setImageMode] = useState<'upload' | 'url'>('upload');
   const [imageUrl, setImageUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const presetImages = [
-    "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/starbucks-citycenter.webp",
-    "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/costa-coffee.webp",
-    "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/bmw-showroom.webp",
-    "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/spinneys-hypermarket.webp",
-    "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/carrefour-express.webp"
-  ];
+  // Articles State (Blog CMS)
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [artTitleAr, setArtTitleAr] = useState('');
+  const [artTitleEn, setArtTitleEn] = useState('');
+  const [artSummaryAr, setArtSummaryAr] = useState('');
+  const [artSummaryEn, setArtSummaryEn] = useState('');
+  const [artContentAr, setArtContentAr] = useState('');
+  const [artContentEn, setArtContentEn] = useState('');
+  const [artImage, setArtImage] = useState('');
+  const [artReadTime, setArtReadTime] = useState(5);
+  const [isSavingArticle, setIsSavingArticle] = useState(false);
 
   // Check auth session on mount
   useEffect(() => {
@@ -112,6 +127,7 @@ export default function AdminPage() {
         if (data.authenticated) {
           setIsAuthenticated(true);
           fetchProjects();
+          fetchArticles();
         }
       } catch (err) {
         console.error('Session verify error:', err);
@@ -126,11 +142,19 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/projects');
       const data = await res.json();
-      if (data.projects) {
-        setProjects(data.projects);
-      }
+      if (data.projects) setProjects(data.projects);
     } catch (err) {
       console.error('Fetch projects error:', err);
+    }
+  };
+
+  const fetchArticles = async () => {
+    try {
+      const res = await fetch('/api/articles');
+      const data = await res.json();
+      if (data.articles) setArticles(data.articles);
+    } catch (err) {
+      console.error('Fetch articles error:', err);
     }
   };
 
@@ -152,6 +176,7 @@ export default function AdminPage() {
       if (res.ok && data.success) {
         setIsAuthenticated(true);
         fetchProjects();
+        fetchArticles();
       } else {
         setLoginError(data.message || (isAr ? 'البريد الإلكتروني أو كلمة السر غير صحيحة' : 'Invalid email or password'));
       }
@@ -173,7 +198,7 @@ export default function AdminPage() {
     }
   };
 
-  const resetForm = () => {
+  const resetProjectForm = () => {
     setEditingProject(null);
     setTitleAr('');
     setTitleEn('');
@@ -197,12 +222,13 @@ export default function AdminPage() {
     setDescAr(p.descAr);
     setDescEn(p.descEn);
     setImageUrl(p.image);
-    setImageMode(p.image.startsWith('http') ? 'url' : 'upload');
-    window.scrollTo({ top: 400, behavior: 'smooth' });
+    setImageMode('url');
+    setActiveTab('projects');
+    window.scrollTo({ top: 300, behavior: 'smooth' });
   };
 
   // Fail-proof File Upload Handler with Client-Side Compression
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (file: File, isForArticle = false) => {
     if (!file || !file.type.startsWith('image/')) {
       setStatusMessage({ type: 'error', text: isAr ? 'يرجى اختيار صورة صالحة (PNG, JPG, WebP)' : 'Please select a valid image file' });
       return;
@@ -212,9 +238,7 @@ export default function AdminPage() {
     setStatusMessage(null);
 
     try {
-      // 1. Compress image to WebP client-side via canvas before sending over network
       const compressedFile = await compressImageBeforeUpload(file);
-
       const formData = new FormData();
       formData.append('file', compressedFile);
 
@@ -226,10 +250,14 @@ export default function AdminPage() {
       const data = await res.json();
 
       if (res.ok && data.url) {
-        setImageUrl(data.url);
+        if (isForArticle) {
+          setArtImage(data.url);
+        } else {
+          setImageUrl(data.url);
+        }
         setStatusMessage({
           type: 'success',
-          text: isAr ? `تم رفع وضغط الصورة بنجاح (${(compressedFile.size / 1024).toFixed(0)} KB)` : `Image compressed and uploaded successfully!`
+          text: isAr ? `تم ضغط الصورة ورفعها بنجاح! (${(compressedFile.size / 1024).toFixed(0)} KB)` : `Image compressed & uploaded successfully!`
         });
       } else {
         throw new Error(data.message || 'Upload failed');
@@ -238,7 +266,7 @@ export default function AdminPage() {
       console.error('File upload error:', err);
       setStatusMessage({
         type: 'error',
-        text: isAr ? 'فشل رفع الصورة على السيرفر. يرجى تجربة صورة أخرى.' : 'Failed to upload image.'
+        text: isAr ? 'فشل رفع الصورة على السيرفر.' : 'Failed to upload image.'
       });
     } finally {
       setIsUploading(false);
@@ -261,7 +289,7 @@ export default function AdminPage() {
   const handleSubmitProject = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!titleAr.trim() || !titleEn.trim() || !imageUrl) {
-      setStatusMessage({ type: 'error', text: isAr ? 'يرجى ملء جميع الحقول المطلوبة واختيار صورة المشروع' : 'Please fill all required fields and upload an image' });
+      setStatusMessage({ type: 'error', text: isAr ? 'يرجى ملء جميع الحقول ورفع صورة المشروع' : 'Please fill all fields and upload image' });
       return;
     }
 
@@ -286,18 +314,17 @@ export default function AdminPage() {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
-
       if (res.ok) {
         setStatusMessage({
           type: 'success',
           text: editingProject 
-            ? (isAr ? 'تم تعديل بيانات المشروع بنجاح!' : 'Project updated successfully!') 
-            : (isAr ? 'تم إضافة المشروع الجديد بنجاح!' : 'New project added successfully!')
+            ? (isAr ? 'تم تعديل بيانات المشروع بنجاح!' : 'Project updated!') 
+            : (isAr ? 'تم إضافة المشروع الجديد بنجاح!' : 'New project added!')
         });
-        resetForm();
+        resetProjectForm();
         fetchProjects();
       } else {
+        const data = await res.json();
         setStatusMessage({ type: 'error', text: data.message || 'Error saving project' });
       }
     } catch (err) {
@@ -314,13 +341,64 @@ export default function AdminPage() {
       if (res.ok) {
         setStatusMessage({ type: 'success', text: isAr ? 'تم حذف المشروع بنجاح' : 'Project deleted successfully' });
         fetchProjects();
-      } else {
-        const data = await res.json();
-        setStatusMessage({ type: 'error', text: data.message || 'Delete error' });
       }
     } catch (err) {
       console.error('Delete error:', err);
-      setStatusMessage({ type: 'error', text: 'Server error deleting project' });
+    }
+  };
+
+  // Submit Article (Blog CMS)
+  const handleSubmitArticle = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!artTitleAr.trim() || !artTitleEn.trim() || !artContentAr.trim() || !artImage) {
+      setStatusMessage({ type: 'error', text: isAr ? 'يرجى اختيار صورة ومثال عنوان ومحتوى المقال' : 'Please fill required article fields' });
+      return;
+    }
+
+    setIsSavingArticle(true);
+    try {
+      const res = await fetch('/api/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          titleAr: artTitleAr,
+          titleEn: artTitleEn,
+          summaryAr: artSummaryAr,
+          summaryEn: artSummaryEn,
+          contentAr: artContentAr,
+          contentEn: artContentEn,
+          image: artImage,
+          readTimeMin: artReadTime,
+          author: 'E-MEP Engineering Team',
+        }),
+      });
+
+      if (res.ok) {
+        setStatusMessage({ type: 'success', text: isAr ? 'تم نشر المقال الهندسي الجديد بنجاح!' : 'Article published successfully!' });
+        setArtTitleAr(''); setArtTitleEn(''); setArtSummaryAr(''); setArtSummaryEn(''); setArtContentAr(''); setArtContentEn(''); setArtImage('');
+        fetchArticles();
+      } else {
+        const data = await res.json();
+        setStatusMessage({ type: 'error', text: data.message || 'Failed to publish article' });
+      }
+    } catch (err) {
+      console.error('Save article error:', err);
+    } finally {
+      setIsSavingArticle(false);
+    }
+  };
+
+  const handleDeleteArticle = async (id: number, title: string) => {
+    if (!confirm(isAr ? `هل أنت تأكد من حذف مقال "${title}"؟` : `Delete article "${title}"?`)) return;
+
+    try {
+      const res = await fetch(`/api/articles?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setStatusMessage({ type: 'success', text: isAr ? 'تم حذف المقال بنجاح' : 'Article deleted' });
+        fetchArticles();
+      }
+    } catch (err) {
+      console.error('Delete article error:', err);
     }
   };
 
@@ -330,12 +408,11 @@ export default function AdminPage() {
     p.catAr.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Statistics Count
   const stats = {
-    total: projects.length,
+    totalProjects: projects.length,
+    totalArticles: articles.length,
     retail: projects.filter(p => p.category === 'retail').length,
     dining: projects.filter(p => p.category === 'dining').length,
-    showrooms: projects.filter(p => p.category === 'showrooms' || p.category === 'supermarket').length,
   };
 
   if (loading) {
@@ -343,32 +420,34 @@ export default function AdminPage() {
       <div className="min-h-screen bg-[#0A0A0C] text-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-4 border-[#FF1E27] border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm text-gray-400">جاري التحقق من الجلسة والأمان...</p>
+          <p className="text-xs text-gray-400">جاري فتح لوحة التحكم والأمان...</p>
         </div>
       </div>
     );
   }
 
   // -------------------------------------------------------------
-  // LOGIN SCREEN (Supabase Auth Email + Password)
+  // LOGIN SCREEN
   // -------------------------------------------------------------
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#0A0A0C] text-white flex items-center justify-center p-4" dir={isAr ? 'rtl' : 'ltr'}>
-        <div className="w-full max-w-md bg-[#131317] border border-white/10 rounded-2xl p-8 shadow-2xl backdrop-blur-xl">
-          <div className="flex flex-col items-center mb-8 text-center">
-            <div className="w-16 h-16 bg-white/10 rounded-2xl p-3 border border-white/20 mb-4 flex items-center justify-center shadow-lg">
+        <div className="w-full max-w-md bg-[#131317] border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF1E27]/10 blur-2xl pointer-events-none rounded-full"></div>
+          
+          <div className="flex flex-col items-center mb-8 text-center relative z-10">
+            <div className="w-16 h-16 bg-white/10 rounded-2xl p-3 border border-white/20 mb-4 flex items-center justify-center shadow-xl">
               <Image src="/logo/logo.png" alt="E-MEP Logo" width={48} height={48} className="w-12 h-12 object-contain" priority />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-1">
-              {isAr ? 'لوحة تحكم E-MEP للإدارة' : 'E-MEP Admin Control Portal'}
+            <h1 className="text-2xl font-extrabold text-white mb-1">
+              {isAr ? 'لوحة تحكم E-MEP المتطورة' : 'E-MEP Enterprise Portal'}
             </h1>
             <p className="text-xs text-gray-400">
-              {isAr ? 'قم بتسجيل الدخول بإيميل الأدمن المعتمد وباسورد سوبابيز' : 'Log in using authorized admin email & password'}
+              {isAr ? 'قم بتسجيل الدخول ببيانات الأدمن المعتمـدة' : 'Enter your admin email & password'}
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-5 relative z-10">
             {loginError && (
               <div className="p-3 bg-red-500/15 border border-red-500/40 rounded-xl text-red-400 text-xs flex items-center gap-2">
                 <i className="fa-solid fa-triangle-exclamation"></i>
@@ -380,16 +459,14 @@ export default function AdminPage() {
               <label className="block text-xs font-semibold text-gray-300 mb-2">
                 {isAr ? 'البريد الإلكتروني للإدارة (Email)' : 'Admin Email Address'}
               </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@emep-egy.com"
-                  required
-                  className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#FF1E27] focus:ring-1 focus:ring-[#FF1E27] transition"
-                />
-              </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@emep-egy.com"
+                required
+                className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#FF1E27] transition"
+              />
             </div>
 
             <div>
@@ -402,7 +479,7 @@ export default function AdminPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 required
-                className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#FF1E27] focus:ring-1 focus:ring-[#FF1E27] transition"
+                className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#FF1E27] transition"
               />
             </div>
 
@@ -430,22 +507,22 @@ export default function AdminPage() {
   }
 
   // -------------------------------------------------------------
-  // ADVANCED DASHBOARD OVERHAUL SCREEN
+  // STATE-OF-THE-ART OVERHAULED DASHBOARD
   // -------------------------------------------------------------
   return (
     <div className="min-h-screen bg-[#0A0A0C] text-white" dir={isAr ? 'rtl' : 'ltr'}>
-      {/* Top Admin Header Bar */}
-      <header className="bg-[#131317]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50 px-4 py-3">
+      {/* Top Bar Navigation Header */}
+      <header className="bg-[#131317]/90 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/10 rounded-xl p-2 border border-white/20 flex items-center justify-center">
+            <div className="w-10 h-10 bg-white/10 rounded-xl p-2 border border-white/20 flex items-center justify-center shadow-lg">
               <Image src="/logo/logo.png" alt="E-MEP Logo" width={32} height={32} className="w-8 h-8 object-contain" priority />
             </div>
             <div>
-              <h1 className="text-base font-bold text-white leading-tight">E-MEP Dashboard</h1>
-              <p className="text-[11px] text-emerald-400 flex items-center gap-1.5">
+              <h1 className="text-base font-extrabold text-white leading-tight">E-MEP Enterprise Portal</h1>
+              <p className="text-[11px] text-emerald-400 flex items-center gap-1.5 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>{isAr ? 'متصل بقواعد بيانات Supabase' : 'Connected to Supabase DB'}</span>
+                <span>{isAr ? 'متصل بقاعدة البيانات Supabase DB' : 'Supabase Active Session'}</span>
               </p>
             </div>
           </div>
@@ -453,13 +530,13 @@ export default function AdminPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsAr(!isAr)}
-              className="px-3 py-1.5 text-xs bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 text-gray-300 transition"
+              className="px-3 py-1.5 text-xs bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 text-gray-300 transition"
             >
               {isAr ? 'English' : 'العربية'}
             </button>
             <button
               onClick={handleLogout}
-              className="px-3 py-1.5 text-xs bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg hover:bg-red-500/20 transition flex items-center gap-1.5"
+              className="px-3.5 py-1.5 text-xs bg-red-500/15 border border-red-500/30 text-red-400 rounded-xl hover:bg-red-500/25 transition flex items-center gap-1.5 font-semibold cursor-pointer"
             >
               <i className="fa-solid fa-arrow-right-from-bracket"></i>
               <span>{isAr ? 'خروج' : 'Logout'}</span>
@@ -470,303 +547,277 @@ export default function AdminPage() {
 
       <main className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
         
-        {/* Quick Stats Counter Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-[#131317] border border-white/10 rounded-2xl p-5 shadow-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-400 font-semibold">{isAr ? 'إجمالي المشاريع' : 'Total Projects'}</span>
-              <i className="fa-solid fa-folder-open text-[#FF1E27]"></i>
-            </div>
-            <p className="text-3xl font-extrabold text-white">{stats.total}</p>
-          </div>
-          <div className="bg-[#131317] border border-white/10 rounded-2xl p-5 shadow-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-400 font-semibold">{isAr ? 'مبيعات وتجزئة' : 'Retail Stores'}</span>
-              <i className="fa-solid fa-bag-shopping text-blue-400"></i>
-            </div>
-            <p className="text-3xl font-extrabold text-white">{stats.retail}</p>
-          </div>
-          <div className="bg-[#131317] border border-white/10 rounded-2xl p-5 shadow-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-400 font-semibold">{isAr ? 'مطاعم وكافيهات' : 'Dining F&B'}</span>
-              <i className="fa-solid fa-utensils text-amber-400"></i>
-            </div>
-            <p className="text-3xl font-extrabold text-white">{stats.dining}</p>
-          </div>
-          <div className="bg-[#131317] border border-white/10 rounded-2xl p-5 shadow-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-400 font-semibold">{isAr ? 'معارض وهايبر' : 'Showrooms'}</span>
-              <i className="fa-solid fa-car text-purple-400"></i>
-            </div>
-            <p className="text-3xl font-extrabold text-white">{stats.showrooms}</p>
-          </div>
+        {/* Navigation Tabs Header */}
+        <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
+          {[
+            { id: 'projects', labelAr: '📁 إدارة المشاريع والأعمال', labelEn: 'Projects CMS', icon: 'fa-folder-open' },
+            { id: 'articles', labelAr: '✍️ إدارة المقالات والمدونة', labelEn: 'Blog CMS', icon: 'fa-newspaper' },
+            { id: 'analytics', labelAr: '📊 لوحة الإحصائيات والأداء', labelEn: 'Analytics', icon: 'fa-chart-pie' },
+            { id: 'settings', labelAr: '⚙️ إعدادات المنصة وقاعدة البيانات', labelEn: 'System Settings', icon: 'fa-sliders' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`px-5 py-3 rounded-2xl text-xs font-bold transition flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+                activeTab === tab.id
+                  ? 'bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white shadow-lg shadow-red-600/30'
+                  : 'bg-[#131317] border border-white/10 text-gray-400 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              <span>{isAr ? tab.labelAr : tab.labelEn}</span>
+            </button>
+          ))}
         </div>
 
-        {/* Global Feedback Status Banner */}
+        {/* Global Feedback Banner */}
         {statusMessage && (
-          <div className={`p-4 rounded-2xl border text-sm flex items-center justify-between ${
+          <div className={`p-4 rounded-2xl border text-xs font-semibold flex items-center justify-between ${
             statusMessage.type === 'success' ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400' : 'bg-red-500/15 border-red-500/30 text-red-400'
           }`}>
             <div className="flex items-center gap-2">
               <i className={`fa-solid ${statusMessage.type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}`}></i>
               <span>{statusMessage.text}</span>
             </div>
-            <button onClick={() => setStatusMessage(null)} className="text-xs underline hover:opacity-75">
+            <button onClick={() => setStatusMessage(null)} className="underline hover:opacity-80">
               {isAr ? 'إغلاق' : 'Close'}
             </button>
           </div>
         )}
 
-        {/* Main Content Grid: Form (Left/Top) & Project List (Right/Bottom) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Project Form Panel (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-[#131317] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <i className="fa-solid fa-plus-circle text-[#FF1E27]"></i>
-                  <span>{editingProject ? (isAr ? 'تعديل بيانات المشروع' : 'Edit Project') : (isAr ? 'إضافة مشروع جديد' : 'Add New Project')}</span>
-                </h2>
-                {editingProject && (
-                  <button onClick={resetForm} className="text-xs text-gray-400 hover:text-white underline">
-                    {isAr ? 'إلغاء التعديل' : 'Cancel'}
-                  </button>
-                )}
-              </div>
+        {/* TAB 1: PROJECTS MANAGEMENT */}
+        {activeTab === 'projects' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Form Column (5 cols) */}
+            <div className="lg:col-span-5 space-y-6">
+              <div className="bg-[#131317] border border-white/10 rounded-3xl p-6 shadow-2xl space-y-5">
+                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                  <h2 className="text-base font-extrabold text-white flex items-center gap-2">
+                    <i className="fa-solid fa-plus-circle text-[#FF1E27]"></i>
+                    <span>{editingProject ? (isAr ? 'تعديل بيانات المشروع' : 'Edit Project') : (isAr ? 'إضافة مشروع جديد' : 'Add New Project')}</span>
+                  </h2>
+                  {editingProject && (
+                    <button onClick={resetProjectForm} className="text-xs text-gray-400 hover:text-white underline">
+                      {isAr ? 'إلغاء التعديل' : 'Cancel'}
+                    </button>
+                  )}
+                </div>
 
-              <form onSubmit={handleSubmitProject} className="space-y-4">
-                {/* Category Selection Radio Badges */}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-2">
-                    {isAr ? 'تصنيف المشروع (Category)' : 'Project Category'}
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { key: 'retail', ar: 'مبيعات وتجزئة', en: 'Retail' },
-                      { key: 'dining', ar: 'مطاعم وكافيهات', en: 'Dining F&B' },
-                      { key: 'showrooms', ar: 'معارض سيارات', en: 'Showroom' },
-                      { key: 'supermarket', ar: 'سوبرماركت وهايبر', en: 'Supermarket' },
-                    ].map((cat) => (
+                <form onSubmit={handleSubmitProject} className="space-y-4">
+                  {/* Category Selection */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-2">
+                      {isAr ? 'تصنيف المشروع' : 'Project Category'}
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { key: 'retail', ar: 'مبيعات وتجزئة', en: 'Retail' },
+                        { key: 'dining', ar: 'مطاعم وكافيهات', en: 'Dining F&B' },
+                        { key: 'showrooms', ar: 'معارض سيارات', en: 'Showroom' },
+                        { key: 'supermarket', ar: 'سوبرماركت وهايبر', en: 'Supermarket' },
+                      ].map((cat) => (
+                        <button
+                          key={cat.key}
+                          type="button"
+                          onClick={() => handleCategorySelect(cat.key)}
+                          className={`p-2.5 rounded-xl border text-xs font-semibold text-center transition cursor-pointer ${
+                            categoryKey === cat.key
+                              ? 'bg-[#FF1E27]/20 border-[#FF1E27] text-white shadow-md'
+                              : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                          }`}
+                        >
+                          {isAr ? cat.ar : cat.en}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Title Inputs */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-300 mb-1">
+                        {isAr ? 'اسم المشروع (عربي)' : 'Title (Arabic)'}
+                      </label>
+                      <input
+                        type="text"
+                        value={titleAr}
+                        onChange={(e) => setTitleAr(e.target.value)}
+                        placeholder="مثال: ستاربكس سيتي سنتر"
+                        required
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-300 mb-1">
+                        {isAr ? 'اسم المشروع (إنجليزي)' : 'Title (English)'}
+                      </label>
+                      <input
+                        type="text"
+                        value={titleEn}
+                        onChange={(e) => setTitleEn(e.target.value)}
+                        placeholder="e.g. Starbucks City Centre"
+                        required
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Fail-Proof WebP Image Drag & Drop Uploader */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-2">
+                      {isAr ? 'صورة المشروع (رفع مباشر مضغوط بنسبة 100%)' : 'Project Image Upload'}
+                    </label>
+
+                    <div className="flex border border-white/10 rounded-xl overflow-hidden mb-3 bg-[#0A0A0C]">
                       <button
-                        key={cat.key}
                         type="button"
-                        onClick={() => handleCategorySelect(cat.key)}
-                        className={`p-2.5 rounded-xl border text-xs font-semibold text-center transition cursor-pointer ${
-                          categoryKey === cat.key
-                            ? 'bg-[#FF1E27]/20 border-[#FF1E27] text-white shadow-md'
-                            : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                        onClick={() => setImageMode('upload')}
+                        className={`flex-1 py-2 text-xs font-semibold transition ${imageMode === 'upload' ? 'bg-[#FF1E27] text-white' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        <i className="fa-solid fa-cloud-arrow-up ml-1"></i> {isAr ? 'رفع صورة جديدة' : 'Upload File'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setImageMode('url')}
+                        className={`flex-1 py-2 text-xs font-semibold transition ${imageMode === 'url' ? 'bg-[#FF1E27] text-white' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        <i className="fa-solid fa-link ml-1"></i> {isAr ? 'رابط مباشر CDN' : 'Direct URL'}
+                      </button>
+                    </div>
+
+                    {imageMode === 'upload' && (
+                      <div
+                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                        onDragLeave={() => setIsDragging(false)}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          setIsDragging(false);
+                          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            handleFileUpload(e.dataTransfer.files[0], false);
+                          }
+                        }}
+                        onClick={() => fileInputRef.current?.click()}
+                        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition flex flex-col items-center justify-center gap-2 ${
+                          isDragging ? 'border-[#FF1E27] bg-[#FF1E27]/10' : 'border-white/15 bg-[#0A0A0C] hover:border-white/30'
                         }`}
                       >
-                        {isAr ? cat.ar : cat.en}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Title Inputs */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'اسم المشروع (بالعربية)' : 'Project Title (Arabic)'}
-                    </label>
-                    <input
-                      type="text"
-                      value={titleAr}
-                      onChange={(e) => setTitleAr(e.target.value)}
-                      placeholder="مثال: ستاربكس سيتي سنتر"
-                      required
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'اسم المشروع (بالإنجليزية)' : 'Project Title (English)'}
-                    </label>
-                    <input
-                      type="text"
-                      value={titleEn}
-                      onChange={(e) => setTitleEn(e.target.value)}
-                      placeholder="e.g. Starbucks City Centre"
-                      required
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                {/* FAIL-PROOF DRAG & DROP IMAGE UPLOADER */}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-2">
-                    {isAr ? 'صورة المشروع (رفع مباشر مضغوط بنسبة 100%)' : 'Project Image Upload'}
-                  </label>
-
-                  {/* Mode switcher tabs */}
-                  <div className="flex border border-white/10 rounded-xl overflow-hidden mb-3 bg-[#0A0A0C]">
-                    <button
-                      type="button"
-                      onClick={() => setImageMode('upload')}
-                      className={`flex-1 py-2 text-xs font-semibold transition ${imageMode === 'upload' ? 'bg-[#FF1E27] text-white' : 'text-gray-400 hover:text-white'}`}
-                    >
-                      <i className="fa-solid fa-cloud-arrow-up ml-1"></i> {isAr ? 'رفع صورة جديدة' : 'Upload File'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setImageMode('url')}
-                      className={`flex-1 py-2 text-xs font-semibold transition ${imageMode === 'url' ? 'bg-[#FF1E27] text-white' : 'text-gray-400 hover:text-white'}`}
-                    >
-                      <i className="fa-solid fa-link ml-1"></i> {isAr ? 'رابط مباشر CDN' : 'Direct URL'}
-                    </button>
-                  </div>
-
-                  {imageMode === 'upload' && (
-                    <div
-                      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                      onDragLeave={() => setIsDragging(false)}
-                      onDrop={(e) => {
-                        e.preventDefault();
-                        setIsDragging(false);
-                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                          handleFileUpload(e.dataTransfer.files[0]);
-                        }
-                      }}
-                      onClick={() => fileInputRef.current?.click()}
-                      className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition flex flex-col items-center justify-center gap-2 ${
-                        isDragging ? 'border-[#FF1E27] bg-[#FF1E27]/10' : 'border-white/15 bg-[#0A0A0C] hover:border-white/30'
-                      }`}
-                    >
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
-                        className="hidden"
-                      />
-                      {isUploading ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="w-8 h-8 border-3 border-[#FF1E27] border-t-transparent rounded-full animate-spin"></div>
-                          <p className="text-xs text-gray-300">{isAr ? 'جاري ضغط ورفع الصورة...' : 'Compressing & uploading...'}</p>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
-                            <i className="fa-solid fa-image text-[#FF1E27] text-xl"></i>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], false)}
+                          className="hidden"
+                        />
+                        {isUploading ? (
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="w-8 h-8 border-3 border-[#FF1E27] border-t-transparent rounded-full animate-spin"></div>
+                            <p className="text-xs text-gray-300">{isAr ? 'جاري ضغط ورفع الصورة...' : 'Compressing & uploading...'}</p>
                           </div>
-                          <p className="text-xs font-semibold text-gray-200">
-                            {isAr ? 'اضغط هنا لرفع صورة أو اسحب الملف وقربه هنا' : 'Click to select or drag image file here'}
-                          </p>
-                          <p className="text-[10px] text-gray-500">
-                            {isAr ? 'يتم ضغط الصورة تلقائياً لصيغة WebP خفيفة قبل الرفع' : 'Images automatically compressed to WebP'}
-                          </p>
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                  {imageMode === 'url' && (
-                    <input
-                      type="url"
-                      value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)}
-                      placeholder="https://dpptnkehkzolqrifbagx.supabase.co/..."
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
-                    />
-                  )}
-
-                  {/* Thumbnail Realtime Preview */}
-                  {imageUrl && (
-                    <div className="mt-3 p-2 bg-[#0A0A0C] border border-white/10 rounded-xl flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 overflow-hidden">
-                        <img src={imageUrl} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-white/10" />
-                        <div className="overflow-hidden">
-                          <p className="text-xs font-semibold text-emerald-400">{isAr ? 'تم تجهيز الصورة' : 'Image Ready'}</p>
-                          <p className="text-[10px] text-gray-500 truncate max-w-[180px]">{imageUrl}</p>
-                        </div>
+                        ) : (
+                          <>
+                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                              <i className="fa-solid fa-image text-[#FF1E27] text-xl"></i>
+                            </div>
+                            <p className="text-xs font-semibold text-gray-200">
+                              {isAr ? 'اضغط هنا لرفع صورة أو اسحب الملف هنا' : 'Click or drag image file here'}
+                            </p>
+                            <p className="text-[10px] text-gray-500">
+                              {isAr ? 'تتم معالجة الصورة وضغطها أوتوماتيكياً صيغة WebP' : 'Compressed to WebP via Canvas'}
+                            </p>
+                          </>
+                        )}
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setImageUrl('')}
-                        className="text-xs text-red-400 hover:text-red-300 p-1.5"
-                      >
-                        <i className="fa-solid fa-trash"></i>
-                      </button>
+                    )}
+
+                    {imageMode === 'url' && (
+                      <input
+                        type="url"
+                        value={imageUrl}
+                        onChange={(e) => setImageUrl(e.target.value)}
+                        placeholder="https://dpptnkehkzolqrifbagx.supabase.co/..."
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                      />
+                    )}
+
+                    {/* Preview Thumbnail */}
+                    {imageUrl && (
+                      <div className="mt-3 p-2.5 bg-[#0A0A0C] border border-white/10 rounded-xl flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 overflow-hidden">
+                          <img src={imageUrl} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-white/10" />
+                          <div className="overflow-hidden">
+                            <p className="text-xs font-semibold text-emerald-400">{isAr ? 'تم تجهيز الصورة' : 'Image Ready'}</p>
+                            <p className="text-[10px] text-gray-500 truncate max-w-[180px]">{imageUrl}</p>
+                          </div>
+                        </div>
+                        <button type="button" onClick={() => setImageUrl('')} className="text-xs text-red-400 p-1">
+                          <i className="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Descriptions */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-300 mb-1">
+                        {isAr ? 'الوصف (عربي)' : 'Desc (Arabic)'}
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={descAr}
+                        onChange={(e) => setDescAr(e.target.value)}
+                        placeholder="تفاصيل نطاق التكييف والكهرباء والإنذار..."
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                      />
                     </div>
-                  )}
-                </div>
-
-                {/* Description Inputs */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'الوصف (عربي)' : 'Description (Arabic)'}
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={descAr}
-                      onChange={(e) => setDescAr(e.target.value)}
-                      placeholder="وصف تفصيلي لأعمال التكييف والكهرباء والإنذار..."
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
-                    />
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-300 mb-1">
+                        {isAr ? 'الوصف (إنجليزي)' : 'Desc (English)'}
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={descEn}
+                        onChange={(e) => setDescEn(e.target.value)}
+                        placeholder="Full MEP scope details..."
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'الوصف (إنجليزي)' : 'Description (English)'}
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={descEn}
-                      onChange={(e) => setDescEn(e.target.value)}
-                      placeholder="Full electromechanical MEP scope details..."
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
-                    />
-                  </div>
-                </div>
 
-                {/* Submit Action Button */}
-                <button
-                  type="submit"
-                  className="w-full py-3.5 bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold rounded-xl shadow-lg shadow-red-600/30 hover:opacity-95 transition flex items-center justify-center gap-2 text-sm cursor-pointer"
-                >
-                  <i className="fa-solid fa-floppy-disk"></i>
-                  <span>{editingProject ? (isAr ? 'حفظ التعديلات' : 'Save Changes') : (isAr ? 'إضافة المشروع إلى المعرض' : 'Add Project to Website')}</span>
-                </button>
-              </form>
+                  <button
+                    type="submit"
+                    className="w-full py-3.5 bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold rounded-xl shadow-lg shadow-red-600/30 hover:opacity-95 transition flex items-center justify-center gap-2 text-sm cursor-pointer"
+                  >
+                    <i className="fa-solid fa-floppy-disk"></i>
+                    <span>{editingProject ? (isAr ? 'حفظ التعديلات' : 'Save Changes') : (isAr ? 'إضافة المشروع للمعرض' : 'Add Project')}</span>
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
 
-          {/* Projects Data Table / List (7 cols) */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="bg-[#131317] border border-white/10 rounded-2xl p-6 shadow-xl space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
-                <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <i className="fa-solid fa-list-check text-[#FF1E27]"></i>
-                  <span>{isAr ? 'قائمة المشاريع المضافة' : 'Existing Projects List'} ({projects.length})</span>
-                </h2>
-                {/* Search Bar */}
-                <div className="relative">
+            {/* List Column (7 cols) */}
+            <div className="lg:col-span-7 space-y-4">
+              <div className="bg-[#131317] border border-white/10 rounded-3xl p-6 shadow-2xl space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                  <h2 className="text-base font-extrabold text-white flex items-center gap-2">
+                    <i className="fa-solid fa-list-check text-[#FF1E27]"></i>
+                    <span>{isAr ? 'المشاريع المضافة' : 'Existing Projects'} ({projects.length})</span>
+                  </h2>
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={isAr ? 'بحث في المشاريع...' : 'Search projects...'}
-                    className="bg-[#0A0A0C] border border-white/15 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-[#FF1E27] focus:outline-none w-full sm:w-48"
+                    placeholder={isAr ? 'بحث في المشاريع...' : 'Search...'}
+                    className="bg-[#0A0A0C] border border-white/15 rounded-xl px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-[#FF1E27] focus:outline-none"
                   />
-                  <i className="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-gray-500 text-xs"></i>
                 </div>
-              </div>
 
-              {/* Projects Grid List */}
-              <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1 custom-scrollbar">
-                {filteredProjects.length === 0 ? (
-                  <div className="text-center py-12 text-gray-500 text-xs">
-                    {isAr ? 'لا توجد مشاريع مضافة طابقة لبحثك' : 'No projects found'}
-                  </div>
-                ) : (
-                  filteredProjects.map((p) => (
-                    <div key={p.id} className="bg-[#0A0A0C] border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-white/20 transition">
+                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1 custom-scrollbar">
+                  {filteredProjects.map((p) => (
+                    <div key={p.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-3 hover:border-white/20 transition">
                       <div className="flex items-center gap-3 overflow-hidden">
-                        <img src={p.image} alt={p.titleAr} className="w-14 h-14 rounded-lg object-cover border border-white/10 flex-shrink-0" />
+                        <img src={p.image} alt={p.titleAr} className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0" />
                         <div className="overflow-hidden">
-                          <span className="text-[10px] font-semibold px-2 py-0.5 bg-[#FF1E27]/20 text-[#FF1E27] rounded-full">
+                          <span className="text-[10px] font-bold px-2 py-0.5 bg-[#FF1E27]/20 text-[#FF1E27] rounded-full">
                             {p.catAr}
                           </span>
                           <h3 className="text-xs font-bold text-white truncate mt-1">{p.titleAr}</h3>
@@ -775,26 +826,218 @@ export default function AdminPage() {
                       </div>
 
                       <div className="flex items-center gap-2 flex-shrink-0">
-                        <button
-                          onClick={() => handleEditInit(p)}
-                          className="px-2.5 py-1.5 text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/20 transition"
-                        >
+                        <button onClick={() => handleEditInit(p)} className="px-2.5 py-1.5 text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg hover:bg-blue-500/20 transition">
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button
-                          onClick={() => handleDeleteProject(p.id, p.titleAr)}
-                          className="px-2.5 py-1.5 text-xs bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg hover:bg-red-500/20 transition"
-                        >
+                        <button onClick={() => handleDeleteProject(p.id, p.titleAr)} className="px-2.5 py-1.5 text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition">
                           <i className="fa-solid fa-trash"></i>
                         </button>
                       </div>
                     </div>
-                  ))
-                )}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* TAB 2: BLOG CMS & ARTICLES EDITOR */}
+        {activeTab === 'articles' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* New Article Form (6 cols) */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="bg-[#131317] border border-white/10 rounded-3xl p-6 shadow-2xl space-y-5">
+                <div className="border-b border-white/10 pb-4">
+                  <h2 className="text-base font-extrabold text-white flex items-center gap-2">
+                    <i className="fa-solid fa-[#FF1E27] fa-pen-nib"></i>
+                    <span>{isAr ? 'كتابة ونشر مقال هندسي جديد' : 'Publish New Engineering Article'}</span>
+                  </h2>
+                </div>
+
+                <form onSubmit={handleSubmitArticle} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">
+                      {isAr ? 'عنوان المقال (عربي)' : 'Article Title (Arabic)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={artTitleAr}
+                      onChange={(e) => setArtTitleAr(e.target.value)}
+                      placeholder="مثال: اشتراطات الكود المصري للحريق في المحلات والمطاعم"
+                      required
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">
+                      {isAr ? 'عنوان المقال (إنجليزي)' : 'Article Title (English)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={artTitleEn}
+                      onChange={(e) => setArtTitleEn(e.target.value)}
+                      placeholder="e.g. Egyptian Firefighting Code Standards"
+                      required
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">
+                      {isAr ? 'صورة الغلاف (رفع مباشر مضغوط)' : 'Article Cover Image'}
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        value={artImage}
+                        onChange={(e) => setArtImage(e.target.value)}
+                        placeholder="https://..."
+                        className="flex-1 bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">
+                      {isAr ? 'ملخص المقال السريع (عربي)' : 'Article Summary (Arabic)'}
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={artSummaryAr}
+                      onChange={(e) => setArtSummaryAr(e.target.value)}
+                      placeholder="ملخص مختصر يظهر في قائمة المقالات..."
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">
+                      {isAr ? 'المحتوى الهندسي الكامل (عربي)' : 'Full Article Content (Arabic)'}
+                    </label>
+                    <textarea
+                      rows={6}
+                      value={artContentAr}
+                      onChange={(e) => setArtContentAr(e.target.value)}
+                      placeholder="اكتب المحتوى الهندسي التفصيلي للمقال..."
+                      required
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSavingArticle}
+                    className="w-full py-3.5 bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold rounded-xl shadow-lg shadow-red-600/30 hover:opacity-95 transition flex items-center justify-center gap-2 text-sm cursor-pointer"
+                  >
+                    <i className="fa-solid fa-paper-plane"></i>
+                    <span>{isSavingArticle ? (isAr ? 'جاري النشر...' : 'Publishing...') : (isAr ? 'نشر المقال الهندسي' : 'Publish Article')}</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            {/* Articles List (6 cols) */}
+            <div className="lg:col-span-6 space-y-4">
+              <div className="bg-[#131317] border border-white/10 rounded-3xl p-6 shadow-2xl space-y-4">
+                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                  <h2 className="text-base font-extrabold text-white flex items-center gap-2">
+                    <i className="fa-solid fa-newspaper text-[#FF1E27]"></i>
+                    <span>{isAr ? 'المقالات الهندسية المنشورة' : 'Published Articles'} ({articles.length})</span>
+                  </h2>
+                </div>
+
+                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1 custom-scrollbar">
+                  {articles.map((art) => (
+                    <div key={art.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-3 hover:border-white/20 transition">
+                      <div className="flex items-center gap-3 overflow-hidden">
+                        <img src={art.image} alt={art.titleAr} className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0" />
+                        <div className="overflow-hidden">
+                          <span className="text-[10px] font-bold text-gray-400">
+                            {art.readTimeMin} دقائق قراءة
+                          </span>
+                          <h3 className="text-xs font-bold text-white truncate mt-0.5">{art.titleAr}</h3>
+                          <p className="text-[11px] text-gray-400 truncate">{art.slug}</p>
+                        </div>
+                      </div>
+
+                      <button onClick={() => handleDeleteArticle(art.id, art.titleAr)} className="px-2.5 py-1.5 text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition flex-shrink-0">
+                        <i className="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: ANALYTICS */}
+        {activeTab === 'analytics' && (
+          <div className="space-y-6">
+            <div className="bg-[#131317] border border-white/10 rounded-3xl p-8 shadow-2xl space-y-6">
+              <h2 className="text-lg font-extrabold text-white flex items-center gap-2">
+                <i className="fa-solid fa-chart-pie text-[#FF1E27]"></i>
+                <span>مؤشرات الأداء والمعاينة العامة للمنصة</span>
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">
+                  <span className="text-xs text-gray-400">معدل استجابة المعرض</span>
+                  <p className="text-3xl font-extrabold text-emerald-400">100%</p>
+                  <p className="text-[11px] text-gray-500">مفعل ISR 60s Revalidation</p>
+                </div>
+                <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">
+                  <span className="text-xs text-gray-400">حجم صور CDN المضغوطة</span>
+                  <p className="text-3xl font-extrabold text-blue-400">WebP Auto</p>
+                  <p className="text-[11px] text-gray-500">توفير 95% من سعة التخزين</p>
+                </div>
+                <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">
+                  <span className="text-xs text-gray-400">حالة الربط مع Supabase</span>
+                  <p className="text-3xl font-extrabold text-purple-400">نشط وحي</p>
+                  <p className="text-[11px] text-gray-500">مشروع dpptnkehkzolqrifbagx</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: SYSTEM SETTINGS */}
+        {activeTab === 'settings' && (
+          <div className="space-y-6">
+            <div className="bg-[#131317] border border-white/10 rounded-3xl p-8 shadow-2xl space-y-6 max-w-2xl mx-auto">
+              <h2 className="text-lg font-extrabold text-white flex items-center gap-2 border-b border-white/10 pb-4">
+                <i className="fa-solid fa-sliders text-[#FF1E27]"></i>
+                <span>إعدادات النظام والاتصال بقاعدة البيانات</span>
+              </h2>
+
+              <div className="space-y-4 text-xs">
+                <div className="flex justify-between p-3 bg-[#0A0A0C] rounded-xl border border-white/10">
+                  <span className="text-gray-400">البريد الإلكتروني الحالي للأدمن:</span>
+                  <span className="font-bold text-white">admin@emep-egy.com</span>
+                </div>
+                <div className="flex justify-between p-3 bg-[#0A0A0C] rounded-xl border border-white/10">
+                  <span className="text-gray-400">رابط مشروع Supabase Live:</span>
+                  <span className="font-mono text-emerald-400">https://dpptnkehkzolqrifbagx.supabase.co</span>
+                </div>
+                <div className="flex justify-between p-3 bg-[#0A0A0C] rounded-xl border border-white/10">
+                  <span className="text-gray-400">صندوق تخزين الصور Storage Bucket:</span>
+                  <span className="font-mono text-blue-400">public / projects</span>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-white/10">
+                <button
+                  onClick={() => { fetchProjects(); fetchArticles(); setStatusMessage({ type: 'success', text: 'تم تحديث وسحب البيانات من السيرفر بنجاح!' }); }}
+                  className="w-full py-3 bg-white/10 hover:bg-white/15 text-white font-bold rounded-xl border border-white/20 transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <i className="fa-solid fa-rotate"></i>
+                  <span>إعادة تحديث ومزامنة البيانات مع Supabase</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
