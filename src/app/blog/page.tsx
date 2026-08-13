@@ -16,6 +16,7 @@ export const revalidate = 60; // ISR 60s
 
 async function getArticles() {
   if (isSupabaseConfigured() && supabase) {
+    // 1. Try articles table
     try {
       const { data: dbArticles, error } = await supabase
         .from('articles')
@@ -33,13 +34,41 @@ async function getArticles() {
           contentEn: a.content_en,
           contentAr: a.content_ar,
           image: a.image,
-          author: a.author,
-          readTimeMin: a.read_time_min,
+          author: a.author || 'E-MEP Engineering Team',
+          readTimeMin: Number(a.read_time_min) || 5,
           createdAt: a.created_at,
         }));
       }
     } catch (err) {
-      console.warn('Supabase articles fetch error, using local fallback:', err);
+      // continue
+    }
+
+    // 2. Try projects table (category = 'article')
+    try {
+      const pRes = await supabase
+        .from('projects')
+        .select('*')
+        .eq('category', 'article')
+        .order('id', { ascending: false });
+
+      if (!pRes.error && pRes.data && pRes.data.length > 0) {
+        return pRes.data.map((a: any) => ({
+          id: Number(a.id),
+          slug: a.cat_en,
+          titleEn: a.title_en,
+          titleAr: a.title_ar,
+          summaryEn: a.desc_en,
+          summaryAr: a.desc_en,
+          contentEn: a.desc_en,
+          contentAr: a.desc_ar,
+          image: a.image,
+          author: 'E-MEP Engineering Team',
+          readTimeMin: Number(a.cat_ar) || 5,
+          createdAt: a.created_at,
+        }));
+      }
+    } catch (err) {
+      // continue
     }
   }
   return articlesData;

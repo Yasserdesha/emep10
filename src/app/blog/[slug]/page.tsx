@@ -14,13 +14,16 @@ interface Props {
 
 export const revalidate = 60; // ISR 60s
 
-async function getArticleBySlug(slug: string) {
+async function getArticleBySlug(rawSlug: string) {
+  const slug = decodeURIComponent(rawSlug).trim();
+
   if (isSupabaseConfigured() && supabase) {
+    // 1. Try articles table
     try {
       const { data, error } = await supabase
         .from('articles')
         .select('*')
-        .eq('slug', slug)
+        .or(`slug.eq.${slug},slug.eq.${rawSlug}`)
         .single();
 
       if (!error && data) {
@@ -34,27 +37,67 @@ async function getArticleBySlug(slug: string) {
           contentEn: data.content_en,
           contentAr: data.content_ar,
           image: data.image,
-          author: data.author,
-          readTimeMin: data.read_time_min,
+          author: data.author || 'E-MEP Engineering Team',
+          readTimeMin: Number(data.read_time_min) || 5,
           createdAt: data.created_at,
         };
       }
     } catch (err) {
-      console.warn('Supabase article fetch failed, searching local fallback:', err);
+      // continue
+    }
+
+    // 2. Try projects table (category = 'article')
+    try {
+      const pRes = await supabase
+        .from('projects')
+        .select('*')
+        .eq('category', 'article')
+        .or(`cat_en.eq.${slug},cat_en.eq.${rawSlug}`)
+        .limit(1);
+
+      if (!pRes.error && pRes.data && pRes.data.length > 0) {
+        const row = pRes.data[0];
+        return {
+          id: Number(row.id),
+          slug: row.cat_en,
+          titleEn: row.title_en,
+          titleAr: row.title_ar,
+          summaryEn: row.desc_en,
+          summaryAr: row.desc_en,
+          contentEn: row.desc_en,
+          contentAr: row.desc_ar,
+          image: row.image,
+          author: 'E-MEP Engineering Team',
+          readTimeMin: Number(row.cat_ar) || 5,
+          createdAt: row.created_at,
+        };
+      }
+    } catch (err) {
+      // continue
     }
   }
 
-  return articlesData.find((a) => a.slug === slug) || null;
+  // 3. Fallback to articlesData JSON
+  return (
+    articlesData.find(
+      (a) =>
+        a.slug === slug ||
+        a.slug === rawSlug ||
+        decodeURIComponent(a.slug) === slug
+    ) || null
+  );
 }
 
 async function getAllArticles() {
   if (isSupabaseConfigured() && supabase) {
+    // 1. Try articles table
     try {
       const { data, error } = await supabase
         .from('articles')
         .select('*')
         .order('created_at', { ascending: false });
-      if (!error && data) {
+
+      if (!error && data && data.length > 0) {
         return data.map((a: any) => ({
           id: Number(a.id),
           slug: a.slug,
@@ -63,11 +106,35 @@ async function getAllArticles() {
           summaryEn: a.summary_en,
           summaryAr: a.summary_ar,
           image: a.image,
-          readTimeMin: a.read_time_min,
+          readTimeMin: Number(a.read_time_min) || 5,
         }));
       }
     } catch (err) {
-      // fallback
+      // continue
+    }
+
+    // 2. Try projects table (category = 'article')
+    try {
+      const pRes = await supabase
+        .from('projects')
+        .select('*')
+        .eq('category', 'article')
+        .order('id', { ascending: false });
+
+      if (!pRes.error && pRes.data && pRes.data.length > 0) {
+        return pRes.data.map((a: any) => ({
+          id: Number(a.id),
+          slug: a.cat_en,
+          titleEn: a.title_en,
+          titleAr: a.title_ar,
+          summaryEn: a.desc_en,
+          summaryAr: a.desc_en,
+          image: a.image,
+          readTimeMin: Number(a.cat_ar) || 5,
+        }));
+      }
+    } catch (err) {
+      // continue
     }
   }
   return articlesData;

@@ -5,7 +5,7 @@ import { verifySessionToken } from '../admin/login/route';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import initialArticles from '@/data/articles.json';
 
-const DEFAULT_ARTICLE_IMAGE = 'https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0004.webp';
+const DEFAULT_ARTICLE_IMAGE = 'https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/proj_1786597773542_article_bim_revit_mep_1786596972626.png';
 
 // Verify admin authorization
 function isAuthorized(req: NextRequest): boolean {
@@ -42,11 +42,34 @@ async function saveLocalArticles(articles: any[]) {
   }
 }
 
+function buildSlug(titleAr: string, titleEn?: string, customSlug?: string): string {
+  if (customSlug && customSlug.trim()) {
+    return customSlug.trim().toLowerCase().replace(/\s+/g, '-');
+  }
 
-// GET: List all articles
+  let base = '';
+  if (titleEn && /[a-zA-Z]/.test(titleEn)) {
+    base = titleEn.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+  }
+
+  if (!base || base.replace(/-/g, '').length < 2) {
+    base = titleAr
+      .toLowerCase()
+      .trim()
+      .replace(/[^\u0600-\u06FFa-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+  }
+
+  const clean = base.replace(/(^-|-$)/g, '');
+  return clean ? `${clean}-${Date.now().toString().slice(-4)}` : `article-${Date.now().toString().slice(-4)}`;
+}
+
+// GET: List all articles (Supabase primary with projects table & JSON fallbacks)
 export async function GET() {
   try {
     if (isSupabaseConfigured() && supabase) {
+      // 1. Try articles table
       try {
         const { data, error } = await supabase
           .from('articles')
@@ -64,15 +87,45 @@ export async function GET() {
             contentEn: row.content_en,
             contentAr: row.content_ar,
             image: row.image || DEFAULT_ARTICLE_IMAGE,
-            author: row.author,
+            author: row.author || 'E-MEP Engineering Team',
             readTimeMin: Number(row.read_time_min) || 5,
             createdAt: row.created_at,
           }));
 
-          return NextResponse.json({ articles: formatted, source: 'supabase' });
+          return NextResponse.json({ articles: formatted, source: 'supabase-articles' });
         }
-      } catch (sbErr) {
-        console.warn('Supabase articles fetch failed, falling back to local JSON:', sbErr);
+      } catch (err) {
+        // continue
+      }
+
+      // 2. Try projects table with category = 'article'
+      try {
+        const pRes = await supabase
+          .from('projects')
+          .select('*')
+          .eq('category', 'article')
+          .order('id', { ascending: false });
+
+        if (!pRes.error && pRes.data && pRes.data.length > 0) {
+          const formatted = pRes.data.map((row: any) => ({
+            id: Number(row.id),
+            slug: row.cat_en,
+            titleEn: row.title_en,
+            titleAr: row.title_ar,
+            summaryEn: row.desc_en,
+            summaryAr: row.desc_en,
+            contentEn: row.desc_en,
+            contentAr: row.desc_ar,
+            image: row.image || DEFAULT_ARTICLE_IMAGE,
+            author: 'E-MEP Engineering Team',
+            readTimeMin: Number(row.cat_ar) || 5,
+            createdAt: row.created_at,
+          }));
+
+          return NextResponse.json({ articles: formatted, source: 'supabase-projects' });
+        }
+      } catch (err) {
+        // continue
       }
     }
 
@@ -101,20 +154,13 @@ export async function POST(req: NextRequest) {
     }
 
     const finalContentAr = (contentAr || summaryAr || finalTitleAr).trim();
+    const finalSummaryAr = (summaryAr || finalTitleAr).trim();
     const finalImage = (image || '').trim() || DEFAULT_ARTICLE_IMAGE;
 
-    // Fail-safe slug generator that handles non-ASCII characters and guarantees a unique slug
-    const cleanBase = (slug || finalTitleEn || finalTitleAr || 'article')
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/(^-|-$)/g, '');
-    
-    const generatedSlug = cleanBase ? `${cleanBase}-${Date.now().toString().slice(-4)}` : `article-${Date.now()}`;
+    const generatedSlug = buildSlug(finalTitleAr, finalTitleEn, slug);
 
-    // Try Supabase first
     if (isSupabaseConfigured() && supabase) {
+      // 1. Try insert into articles table
       try {
         const { data, error } = await supabase
           .from('articles')
@@ -122,8 +168,8 @@ export async function POST(req: NextRequest) {
             slug: generatedSlug,
             title_en: finalTitleEn,
             title_ar: finalTitleAr,
-            summary_en: summaryEn || summaryAr || finalTitleEn,
-            summary_ar: summaryAr || finalTitleAr,
+            summary_en: summaryEn || finalSummaryAr,
+            summary_ar: finalSummaryAr,
             content_en: contentEn || finalContentAr,
             content_ar: finalContentAr,
             image: finalImage,
@@ -132,25 +178,61 @@ export async function POST(req: NextRequest) {
           }])
           .select();
 
-        if (!error && data) {
-          return NextResponse.json({ success: true, article: data[0], source: 'supabase' }, { status: 201 });
-        } else if (error) {
-          console.error('Supabase article insert error:', error);
+        if (!error && data && data.length > 0) {
+          return NextResponse.json({ success: true, article: data[0], source: 'supabase-articles' }, { status: 201 });
         }
-      } catch (sbErr) {
-        console.warn('Supabase article insert failed, saving to local JSON:', sbErr);
+      } catch (err) {
+        // continue
+      }
+
+      // 2. Insert into projects table with category = 'article'
+      try {
+        const pInsert = await supabase
+          .from('projects')
+          .insert([{
+            title_ar: finalTitleAr,
+            title_en: finalTitleEn,
+            category: 'article',
+            cat_en: generatedSlug,
+            cat_ar: String(readTimeMin || 5),
+            desc_ar: finalContentAr,
+            desc_en: finalSummaryAr,
+            image: finalImage,
+          }])
+          .select();
+
+        if (!pInsert.error && pInsert.data && pInsert.data.length > 0) {
+          const row = pInsert.data[0];
+          const formatted = {
+            id: Number(row.id),
+            slug: row.cat_en,
+            titleEn: row.title_en,
+            titleAr: row.title_ar,
+            summaryEn: row.desc_en,
+            summaryAr: row.desc_en,
+            contentEn: row.desc_en,
+            contentAr: row.desc_ar,
+            image: row.image,
+            author: 'E-MEP Engineering Team',
+            readTimeMin: Number(row.cat_ar) || 5,
+            createdAt: row.created_at,
+          };
+          return NextResponse.json({ success: true, article: formatted, source: 'supabase-projects' }, { status: 201 });
+        }
+      } catch (err) {
+        console.warn('Supabase projects table insert failed:', err);
       }
     }
 
-    // Local JSON fallback
+    // Local JSON / in-memory fallback
     const localArticles = await getLocalArticles();
     const newArticle = {
       id: Date.now(),
       slug: generatedSlug,
       titleEn: finalTitleEn,
       titleAr: finalTitleAr,
-      summaryEn: summaryEn || summaryAr || finalTitleEn,
-      summaryAr: summaryAr || finalTitleAr,
+      summaryEn: summaryEn || finalSummaryAr,
+      summaryAr: finalSummaryAr,
       contentEn: contentEn || finalContentAr,
       contentAr: finalContentAr,
       image: finalImage,
@@ -169,7 +251,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PUT: Update existing article by ID or Slug
+// PUT: Update existing article
 export async function PUT(req: NextRequest) {
   try {
     if (!isAuthorized(req)) {
@@ -185,36 +267,65 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: 'Article ID or slug is required' }, { status: 400 });
     }
 
-    const updateData: Record<string, unknown> = {
-      updated_at: new Date().toISOString(),
-    };
-    if (titleAr) updateData.title_ar = titleAr;
-    if (titleEn || titleAr) updateData.title_en = titleEn || titleAr;
-    if (summaryAr) updateData.summary_ar = summaryAr;
-    if (summaryEn) updateData.summary_en = summaryEn;
-    if (contentAr) updateData.content_ar = contentAr;
-    if (contentEn) updateData.content_en = contentEn;
-    if (image) updateData.image = image;
-    if (author) updateData.author = author;
-    if (readTimeMin) updateData.read_time_min = Number(readTimeMin);
-
     if (isSupabaseConfigured() && supabase) {
+      // 1. Try updating in articles table
       try {
+        const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() };
+        if (titleAr) updateData.title_ar = titleAr;
+        if (titleEn || titleAr) updateData.title_en = titleEn || titleAr;
+        if (summaryAr) updateData.summary_ar = summaryAr;
+        if (summaryEn) updateData.summary_en = summaryEn;
+        if (contentAr) updateData.content_ar = contentAr;
+        if (contentEn) updateData.content_en = contentEn;
+        if (image) updateData.image = image;
+        if (author) updateData.author = author;
+        if (readTimeMin) updateData.read_time_min = Number(readTimeMin);
+
         let query = supabase.from('articles').update(updateData);
-        if (!isNaN(Number(id))) {
-          query = query.eq('id', Number(id));
-        } else {
-          query = query.eq('slug', String(id));
-        }
+        query = !isNaN(Number(id)) ? query.eq('id', Number(id)) : query.eq('slug', String(id));
         const { data, error } = await query.select();
 
         if (!error && data && data.length > 0) {
-          return NextResponse.json({ success: true, article: data[0], source: 'supabase' });
-        } else if (error) {
-          console.warn('Supabase article update notice:', error.message);
+          return NextResponse.json({ success: true, article: data[0], source: 'supabase-articles' });
         }
-      } catch (sbErr) {
-        console.warn('Supabase article update failed, attempting local fallback:', sbErr);
+      } catch (err) {
+        // continue
+      }
+
+      // 2. Try updating in projects table (where category = 'article')
+      try {
+        const pUpdate: Record<string, unknown> = { updated_at: new Date().toISOString() };
+        if (titleAr) pUpdate.title_ar = titleAr;
+        if (titleEn || titleAr) pUpdate.title_en = titleEn || titleAr;
+        if (contentAr) pUpdate.desc_ar = contentAr;
+        if (summaryAr) pUpdate.desc_en = summaryAr;
+        if (image) pUpdate.image = image;
+        if (readTimeMin) pUpdate.cat_ar = String(readTimeMin);
+
+        let pQuery = supabase.from('projects').update(pUpdate).eq('category', 'article');
+        pQuery = !isNaN(Number(id)) ? pQuery.eq('id', Number(id)) : pQuery.eq('cat_en', String(id));
+        const pRes = await pQuery.select();
+
+        if (!pRes.error && pRes.data && pRes.data.length > 0) {
+          const row = pRes.data[0];
+          const formatted = {
+            id: Number(row.id),
+            slug: row.cat_en,
+            titleEn: row.title_en,
+            titleAr: row.title_ar,
+            summaryEn: row.desc_en,
+            summaryAr: row.desc_en,
+            contentEn: row.desc_en,
+            contentAr: row.desc_ar,
+            image: row.image,
+            author: 'E-MEP Engineering Team',
+            readTimeMin: Number(row.cat_ar) || 5,
+            createdAt: row.created_at,
+          };
+          return NextResponse.json({ success: true, article: formatted, source: 'supabase-projects' });
+        }
+      } catch (err) {
+        // continue
       }
     }
 
@@ -240,13 +351,12 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ success: true, article: localArticles[idx], source: 'local' });
     }
 
-    return NextResponse.json({ success: true, message: 'Article processed', source: 'local' });
+    return NextResponse.json({ success: true, message: 'Article updated', source: 'local' });
   } catch (error: any) {
     console.error('Article update handler error:', error);
     return NextResponse.json({ message: error?.message || 'Error updating article' }, { status: 500 });
   }
 }
-
 
 // DELETE: Remove article by id
 export async function DELETE(req: NextRequest) {
@@ -266,12 +376,22 @@ export async function DELETE(req: NextRequest) {
       try {
         await supabase.from('articles').delete().eq('id', id);
       } catch (err) {
-        console.warn('Supabase article delete failed:', err);
+        // continue
+      }
+      try {
+        await supabase.from('projects').delete().eq('id', id).eq('category', 'article');
+      } catch (err) {
+        // continue
+      }
+      try {
+        await supabase.from('projects').delete().eq('cat_en', id).eq('category', 'article');
+      } catch (err) {
+        // continue
       }
     }
 
     const localArticles = await getLocalArticles();
-    const filtered = localArticles.filter((a: any) => String(a.id) !== String(id));
+    const filtered = localArticles.filter((a: any) => String(a.id) !== String(id) && String(a.slug) !== String(id));
     await saveLocalArticles(filtered);
 
     return NextResponse.json({ success: true, message: 'Article deleted' });
@@ -279,4 +399,3 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ message: 'Error deleting article' }, { status: 500 });
   }
 }
-
