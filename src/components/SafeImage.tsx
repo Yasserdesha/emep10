@@ -7,6 +7,7 @@ interface SafeImageProps {
   alt: string;
   className?: string;
   fallbackSrc?: string;
+  priority?: boolean;
 }
 
 const DEFAULT_FALLBACK = 'https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/proj_1786597773542_article_bim_revit_mep_1786596972626.png';
