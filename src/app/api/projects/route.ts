@@ -82,6 +82,7 @@ export async function GET() {
       const { data, error } = await supabase
         .from('projects')
         .select('*')
+        .neq('category', 'article')
         .range(0, 1000)
         .order('id', { ascending: true });
 
@@ -96,7 +97,8 @@ export async function GET() {
     }
 
     const data = await readLocalData();
-    return NextResponse.json(data, {
+    const cleanProjects = (data.projects || []).filter((p: any) => p.category !== 'article');
+    return NextResponse.json({ projects: cleanProjects }, {
       headers: {
         'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
       },
