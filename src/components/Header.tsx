@@ -21,6 +21,7 @@ export default function Header() {
     { id: 'services', i18nKey: 'nav_services' },
     { id: 'bim', i18nKey: 'nav_bim' },
     { id: 'projects', i18nKey: 'nav_projects' },
+    { id: 'blog', i18nKey: 'nav_blog', href: '/blog' },
     { id: 'contact', i18nKey: 'nav_contact' },
   ];
 
@@ -64,8 +65,18 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleScrollTo = (id: string) => {
+  const handleScrollTo = (id: string, href?: string) => {
     setMobileMenuOpen(false);
+
+    if (href) {
+      window.location.href = href;
+      return;
+    }
+
+    if (!isHomePage) {
+      window.location.href = id === 'hero' ? '/' : `/#${id}`;
+      return;
+    }
 
     if (id === 'hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -80,10 +91,10 @@ export default function Header() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+  const handleKeyDown = (e: React.KeyboardEvent, id: string, href?: string) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      handleScrollTo(id);
+      handleScrollTo(id, href);
     }
   };
 
@@ -140,9 +151,11 @@ export default function Header() {
               <li key={item.id}>
                 <button
                   type="button"
-                  className={`nav-link w-full text-start md:w-auto ${activeSection === item.id ? 'active' : ''}`}
-                  onClick={() => handleScrollTo(item.id)}
-                  aria-current={activeSection === item.id ? 'page' : undefined}
+                  className={`nav-link w-full text-start md:w-auto ${
+                    (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog') ? 'active' : ''
+                  }`}
+                  onClick={() => handleScrollTo(item.id, item.href)}
+                  aria-current={(isHomePage && activeSection === item.id) ? 'page' : undefined}
                 >
                   {t(item.i18nKey)}
                 </button>

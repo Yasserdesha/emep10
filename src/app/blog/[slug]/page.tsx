@@ -23,23 +23,24 @@ async function getArticleBySlug(rawSlug: string) {
       const { data, error } = await supabase
         .from('articles')
         .select('*')
-        .or(`slug.eq.${slug},slug.eq.${rawSlug}`)
-        .single();
+        .in('slug', [slug, rawSlug])
+        .limit(1);
 
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
+        const row = data[0];
         return {
-          id: Number(data.id),
-          slug: data.slug,
-          titleEn: data.title_en,
-          titleAr: data.title_ar,
-          summaryEn: data.summary_en,
-          summaryAr: data.summary_ar,
-          contentEn: data.content_en,
-          contentAr: data.content_ar,
-          image: data.image,
-          author: data.author || 'E-MEP Engineering Team',
-          readTimeMin: Number(data.read_time_min) || 5,
-          createdAt: data.created_at,
+          id: Number(row.id),
+          slug: row.slug,
+          titleEn: row.title_en,
+          titleAr: row.title_ar,
+          summaryEn: row.summary_en,
+          summaryAr: row.summary_ar,
+          contentEn: row.content_en,
+          contentAr: row.content_ar,
+          image: row.image,
+          author: row.author || 'E-MEP Engineering Team',
+          readTimeMin: Number(row.read_time_min) || 5,
+          createdAt: row.created_at,
         };
       }
     } catch (err) {
@@ -52,7 +53,7 @@ async function getArticleBySlug(rawSlug: string) {
         .from('projects')
         .select('*')
         .eq('category', 'article')
-        .or(`cat_en.eq.${slug},cat_en.eq.${rawSlug}`)
+        .in('cat_en', [slug, rawSlug])
         .limit(1);
 
       if (!pRes.error && pRes.data && pRes.data.length > 0) {
