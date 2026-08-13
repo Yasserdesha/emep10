@@ -16,7 +16,7 @@ interface ArticleItem {
   contentEn?: string;
   contentAr?: string;
   image: string;
-  author: string;
+  author?: string;
   readTimeMin: number;
   createdAt?: string;
 }

@@ -108,6 +108,7 @@ async function getAllArticles() {
           summaryEn: a.summary_en,
           summaryAr: a.summary_ar,
           image: a.image,
+          author: a.author || 'E-MEP Engineering Team',
           readTimeMin: Number(a.read_time_min) || 5,
         }));
       }
@@ -132,6 +133,7 @@ async function getAllArticles() {
           summaryEn: a.desc_en,
           summaryAr: a.desc_en,
           image: a.image,
+          author: 'E-MEP Engineering Team',
           readTimeMin: Number(a.cat_ar) || 5,
         }));
       }
