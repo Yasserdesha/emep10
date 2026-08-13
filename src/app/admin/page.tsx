@@ -99,12 +99,19 @@ export default function AdminPage() {
   const [descAr, setDescAr] = useState('');
   const [descEn, setDescEn] = useState('');
 
-  // Image Upload State
+  // Image Upload State (Projects)
   const [imageMode, setImageMode] = useState<'upload' | 'url'>('upload');
   const [imageUrl, setImageUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Image Upload State (Articles)
+  const [artImageMode, setArtImageMode] = useState<'upload' | 'url'>('upload');
+  const [artImage, setArtImage] = useState('');
+  const [isArtUploading, setIsArtUploading] = useState(false);
+  const [isArtDragging, setIsArtDragging] = useState(false);
+  const artFileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Articles State (Blog CMS)
   const [articles, setArticles] = useState<Article[]>([]);
@@ -114,7 +121,6 @@ export default function AdminPage() {
   const [artSummaryEn, setArtSummaryEn] = useState('');
   const [artContentAr, setArtContentAr] = useState('');
   const [artContentEn, setArtContentEn] = useState('');
-  const [artImage, setArtImage] = useState('');
   const [artReadTime, setArtReadTime] = useState(5);
   const [isSavingArticle, setIsSavingArticle] = useState(false);
 
@@ -158,7 +164,7 @@ export default function AdminPage() {
     }
   };
 
-  // Login submit handler
+  // Login submit handler (Automatic instant refresh fix)
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
@@ -175,8 +181,8 @@ export default function AdminPage() {
 
       if (res.ok && data.success) {
         setIsAuthenticated(true);
-        fetchProjects();
-        fetchArticles();
+        // Instant reload to attach session cookie to all sub-fetches
+        window.location.reload();
       } else {
         setLoginError(data.message || (isAr ? 'البريد الإلكتروني أو كلمة السر غير صحيحة' : 'Invalid email or password'));
       }
@@ -193,6 +199,7 @@ export default function AdminPage() {
       await fetch('/api/admin/logout', { method: 'POST' });
       setIsAuthenticated(false);
       setPassword('');
+      window.location.reload();
     } catch (err) {
       console.error('Logout error:', err);
     }
@@ -227,8 +234,8 @@ export default function AdminPage() {
     window.scrollTo({ top: 300, behavior: 'smooth' });
   };
 
-  // Fail-proof File Upload Handler with Client-Side Compression
-  const handleFileUpload = async (file: File, isForArticle = false) => {
+  // Fail-proof File Upload Handler for Projects
+  const handleFileUpload = async (file: File) => {
     if (!file || !file.type.startsWith('image/')) {
       setStatusMessage({ type: 'error', text: isAr ? 'يرجى اختيار صورة صالحة (PNG, JPG, WebP)' : 'Please select a valid image file' });
       return;
@@ -250,11 +257,7 @@ export default function AdminPage() {
       const data = await res.json();
 
       if (res.ok && data.url) {
-        if (isForArticle) {
-          setArtImage(data.url);
-        } else {
-          setImageUrl(data.url);
-        }
+        setImageUrl(data.url);
         setStatusMessage({
           type: 'success',
           text: isAr ? `تم ضغط الصورة ورفعها بنجاح! (${(compressedFile.size / 1024).toFixed(0)} KB)` : `Image compressed & uploaded successfully!`
@@ -270,6 +273,48 @@ export default function AdminPage() {
       });
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  // Fail-proof File Upload Handler for Articles
+  const handleArticleFileUpload = async (file: File) => {
+    if (!file || !file.type.startsWith('image/')) {
+      setStatusMessage({ type: 'error', text: isAr ? 'يرجى اختيار صورة صالحة (PNG, JPG, WebP)' : 'Please select a valid image file' });
+      return;
+    }
+
+    setIsArtUploading(true);
+    setStatusMessage(null);
+
+    try {
+      const compressedFile = await compressImageBeforeUpload(file);
+      const formData = new FormData();
+      formData.append('file', compressedFile);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.url) {
+        setArtImage(data.url);
+        setStatusMessage({
+          type: 'success',
+          text: isAr ? `تم ضغط صورة المقال ورفعها بنجاح! (${(compressedFile.size / 1024).toFixed(0)} KB)` : `Article image uploaded successfully!`
+        });
+      } else {
+        throw new Error(data.message || 'Upload failed');
+      }
+    } catch (err: any) {
+      console.error('Article upload error:', err);
+      setStatusMessage({
+        type: 'error',
+        text: isAr ? 'فشل رفع صورة المقال.' : 'Failed to upload article image.'
+      });
+    } finally {
+      setIsArtUploading(false);
     }
   };
 
@@ -692,7 +737,7 @@ export default function AdminPage() {
                           e.preventDefault();
                           setIsDragging(false);
                           if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                            handleFileUpload(e.dataTransfer.files[0], false);
+                            handleFileUpload(e.dataTransfer.files[0]);
                           }
                         }}
                         onClick={() => fileInputRef.current?.click()}
@@ -704,7 +749,7 @@ export default function AdminPage() {
                           ref={fileInputRef}
                           type="file"
                           accept="image/*"
-                          onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], false)}
+                          onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
                           className="hidden"
                         />
                         {isUploading ? (
@@ -841,7 +886,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* TAB 2: BLOG CMS & ARTICLES EDITOR */}
+        {/* TAB 2: BLOG CMS & ARTICLES EDITOR (WITH DEDICATED IMAGE UPLOADER) */}
         {activeTab === 'articles' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* New Article Form (6 cols) */}
@@ -849,7 +894,7 @@ export default function AdminPage() {
               <div className="bg-[#131317] border border-white/10 rounded-3xl p-6 shadow-2xl space-y-5">
                 <div className="border-b border-white/10 pb-4">
                   <h2 className="text-base font-extrabold text-white flex items-center gap-2">
-                    <i className="fa-solid fa-[#FF1E27] fa-pen-nib"></i>
+                    <i className="fa-solid fa-pen-nib text-[#FF1E27]"></i>
                     <span>{isAr ? 'كتابة ونشر مقال هندسي جديد' : 'Publish New Engineering Article'}</span>
                   </h2>
                 </div>
@@ -883,43 +928,122 @@ export default function AdminPage() {
                     />
                   </div>
 
+                  {/* DEDICATED FILE UPLOADER FOR ARTICLES */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'صورة الغلاف (رفع مباشر مضغوط)' : 'Article Cover Image'}
+                    <label className="block text-xs font-semibold text-gray-300 mb-2">
+                      {isAr ? 'صورة الغلاف (رفع مباشر أو رابط)' : 'Article Cover Image'}
                     </label>
-                    <div className="flex gap-2">
+
+                    <div className="flex border border-white/10 rounded-xl overflow-hidden mb-3 bg-[#0A0A0C]">
+                      <button
+                        type="button"
+                        onClick={() => setArtImageMode('upload')}
+                        className={`flex-1 py-2 text-xs font-semibold transition ${artImageMode === 'upload' ? 'bg-[#FF1E27] text-white' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        <i className="fa-solid fa-cloud-arrow-up ml-1"></i> {isAr ? 'رفع صورة غلاف جديدة' : 'Upload Image'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setArtImageMode('url')}
+                        className={`flex-1 py-2 text-xs font-semibold transition ${artImageMode === 'url' ? 'bg-[#FF1E27] text-white' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        <i className="fa-solid fa-link ml-1"></i> {isAr ? 'رابط مباشر' : 'Direct URL'}
+                      </button>
+                    </div>
+
+                    {artImageMode === 'upload' && (
+                      <div
+                        onDragOver={(e) => { e.preventDefault(); setIsArtDragging(true); }}
+                        onDragLeave={() => setIsArtDragging(false)}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          setIsArtDragging(false);
+                          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            handleArticleFileUpload(e.dataTransfer.files[0]);
+                          }
+                        }}
+                        onClick={() => artFileInputRef.current?.click()}
+                        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition flex flex-col items-center justify-center gap-2 ${
+                          isArtDragging ? 'border-[#FF1E27] bg-[#FF1E27]/10' : 'border-white/15 bg-[#0A0A0C] hover:border-white/30'
+                        }`}
+                      >
+                        <input
+                          ref={artFileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => e.target.files?.[0] && handleArticleFileUpload(e.target.files[0])}
+                          className="hidden"
+                        />
+                        {isArtUploading ? (
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="w-8 h-8 border-3 border-[#FF1E27] border-t-transparent rounded-full animate-spin"></div>
+                            <p className="text-xs text-gray-300">{isAr ? 'جاري ضغط ورفع الصورة...' : 'Compressing & uploading...'}</p>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                              <i className="fa-solid fa-newspaper text-[#FF1E27] text-xl"></i>
+                            </div>
+                            <p className="text-xs font-semibold text-gray-200">
+                              {isAr ? 'اضغط هنا لرفع صورة الغلاف أو اسحب الملف هنا' : 'Click or drag cover image here'}
+                            </p>
+                            <p className="text-[10px] text-gray-500">
+                              {isAr ? 'تتم المعالجة والضغط التلقائي صيغة WebP' : 'Compressed to WebP via Canvas'}
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    {artImageMode === 'url' && (
                       <input
                         type="url"
                         value={artImage}
                         onChange={(e) => setArtImage(e.target.value)}
                         placeholder="https://..."
-                        className="flex-1 bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                       />
-                    </div>
+                    )}
+
+                    {/* Preview Thumbnail */}
+                    {artImage && (
+                      <div className="mt-3 p-2.5 bg-[#0A0A0C] border border-white/10 rounded-xl flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 overflow-hidden">
+                          <img src={artImage} alt="Article Cover" className="w-12 h-12 rounded-lg object-cover border border-white/10" />
+                          <div className="overflow-hidden">
+                            <p className="text-xs font-semibold text-emerald-400">{isAr ? 'تم جاهزية صورة الغلاف' : 'Cover Image Ready'}</p>
+                            <p className="text-[10px] text-gray-500 truncate max-w-[180px]">{artImage}</p>
+                          </div>
+                        </div>
+                        <button type="button" onClick={() => setArtImage('')} className="text-xs text-red-400 p-1">
+                          <i className="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'ملخص المقال السريع (عربي)' : 'Article Summary (Arabic)'}
+                      {isAr ? 'ملخص المقال (عربي)' : 'Article Summary (Arabic)'}
                     </label>
                     <textarea
                       rows={2}
                       value={artSummaryAr}
                       onChange={(e) => setArtSummaryAr(e.target.value)}
-                      placeholder="ملخص مختصر يظهر في قائمة المقالات..."
+                      placeholder="ملخص مختصر يظهر في القائمة..."
                       className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'المحتوى الهندسي الكامل (عربي)' : 'Full Article Content (Arabic)'}
+                      {isAr ? 'المحتوى الهندسي الكامل (عربي)' : 'Full Content (Arabic)'}
                     </label>
                     <textarea
-                      rows={6}
+                      rows={5}
                       value={artContentAr}
                       onChange={(e) => setArtContentAr(e.target.value)}
-                      placeholder="اكتب المحتوى الهندسي التفصيلي للمقال..."
+                      placeholder="اكتب المحتوى الهندسي للمقال..."
                       required
                       className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                     />
@@ -983,8 +1107,8 @@ export default function AdminPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">
-                  <span className="text-xs text-gray-400">معدل استجابة المعرض</span>
-                  <p className="text-3xl font-extrabold text-emerald-400">100%</p>
+                  <span className="text-xs text-gray-400">إجمالي المشاريع</span>
+                  <p className="text-3xl font-extrabold text-emerald-400">{stats.totalProjects}</p>
                   <p className="text-[11px] text-gray-500">مفعل ISR 60s Revalidation</p>
                 </div>
                 <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">

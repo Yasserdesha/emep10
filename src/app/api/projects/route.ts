@@ -82,6 +82,7 @@ export async function GET() {
       const { data, error } = await supabase
         .from('projects')
         .select('*')
+        .range(0, 1000)
         .order('id', { ascending: true });
 
       if (!error && data && data.length > 0) {

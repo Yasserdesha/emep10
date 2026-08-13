@@ -22,6 +22,7 @@ async function getInitialData() {
       const { data: dbProjects, error } = await supabase
         .from('projects')
         .select('*')
+        .range(0, 1000)
         .order('id', { ascending: true });
 
       if (!error && dbProjects && dbProjects.length > 0) {
