@@ -63,10 +63,19 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/logo/logo.png" />
         <link rel="apple-touch-icon" href="/logo/logo.png" />
 
-        {/* Local FontAwesome icons - preloaded to avoid render blocking */}
-        <link rel="preload" href="/fontawesome/all.min.css" as="style" />
+        {/* FontAwesome icons - non-render-blocking async load */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
-        <link rel="stylesheet" href="/fontawesome/all.min.css" />
+        <link
+          rel="stylesheet"
+          href="/fontawesome/all.min.css"
+          media="print"
+          // @ts-expect-error onLoad prop for media swap
+          onLoad="this.media='all'"
+        />
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-css-tags */}
+          <link rel="stylesheet" href="/fontawesome/all.min.css" />
+        </noscript>
       </head>
       <body suppressHydrationWarning className="theme-dark bg-[#0A0A0C] text-[#F8FAFC]">
         <LanguageProvider>
