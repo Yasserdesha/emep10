@@ -179,6 +179,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 height={150}
                 priority
                 className="hero-pure-logo" 
+                style={{ width: '150px', height: '150px', aspectRatio: '1/1' }}
               />
             </div>
             
@@ -452,7 +453,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                     alt={isAr ? p.titleAr : p.titleEn} 
                     fill
                     loading="lazy"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 480px) 440px, (max-width: 768px) 600px, (max-width: 1200px) 480px, 360px"
                     style={{ objectFit: 'cover' }}
                   />
                   <span className="project-category">{isAr ? p.catAr : p.catEn}</span>

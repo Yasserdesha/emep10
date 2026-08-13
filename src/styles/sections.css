@@ -536,8 +536,10 @@ html[dir="rtl"] .brand-ticker-track {
 .project-img-wrapper { 
   position: relative; 
   height: 240px; 
+  aspect-ratio: 16 / 10;
   overflow: hidden; 
   cursor: pointer;
+  contain: layout paint;
 }
 
 .project-img-wrapper img { 

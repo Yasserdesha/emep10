@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Cairo, Outfit } from "next/font/google";
 import { LanguageProvider } from "@/components/LanguageContext";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import FontAwesomeLoader from "@/components/FontAwesomeLoader";
 import "./globals.css";
 
 const inter = Inter({
@@ -62,24 +63,11 @@ export default function RootLayout({
         <link rel="icon" href="/logo/logo.png" type="image/png" sizes="any" />
         <link rel="shortcut icon" href="/logo/logo.png" />
         <link rel="apple-touch-icon" href="/logo/logo.png" />
-
-        {/* FontAwesome icons - non-render-blocking async load */}
-        {/* eslint-disable-next-line @next/next/no-css-tags */}
-        <link
-          rel="stylesheet"
-          href="/fontawesome/all.min.css"
-          media="print"
-          // @ts-expect-error onLoad prop for media swap
-          onLoad="this.media='all'"
-        />
-        <noscript>
-          {/* eslint-disable-next-line @next/next/no-css-tags */}
-          <link rel="stylesheet" href="/fontawesome/all.min.css" />
-        </noscript>
       </head>
       <body suppressHydrationWarning className="theme-dark bg-[#0A0A0C] text-[#F8FAFC]">
         <LanguageProvider>
           <ServiceWorkerRegister />
+          <FontAwesomeLoader />
           {children}
         </LanguageProvider>
       </body>
