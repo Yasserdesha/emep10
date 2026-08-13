@@ -16,7 +16,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('ar');
+  const [language, setLanguageState] = useState<Language>('en');
   const [isMounted, setIsMounted] = useState(false);
 
   const updateHtmlAttributes = useCallback((lang: Language) => {
@@ -27,30 +27,21 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Synchronize language state from localStorage or default to Arabic ('ar')
+  // Always default to English ('en') on first open and page refresh
   useEffect(() => {
     setIsMounted(true);
-    let savedLang: Language = 'ar';
+    setLanguageState('en');
+    updateHtmlAttributes('en');
     try {
-      const stored = localStorage.getItem('emep_lang') as Language | null;
-      if (stored === 'ar' || stored === 'en') {
-        savedLang = stored;
-      }
+      localStorage.removeItem('emep_lang');
+      sessionStorage.removeItem('emep_session_lang');
     } catch {
       // Ignore
     }
-
-    setLanguageState(savedLang);
-    updateHtmlAttributes(savedLang);
   }, [updateHtmlAttributes]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    try {
-      localStorage.setItem('emep_lang', lang);
-    } catch {
-      // Ignore
-    }
     updateHtmlAttributes(lang);
   };
 
