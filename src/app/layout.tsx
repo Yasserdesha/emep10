@@ -51,6 +51,10 @@ export default function RootLayout({
       className={`${inter.variable} ${cairo.variable} ${outfit.variable}`}
     >
       <head>
+        {/* Preconnect & DNS-prefetch for Supabase Storage CDN */}
+        <link rel="preconnect" href="https://dpptnkehkzolqrifbagx.supabase.co" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://dpptnkehkzolqrifbagx.supabase.co" />
+
         {/* iOS & Safari format detection meta tag to prevent hydration mismatches */}
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
 
