@@ -103,6 +103,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.9rem;
+  min-height: 44px;
+  min-width: 44px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--clr-border);
   background: rgba(255, 255, 255, 0.05);
@@ -384,7 +386,8 @@ html[dir="rtl"] .bim-badge-overlay { right: auto; left: 1rem; }
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--clr-text-muted);
-  padding: 0.6rem 1.4rem;
+  padding: 0.65rem 1.4rem;
+  min-height: 44px;
   border-radius: 50px;
   font-size: 0.9rem;
   font-weight: 600;

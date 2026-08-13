@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { useLanguage } from './LanguageContext';
 
-// Global cache to avoid double fetching of video blobs
+// Global memory cache to avoid double fetching of video blobs
 const blobCache = new Map<string, string>();
 
 async function getProtectedBlobUrl(datUrl: string): Promise<string | null> {
@@ -20,7 +20,7 @@ async function getProtectedBlobUrl(datUrl: string): Promise<string | null> {
     blobCache.set(datUrl, blobUrl);
     return blobUrl;
   } catch (err) {
-    console.warn(`[E-MEP Engine] Failed to fetch dat asset ${datUrl}:`, err);
+    console.warn(`[E-MEP Engine] Failed to fetch asset ${datUrl}:`, err);
     return null;
   }
 }
@@ -36,86 +36,39 @@ interface ExpertiseCardProps {
 export default function ExpertiseCard({ img, datSrc, titleKey, descKey }: ExpertiseCardProps) {
   const { t, language } = useLanguage();
   const isAr = language === 'ar';
-  
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
   const cardRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const animIdRef = useRef<number | null>(null);
 
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const prepareVideo = useCallback(async (): Promise<HTMLVideoElement | null> => {
-    if (videoRef.current) return videoRef.current;
-    
-    const blobUrl = await getProtectedBlobUrl(datSrc);
-    if (!blobUrl) return null;
-
-    const video = document.createElement('video');
-    video.src = blobUrl;
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-    video.preload = 'auto';
-    
-    videoRef.current = video;
-    return video;
-  }, [datSrc]);
-
-  const drawFrame = useCallback(() => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const card = cardRef.current;
-    if (!video || !canvas || !card) return;
-
-    if (!video.paused && !video.ended) {
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      const mediaContainer = card.querySelector('.expertise-media');
-      const cw = mediaContainer ? mediaContainer.clientWidth : 600;
-      const ch = mediaContainer ? mediaContainer.clientHeight : 400;
-
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const targetW = Math.round(cw * dpr);
-      const targetH = Math.round(ch * dpr);
-
-      if (canvas.width !== targetW || canvas.height !== targetH) {
-        canvas.width = targetW;
-        canvas.height = targetH;
-      }
-
-      const vw = video.videoWidth || cw;
-      const vh = video.videoHeight || ch;
-
-      if (vw && vh) {
-        const scale = Math.max(targetW / vw, targetH / vh);
-        const nw = vw * scale;
-        const nh = vh * scale;
-        const nx = (targetW - nw) / 2;
-        const ny = (targetH - nh) / 2;
-
-        ctx.clearRect(0, 0, targetW, targetH);
-        ctx.drawImage(video, nx, ny, nw, nh);
-      } else {
-        ctx.drawImage(video, 0, 0, targetW, targetH);
-      }
-
-      animIdRef.current = requestAnimationFrame(drawFrame);
+  // Lazy prepare video blob on demand (hover/click/idle)
+  const prepareVideo = useCallback(async (): Promise<string | null> => {
+    if (videoUrl) return videoUrl;
+    const url = await getProtectedBlobUrl(datSrc);
+    if (url) {
+      setVideoUrl(url);
     }
-  }, []);
+    return url;
+  }, [datSrc, videoUrl]);
 
   const playVideo = useCallback(async () => {
-    const v = await prepareVideo();
-    if (!v) return;
+    const url = await prepareVideo();
+    if (!url) return;
 
-    v.play().then(() => {
-      setIsPlaying(true);
-      if (animIdRef.current) cancelAnimationFrame(animIdRef.current);
-      animIdRef.current = requestAnimationFrame(drawFrame);
-    }).catch((err) => {
-      console.warn('Video playback prevented:', err);
-    });
-  }, [prepareVideo, drawFrame]);
+    // Small delay to ensure state update attaches src
+    setTimeout(() => {
+      const v = videoRef.current;
+      if (v) {
+        v.play().then(() => {
+          setIsPlaying(true);
+        }).catch(() => {
+          // Silent fallback on browser autoplay restrictions
+        });
+      }
+    }, 50);
+  }, [prepareVideo]);
 
   const pauseVideo = useCallback(() => {
     const v = videoRef.current;
@@ -123,51 +76,26 @@ export default function ExpertiseCard({ img, datSrc, titleKey, descKey }: Expert
       v.pause();
     }
     setIsPlaying(false);
-    if (animIdRef.current) {
-      cancelAnimationFrame(animIdRef.current);
-      animIdRef.current = null;
-    }
   }, []);
 
-  // Preload video & set up IntersectionObserver for auto-playing when scrolling into view
+  // Defer video preload to browser idle time (3s delay) to ensure 0ms main thread impact on load
   useEffect(() => {
-    prepareVideo();
-    const card = cardRef.current;
-    if (!card) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            playVideo();
-          } else {
-            pauseVideo();
-          }
-        });
-      },
-      {
-        threshold: 0.35, // Plays when 35% of the card is visible on screen
-      }
-    );
-
-    observer.observe(card);
-
-    return () => {
-      observer.disconnect();
-      if (animIdRef.current) {
-        cancelAnimationFrame(animIdRef.current);
-      }
-      if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current = null;
-      }
-    };
-  }, [prepareVideo, playVideo, pauseVideo]);
+    let timerId: NodeJS.Timeout;
+    
+    if ('requestIdleCallback' in window) {
+      const idleId = (window as any).requestIdleCallback(() => {
+        prepareVideo();
+      }, { timeout: 4000 });
+      return () => (window as any).cancelIdleCallback(idleId);
+    } else {
+      timerId = setTimeout(prepareVideo, 3000);
+      return () => clearTimeout(timerId);
+    }
+  }, [prepareVideo]);
 
   const togglePlayback = async (e?: React.SyntheticEvent) => {
     if (e) e.stopPropagation();
-    const v = videoRef.current;
-    if (!v || v.paused) {
+    if (!isPlaying) {
       await playVideo();
     } else {
       pauseVideo();
@@ -190,14 +118,21 @@ export default function ExpertiseCard({ img, datSrc, titleKey, descKey }: Expert
           alt={isAr ? `صورة توضيحية لخدمة ${t(titleKey)}` : `${t(titleKey)} illustrative service visual`} 
           width={400}
           height={300}
-          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          style={{ objectFit: 'cover', width: '100%', height: '100%', aspectRatio: '4/3' }}
           className="expertise-img" 
         />
-        <canvas 
-          ref={canvasRef} 
-          className="expertise-canvas"
-          aria-hidden="true"
-        />
+
+        {videoUrl && (
+          <video
+            ref={videoRef}
+            src={videoUrl}
+            loop
+            muted
+            playsInline
+            className={`expertise-video ${isPlaying ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500 absolute inset-0 w-full h-full object-cover`}
+          />
+        )}
+
         <div className="expertise-overlay"></div>
       </div>
       <div className="expertise-content">

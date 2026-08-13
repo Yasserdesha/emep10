@@ -611,9 +611,9 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
 
               {/* Social Media Channels Grid */}
               <div className="mt-6 pt-4 border-t border-white/10">
-                <h4 className="text-xs font-bold text-[#94A3B8] mb-3 uppercase tracking-wider">
+                <h3 className="text-xs font-bold text-[#94A3B8] mb-3 uppercase tracking-wider">
                   {t('social_heading')}
-                </h4>
+                </h3>
                 <div className="flex items-center gap-3 flex-wrap">
                   <button
                     type="button"
@@ -699,7 +699,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             </div>
 
             <div className="footer-links-col">
-              <h4>{t('footer_col_links')}</h4>
+              <h3>{t('footer_col_links')}</h3>
               <ul>
                 <li>
                   <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="footer-nav-item">
@@ -730,7 +730,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             </div>
 
             <div className="footer-services-col">
-              <h4>{t('footer_col_services')}</h4>
+              <h3>{t('footer_col_services')}</h3>
               <ul>
                 <li>{t('feat_hvac_title')}</li>
                 <li>{t('feat_elec_title')}</li>
@@ -741,7 +741,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             </div>
 
             <div className="footer-contact-col">
-              <h4>{t('footer_col_contact')}</h4>
+              <h3>{t('footer_col_contact')}</h3>
               <p className="mb-2"><i className="fa-solid fa-envelope red-text" aria-hidden="true"></i> Info@emep-egy.com</p>
               
               {/* WhatsApp Eng. Osama Mohamed */}
@@ -854,9 +854,9 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               <span className="project-modal-badge">
                 {isAr ? selectedProject.catAr : selectedProject.catEn}
               </span>
-              <h2>
+              <h3>
                 {isAr ? selectedProject.titleAr : selectedProject.titleEn}
-              </h2>
+              </h3>
               <p>
                 {isAr ? selectedProject.descAr : selectedProject.descEn}
               </p>
