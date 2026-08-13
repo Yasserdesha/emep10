@@ -3,8 +3,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
+import SafeImage from '@/components/SafeImage';
 import articlesData from '@/data/articles.json';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -178,16 +180,14 @@ export default async function ArticleReaderPage({ params }: Props) {
         </div>
 
         {/* Featured Cover Image */}
-        <div className="relative aspect-video w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-          <Image
+        <div className="relative aspect-video w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-white/5">
+          <SafeImage
             src={article.image}
             alt={article.titleAr}
-            fill
-            sizes="100vw"
-            priority
-            className="object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
+
 
         {/* Article Body Content */}
         <div className="bg-[#131317] border border-white/10 rounded-3xl p-6 md:p-12 space-y-8 shadow-2xl leading-relaxed text-gray-200 text-sm md:text-base">

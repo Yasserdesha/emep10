@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
+import SafeImage from '@/components/SafeImage';
 import articlesData from '@/data/articles.json';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+
 
 export const metadata: Metadata = {
   title: 'مدونة الهندسة الكهروميكانيكية وBIM | مقالات E-MEP المتخصصة',
@@ -82,14 +84,11 @@ export default async function BlogIndexPage() {
             </h2>
 
             <div className="bg-[#131317] border border-white/10 rounded-3xl overflow-hidden shadow-2xl hover:border-white/20 transition group grid grid-cols-1 lg:grid-cols-12 gap-0">
-              <div className="lg:col-span-7 relative min-h-[300px] lg:min-h-[420px] overflow-hidden">
-                <Image
+              <div className="lg:col-span-7 relative min-h-[300px] lg:min-h-[420px] overflow-hidden bg-white/5">
+                <SafeImage
                   src={featuredArticle.image}
                   alt={featuredArticle.titleAr}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                  className="object-cover group-hover:scale-105 transition duration-700"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#131317] via-transparent to-transparent lg:hidden"></div>
               </div>
@@ -107,7 +106,7 @@ export default async function BlogIndexPage() {
                     </span>
                   </div>
 
-                  <h3 className="text-xl md:text-2xl font-extrabold text-white group-hover:text-[#FF1E27] transition leading-snug">
+                  <h3 className="text-xl md:text-2xl font-extrabold text-[#F8FAFC] group-hover:text-[#FF1E27] transition leading-snug">
                     <Link href={`/blog/${featuredArticle.slug}`}>{featuredArticle.titleAr}</Link>
                   </h3>
 
@@ -146,12 +145,10 @@ export default async function BlogIndexPage() {
               <article key={art.id} className="bg-[#131317] border border-white/10 rounded-2xl overflow-hidden shadow-xl hover:border-white/25 hover:-translate-y-1 transition duration-300 flex flex-col justify-between group">
                 <div className="space-y-4">
                   <div className="relative aspect-video w-full overflow-hidden bg-white/5">
-                    <Image
+                    <SafeImage
                       src={art.image}
                       alt={art.titleAr}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     />
                   </div>
 
