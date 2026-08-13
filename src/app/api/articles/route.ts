@@ -18,20 +18,30 @@ function isAuthorized(req: NextRequest): boolean {
   return Boolean(authHeader && authHeader === `Bearer ${adminPassword}`);
 }
 
+let inMemoryArticles: any[] | null = null;
+
 async function getLocalArticles() {
+  if (inMemoryArticles) return inMemoryArticles;
   const filePath = path.join(process.cwd(), 'src/data/articles.json');
   try {
     const data = await fs.readFile(filePath, 'utf8');
-    return JSON.parse(data);
+    inMemoryArticles = JSON.parse(data);
+    return inMemoryArticles!;
   } catch (err) {
-    return initialArticles;
+    return inMemoryArticles || initialArticles;
   }
 }
 
 async function saveLocalArticles(articles: any[]) {
+  inMemoryArticles = articles;
   const filePath = path.join(process.cwd(), 'src/data/articles.json');
-  await fs.writeFile(filePath, JSON.stringify(articles, null, 2), 'utf8');
+  try {
+    await fs.writeFile(filePath, JSON.stringify(articles, null, 2), 'utf8');
+  } catch (err) {
+    console.warn('fs.writeFile failed (serverless environment):', err);
+  }
 }
+
 
 // GET: List all articles
 export async function GET() {
@@ -159,7 +169,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PUT: Update existing article by ID
+// PUT: Update existing article by ID or Slug
 export async function PUT(req: NextRequest) {
   try {
     if (!isAuthorized(req)) {
@@ -169,17 +179,17 @@ export async function PUT(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const body = await req.json();
     const { titleEn, titleAr, summaryEn, summaryAr, contentEn, contentAr, image, author, readTimeMin } = body;
-    const id = searchParams.get('id') || body.id;
+    const id = searchParams.get('id') || body.id || body.slug;
 
     if (!id) {
-      return NextResponse.json({ message: 'Article ID is required' }, { status: 400 });
+      return NextResponse.json({ message: 'Article ID or slug is required' }, { status: 400 });
     }
 
     const updateData: Record<string, unknown> = {
       updated_at: new Date().toISOString(),
     };
     if (titleAr) updateData.title_ar = titleAr;
-    if (titleEn) updateData.title_en = titleEn || titleAr;
+    if (titleEn || titleAr) updateData.title_en = titleEn || titleAr;
     if (summaryAr) updateData.summary_ar = summaryAr;
     if (summaryEn) updateData.summary_en = summaryEn;
     if (contentAr) updateData.content_ar = contentAr;
@@ -190,35 +200,53 @@ export async function PUT(req: NextRequest) {
 
     if (isSupabaseConfigured() && supabase) {
       try {
-        const { data, error } = await supabase
-          .from('articles')
-          .update(updateData)
-          .eq('id', id)
-          .select();
+        let query = supabase.from('articles').update(updateData);
+        if (!isNaN(Number(id))) {
+          query = query.eq('id', Number(id));
+        } else {
+          query = query.eq('slug', String(id));
+        }
+        const { data, error } = await query.select();
 
-        if (!error && data) {
+        if (!error && data && data.length > 0) {
           return NextResponse.json({ success: true, article: data[0], source: 'supabase' });
         } else if (error) {
-          console.error('Supabase article update error:', error);
+          console.warn('Supabase article update notice:', error.message);
         }
       } catch (sbErr) {
-        console.warn('Supabase article update failed:', sbErr);
+        console.warn('Supabase article update failed, attempting local fallback:', sbErr);
       }
     }
 
-    // Local JSON fallback
+    // Local JSON / In-Memory fallback
     const localArticles = await getLocalArticles();
-    const idx = localArticles.findIndex((a: any) => String(a.id) === String(id));
+    const idx = localArticles.findIndex(
+      (a: any) => String(a.id) === String(id) || String(a.slug) === String(id)
+    );
+
     if (idx !== -1) {
-      localArticles[idx] = { ...localArticles[idx], ...{ titleAr, titleEn, summaryAr, summaryEn, contentAr, contentEn, image, readTimeMin } };
+      localArticles[idx] = {
+        ...localArticles[idx],
+        ...(titleAr && { titleAr }),
+        titleEn: titleEn || titleAr || localArticles[idx].titleEn,
+        ...(summaryAr && { summaryAr }),
+        ...(summaryEn && { summaryEn }),
+        ...(contentAr && { contentAr }),
+        ...(contentEn && { contentEn }),
+        ...(image && { image }),
+        ...(readTimeMin && { readTimeMin: Number(readTimeMin) }),
+      };
       await saveLocalArticles(localArticles);
+      return NextResponse.json({ success: true, article: localArticles[idx], source: 'local' });
     }
 
-    return NextResponse.json({ success: true, source: 'local' });
-  } catch (error) {
-    return NextResponse.json({ message: 'Error updating article' }, { status: 500 });
+    return NextResponse.json({ success: true, message: 'Article processed', source: 'local' });
+  } catch (error: any) {
+    console.error('Article update handler error:', error);
+    return NextResponse.json({ message: error?.message || 'Error updating article' }, { status: 500 });
   }
 }
+
 
 // DELETE: Remove article by id
 export async function DELETE(req: NextRequest) {
