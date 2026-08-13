@@ -27,16 +27,21 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Always default to English ('en') on initial open or page reload
+  // Synchronize language state from localStorage or default to Arabic ('ar')
   useEffect(() => {
     setIsMounted(true);
-    setLanguageState('en');
-    updateHtmlAttributes('en');
+    let savedLang: Language = 'ar';
     try {
-      localStorage.removeItem('emep_lang');
+      const stored = localStorage.getItem('emep_lang') as Language | null;
+      if (stored === 'ar' || stored === 'en') {
+        savedLang = stored;
+      }
     } catch {
       // Ignore
     }
+
+    setLanguageState(savedLang);
+    updateHtmlAttributes(savedLang);
   }, [updateHtmlAttributes]);
 
   const setLanguage = (lang: Language) => {

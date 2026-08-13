@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
 
 
 export default function Header() {
   const { language, setLanguage, t } = useLanguage();
   const pathname = usePathname();
+  const router = useRouter();
   const isHomePage = pathname === '/';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -69,12 +70,12 @@ export default function Header() {
     setMobileMenuOpen(false);
 
     if (href) {
-      window.location.href = href;
+      router.push(href);
       return;
     }
 
     if (!isHomePage) {
-      window.location.href = id === 'hero' ? '/' : `/#${id}`;
+      router.push(id === 'hero' ? '/' : `/#${id}`);
       return;
     }
 
