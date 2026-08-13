@@ -27,21 +27,30 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Always default to English ('en') on first open and page refresh
+  // Read saved language preference from localStorage or default to 'en' for new visitors
   useEffect(() => {
     setIsMounted(true);
-    setLanguageState('en');
-    updateHtmlAttributes('en');
+    let langToUse: Language = 'en';
     try {
-      localStorage.removeItem('emep_lang');
-      sessionStorage.removeItem('emep_session_lang');
+      const stored = localStorage.getItem('emep_lang') as Language | null;
+      if (stored === 'ar' || stored === 'en') {
+        langToUse = stored;
+      }
     } catch {
       // Ignore
     }
+
+    setLanguageState(langToUse);
+    updateHtmlAttributes(langToUse);
   }, [updateHtmlAttributes]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
+    try {
+      localStorage.setItem('emep_lang', lang);
+    } catch {
+      // Ignore
+    }
     updateHtmlAttributes(lang);
   };
 
