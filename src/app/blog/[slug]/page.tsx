@@ -197,17 +197,34 @@ export default async function ArticleReaderPage({ params }: Props) {
           </div>
 
           <div className="space-y-6 text-gray-300">
-            <p className="leading-loose text-justify">{article.contentAr}</p>
+            {/* Render content as paragraphs split by newlines */}
+            <div className="space-y-4 leading-loose text-justify">
+              {article.contentAr.split('\n').map((para: string, idx: number) =>
+                para.trim() ? (
+                  <p key={idx} className="leading-loose">
+                    {para}
+                  </p>
+                ) : (
+                  <div key={idx} className="h-2" />
+                )
+              )}
+            </div>
 
             <hr className="border-white/10 my-8" />
 
-            <div className="space-y-2">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <i className="fa-solid fa-globe text-[#FF1E27]"></i>
-                <span>English Summary</span>
-              </h3>
-              <p className="text-xs text-gray-400 ltr text-left leading-relaxed">{article.contentEn}</p>
-            </div>
+            {article.contentEn && article.contentEn !== article.contentAr && (
+              <div className="space-y-2">
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <i className="fa-solid fa-globe text-[#FF1E27]"></i>
+                  <span>English Summary</span>
+                </h3>
+                <div className="text-xs text-gray-400 ltr text-left leading-relaxed space-y-2">
+                  {article.contentEn.split('\n').map((para: string, idx: number) =>
+                    para.trim() ? <p key={idx}>{para}</p> : <div key={idx} className="h-1" />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

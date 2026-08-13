@@ -193,8 +193,12 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
+    // Read id from URL query params first (how frontend sends it), then fall back to body
+    const { searchParams } = new URL(req.url);
     const body = await req.json();
-    const { id, titleEn, titleAr, category, catEn, catAr, descEn, descAr, image } = body;
+    const { titleEn, titleAr, category, catEn, catAr, descEn, descAr, image } = body;
+
+    const id = searchParams.get('id') || body.id;
 
     if (!id) {
       return NextResponse.json({ message: 'Project ID is required for editing' }, { status: 400 });

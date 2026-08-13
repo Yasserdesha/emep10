@@ -68,6 +68,8 @@ async function compressImageBeforeUpload(file: File, maxWidth = 1200, quality = 
   });
 }
 
+const FALLBACK_IMG = '/logo/logo.png';
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -89,6 +91,7 @@ export default function AdminPage() {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [isSavingProject, setIsSavingProject] = useState(false);
 
   // Form Fields State (Projects)
   const [titleAr, setTitleAr] = useState('');
@@ -202,6 +205,7 @@ export default function AdminPage() {
   };
 
   const handleLogout = async () => {
+    if (!confirm(isAr ? 'هل تريد تسجيل الخروج من لوحة التحكم؟' : 'Are you sure you want to logout?')) return;
     try {
       await fetch('/api/admin/logout', { method: 'POST' });
       setIsAuthenticated(false);
@@ -345,6 +349,9 @@ export default function AdminPage() {
       return;
     }
 
+    setIsSavingProject(true);
+    setStatusMessage(null);
+
     const payload = {
       image: imageUrl,
       titleEn,
@@ -363,15 +370,16 @@ export default function AdminPage() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        // Also include id in body for the PUT handler (belt-and-suspenders approach)
+        body: JSON.stringify(editingProject ? { ...payload, id: editingProject.id } : payload),
       });
 
       if (res.ok) {
         setStatusMessage({
           type: 'success',
           text: editingProject 
-            ? (isAr ? 'تم تعديل بيانات المشروع بنجاح!' : 'Project updated!') 
-            : (isAr ? 'تم إضافة المشروع الجديد بنجاح!' : 'New project added!')
+            ? (isAr ? 'تم تعديل بيانات المشروع بنجاح! ✅' : 'Project updated successfully! ✅') 
+            : (isAr ? 'تم إضافة المشروع الجديد بنجاح! ✅' : 'New project added! ✅')
         });
         resetProjectForm();
         fetchProjects();
@@ -382,6 +390,8 @@ export default function AdminPage() {
     } catch (err) {
       console.error('Submit project error:', err);
       setStatusMessage({ type: 'error', text: 'Server error saving project' });
+    } finally {
+      setIsSavingProject(false);
     }
   };
 
@@ -402,8 +412,13 @@ export default function AdminPage() {
   // Submit Article (Blog CMS)
   const handleSubmitArticle = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!artTitleAr.trim() || !artTitleEn.trim() || !artContentAr.trim() || !artImage) {
-      setStatusMessage({ type: 'error', text: isAr ? 'يرجى إدخال عنوان وصورة ومحتوى المقال' : 'Please fill required article fields' });
+    // Only Arabic title and content are required — image and English title are optional (server provides fallbacks)
+    if (!artTitleAr.trim()) {
+      setStatusMessage({ type: 'error', text: isAr ? 'يرجى كتابة عنوان المقال بالعربي على الأقل' : 'Arabic article title is required' });
+      return;
+    }
+    if (!artContentAr.trim()) {
+      setStatusMessage({ type: 'error', text: isAr ? 'يرجى كتابة محتوى المقال' : 'Article content is required' });
       return;
     }
 
@@ -416,12 +431,12 @@ export default function AdminPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           titleAr: artTitleAr,
-          titleEn: artTitleEn,
+          titleEn: artTitleEn || artTitleAr, // fallback to Arabic if English is empty
           summaryAr: artSummaryAr,
           summaryEn: artSummaryEn,
           contentAr: artContentAr,
           contentEn: artContentEn,
-          image: artImage,
+          image: artImage || '', // server will use default image if empty
           readTimeMin: artReadTime,
           author: 'E-MEP Engineering Team',
         }),
@@ -430,8 +445,8 @@ export default function AdminPage() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        setStatusMessage({ type: 'success', text: isAr ? 'تم نشر المقال الهندسي بنجاح!' : 'Article published successfully!' });
-        setArtTitleAr(''); setArtTitleEn(''); setArtSummaryAr(''); setArtSummaryEn(''); setArtContentAr(''); setArtContentEn(''); setArtImage('');
+        setStatusMessage({ type: 'success', text: isAr ? 'تم نشر المقال الهندسي بنجاح! ✅' : 'Article published successfully! ✅' });
+        setArtTitleAr(''); setArtTitleEn(''); setArtSummaryAr(''); setArtSummaryEn(''); setArtContentAr(''); setArtContentEn(''); setArtImage(''); setArtReadTime(5);
         fetchArticles();
       } else {
         setStatusMessage({ type: 'error', text: data.message || (isAr ? 'حدث خطأ أثناء حفظ المقال' : 'Failed to publish article') });
@@ -563,7 +578,7 @@ export default function AdminPage() {
   }
 
   // -------------------------------------------------------------
-  // STATE-OF-THE-ART HIGH-CONTRAST DASHBOARD
+  // DASHBOARD
   // -------------------------------------------------------------
   return (
     <div className="min-h-screen bg-[#0A0A0C] text-white" dir={isAr ? 'rtl' : 'ltr'}>
@@ -584,6 +599,16 @@ export default function AdminPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Quick link to live site */}
+            <a
+              href="https://emep.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl hover:bg-emerald-500/20 transition hidden sm:flex items-center gap-1.5"
+            >
+              <i className="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              <span>{isAr ? 'الموقع الحي' : 'Live Site'}</span>
+            </a>
             <button
               onClick={() => setIsAr(!isAr)}
               className="px-3 py-1.5 text-xs bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 text-gray-300 transition"
@@ -603,13 +628,33 @@ export default function AdminPage() {
 
       <main className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
         
-        {/* Navigation Tabs Header */}
+        {/* Stats Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: isAr ? 'إجمالي المشاريع' : 'Total Projects', value: stats.totalProjects, icon: 'fa-folder-open', color: 'text-blue-400' },
+            { label: isAr ? 'إجمالي المقالات' : 'Total Articles', value: stats.totalArticles, icon: 'fa-newspaper', color: 'text-purple-400' },
+            { label: isAr ? 'مطاعم وكافيهات' : 'F&B Dining', value: stats.dining, icon: 'fa-utensils', color: 'text-orange-400' },
+            { label: isAr ? 'مبيعات وتجزئة' : 'Retail Stores', value: stats.retail, icon: 'fa-store', color: 'text-emerald-400' },
+          ].map((stat, i) => (
+            <div key={i} className="bg-[#131317] border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i className={`fa-solid ${stat.icon} ${stat.color}`}></i>
+              </div>
+              <div>
+                <p className={`text-xl font-extrabold ${stat.color}`}>{stat.value}</p>
+                <p className="text-[10px] text-gray-500 leading-tight">{stat.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Navigation Tabs */}
         <div className="flex items-center gap-3 border-b border-white/10 pb-4 overflow-x-auto">
           {[
-            { id: 'projects', labelAr: '📁 إدارة المشاريع والأعمال', labelEn: 'Projects CMS', icon: 'fa-folder-open' },
-            { id: 'articles', labelAr: '✍️ إدارة المقالات والمدونة', labelEn: 'Blog CMS', icon: 'fa-newspaper' },
-            { id: 'analytics', labelAr: '📊 لوحة الإحصائيات والأداء', labelEn: 'Analytics', icon: 'fa-chart-pie' },
-            { id: 'settings', labelAr: '⚙️ إعدادات المنصة وقاعدة البيانات', labelEn: 'System Settings', icon: 'fa-sliders' },
+            { id: 'projects', labelAr: '📁 إدارة المشاريع', labelEn: 'Projects CMS', icon: 'fa-folder-open' },
+            { id: 'articles', labelAr: '✍️ إدارة المقالات', labelEn: 'Blog CMS', icon: 'fa-newspaper' },
+            { id: 'analytics', labelAr: '📊 الإحصائيات', labelEn: 'Analytics', icon: 'fa-chart-pie' },
+            { id: 'settings', labelAr: '⚙️ الإعدادات', labelEn: 'Settings', icon: 'fa-sliders' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -628,7 +673,7 @@ export default function AdminPage() {
 
         {/* Floating Toast Notification Banner */}
         {statusMessage && (
-          <div className={`p-4 rounded-2xl border text-xs font-bold flex items-center justify-between shadow-2xl transition animate-fadeIn ${
+          <div className={`p-4 rounded-2xl border text-xs font-bold flex items-center justify-between shadow-2xl transition ${
             statusMessage.type === 'success' ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' : 'bg-red-500/20 border-red-500/40 text-red-300'
           }`}>
             <div className="flex items-center gap-2.5">
@@ -641,7 +686,9 @@ export default function AdminPage() {
           </div>
         )}
 
+        {/* ====================================================== */}
         {/* TAB 1: PROJECTS MANAGEMENT */}
+        {/* ====================================================== */}
         {activeTab === 'projects' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Form Column (5 cols) */}
@@ -693,7 +740,7 @@ export default function AdminPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-semibold text-gray-300 mb-1">
-                        {isAr ? 'اسم المشروع (عربي)' : 'Title (Arabic)'}
+                        {isAr ? 'اسم المشروع (عربي)' : 'Title (Arabic)'} <span className="text-[#FF1E27]">*</span>
                       </label>
                       <input
                         type="text"
@@ -706,7 +753,7 @@ export default function AdminPage() {
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-300 mb-1">
-                        {isAr ? 'اسم المشروع (إنجليزي)' : 'Title (English)'}
+                        {isAr ? 'اسم المشروع (إنجليزي)' : 'Title (English)'} <span className="text-[#FF1E27]">*</span>
                       </label>
                       <input
                         type="text"
@@ -719,10 +766,10 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  {/* Fail-Proof WebP Image Drag & Drop Uploader */}
+                  {/* Project Image Upload */}
                   <div>
                     <label className="block text-xs font-bold text-gray-200 mb-2">
-                      {isAr ? 'صورة المشروع (رفع مباشر مضغوط بنسبة 100%)' : 'Project Image Upload'}
+                      {isAr ? 'صورة المشروع (رفع مباشر مضغوط بنسبة 100%)' : 'Project Image Upload'} <span className="text-[#FF1E27]">*</span>
                     </label>
 
                     <div className="flex border border-white/10 rounded-xl overflow-hidden mb-3 bg-[#0A0A0C]">
@@ -800,7 +847,12 @@ export default function AdminPage() {
                     {imageUrl && (
                       <div className="mt-3 p-3 bg-[#0A0A0C] border border-white/10 rounded-2xl flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 overflow-hidden">
-                          <img src={imageUrl} alt="Preview" className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0" />
+                          <img
+                            src={imageUrl}
+                            alt="Preview"
+                            className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0"
+                            onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }}
+                          />
                           <div className="overflow-hidden">
                             <p className="text-xs font-bold text-emerald-400">{isAr ? 'تم جاهزية الصورة' : 'Image Ready'}</p>
                             <p className="text-[10px] text-gray-500 truncate max-w-[180px]">{imageUrl}</p>
@@ -843,10 +895,20 @@ export default function AdminPage() {
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold rounded-xl shadow-lg shadow-red-600/30 hover:opacity-95 transition flex items-center justify-center gap-2 text-sm cursor-pointer"
+                    disabled={isSavingProject}
+                    className="w-full py-3.5 bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold rounded-xl shadow-lg shadow-red-600/30 hover:opacity-95 transition flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-60"
                   >
-                    <i className="fa-solid fa-floppy-disk"></i>
-                    <span>{editingProject ? (isAr ? 'حفظ التعديلات' : 'Save Changes') : (isAr ? 'إضافة المشروع للمعرض' : 'Add Project')}</span>
+                    {isSavingProject ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>{isAr ? 'جاري الحفظ...' : 'Saving...'}</span>
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-floppy-disk"></i>
+                        <span>{editingProject ? (isAr ? 'حفظ التعديلات' : 'Save Changes') : (isAr ? 'إضافة المشروع للمعرض' : 'Add Project')}</span>
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
@@ -869,37 +931,66 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <div className="space-y-3 max-h-[650px] overflow-y-auto pr-1 custom-scrollbar">
-                  {filteredProjects.map((p) => (
-                    <div key={p.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-4 flex items-center justify-between gap-4 hover:border-white/20 transition shadow-lg">
-                      <div className="flex items-center gap-4 min-w-0">
-                        <img src={p.image} alt={p.titleAr} className="w-16 h-16 rounded-xl object-cover border border-white/10 flex-shrink-0" />
-                        <div className="min-w-0">
-                          <span className="text-[10px] font-extrabold px-2.5 py-0.5 bg-[#FF1E27]/20 text-[#FF1E27] rounded-full inline-block mb-1">
-                            {p.catAr}
-                          </span>
-                          <h3 className="text-xs font-extrabold text-white truncate">{p.titleAr}</h3>
-                          <p className="text-[11px] text-gray-400 truncate">{p.titleEn}</p>
+                <div className="space-y-3 max-h-[650px] overflow-y-auto pr-1">
+                  {filteredProjects.length === 0 ? (
+                    <div className="py-12 flex flex-col items-center gap-3 text-center">
+                      <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                        <i className="fa-solid fa-folder-open text-gray-600 text-2xl"></i>
+                      </div>
+                      <p className="text-sm font-bold text-gray-500">
+                        {searchQuery ? (isAr ? 'لا توجد نتائج للبحث' : 'No results found') : (isAr ? 'لا توجد مشاريع مضافة بعد' : 'No projects added yet')}
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        {!searchQuery && (isAr ? 'أضف مشروعك الأول من النموذج على اليسار' : 'Add your first project from the form')}
+                      </p>
+                    </div>
+                  ) : (
+                    filteredProjects.map((p) => (
+                      <div key={p.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-4 flex items-center justify-between gap-4 hover:border-white/20 transition shadow-lg">
+                        <div className="flex items-center gap-4 min-w-0">
+                          <img
+                            src={p.image}
+                            alt={p.titleAr}
+                            className="w-16 h-16 rounded-xl object-cover border border-white/10 flex-shrink-0"
+                            onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }}
+                          />
+                          <div className="min-w-0">
+                            <span className="text-[10px] font-extrabold px-2.5 py-0.5 bg-[#FF1E27]/20 text-[#FF1E27] rounded-full inline-block mb-1">
+                              {p.catAr}
+                            </span>
+                            <h3 className="text-xs font-extrabold text-white truncate">{p.titleAr}</h3>
+                            <p className="text-[11px] text-gray-400 truncate">{p.titleEn}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <button
+                            onClick={() => handleEditInit(p)}
+                            title={isAr ? 'تعديل' : 'Edit'}
+                            className="px-3 py-2 text-xs bg-blue-500/15 text-blue-400 border border-blue-500/30 rounded-xl hover:bg-blue-500/25 transition"
+                          >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProject(p.id, p.titleAr)}
+                            title={isAr ? 'حذف' : 'Delete'}
+                            className="px-3 py-2 text-xs bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/25 transition"
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
                         </div>
                       </div>
-
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <button onClick={() => handleEditInit(p)} className="px-3 py-2 text-xs bg-blue-500/15 text-blue-400 border border-blue-500/30 rounded-xl hover:bg-blue-500/25 transition">
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button onClick={() => handleDeleteProject(p.id, p.titleAr)} className="px-3 py-2 text-xs bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/25 transition">
-                          <i className="fa-solid fa-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>
           </div>
         )}
 
+        {/* ====================================================== */}
         {/* TAB 2: BLOG CMS & ARTICLES EDITOR */}
+        {/* ====================================================== */}
         {activeTab === 'articles' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* New Article Form (6 cols) */}
@@ -910,12 +1001,16 @@ export default function AdminPage() {
                     <i className="fa-solid fa-pen-nib text-[#FF1E27]"></i>
                     <span>{isAr ? 'كتابة ونشر مقال هندسي جديد' : 'Publish New Engineering Article'}</span>
                   </h2>
+                  <p className="text-[11px] text-gray-500 mt-1">
+                    {isAr ? 'الحقول المطلوبة مُعلَّمة بـ ❊ — باقي الحقول اختيارية والسيرفر يكمّلها تلقائياً' : 'Required fields marked with ❊ — others are auto-filled by server'}
+                  </p>
                 </div>
 
                 <form onSubmit={handleSubmitArticle} className="space-y-4">
+                  {/* Arabic Title (required) */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'عنوان المقال (عربي)' : 'Article Title (Arabic)'}
+                      {isAr ? 'عنوان المقال (عربي)' : 'Article Title (Arabic)'} <span className="text-[#FF1E27]">❊</span>
                     </label>
                     <input
                       type="text"
@@ -927,24 +1022,24 @@ export default function AdminPage() {
                     />
                   </div>
 
+                  {/* English Title (optional) */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'عنوان المقال (إنجليزي)' : 'Article Title (English)'}
+                      {isAr ? 'عنوان المقال (إنجليزي) — اختياري' : 'Article Title (English) — Optional'}
                     </label>
                     <input
                       type="text"
                       value={artTitleEn}
                       onChange={(e) => setArtTitleEn(e.target.value)}
-                      placeholder="e.g. Egyptian Firefighting Code Standards"
-                      required
+                      placeholder="e.g. Egyptian Firefighting Code Standards (optional)"
                       className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                     />
                   </div>
 
-                  {/* DEDICATED FILE UPLOADER FOR ARTICLES */}
+                  {/* Cover Image - Optional */}
                   <div>
                     <label className="block text-xs font-bold text-gray-200 mb-2">
-                      {isAr ? 'صورة الغلاف (رفع مباشر أو رابط)' : 'Article Cover Image'}
+                      {isAr ? 'صورة الغلاف — اختياري (يوجد صورة افتراضية)' : 'Article Cover Image — Optional (default image available)'}
                     </label>
 
                     <div className="flex border border-white/10 rounded-xl overflow-hidden mb-3 bg-[#0A0A0C]">
@@ -953,7 +1048,7 @@ export default function AdminPage() {
                         onClick={() => setArtImageMode('upload')}
                         className={`flex-1 py-2 text-xs font-semibold transition ${artImageMode === 'upload' ? 'bg-[#FF1E27] text-white' : 'text-gray-400 hover:text-white'}`}
                       >
-                        <i className="fa-solid fa-cloud-arrow-up ml-1"></i> {isAr ? 'رفع صورة غلاف جديدة' : 'Upload Image'}
+                        <i className="fa-solid fa-cloud-arrow-up ml-1"></i> {isAr ? 'رفع صورة غلاف' : 'Upload Image'}
                       </button>
                       <button
                         type="button"
@@ -976,7 +1071,7 @@ export default function AdminPage() {
                           }
                         }}
                         onClick={() => artFileInputRef.current?.click()}
-                        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition flex flex-col items-center justify-center gap-2 ${
+                        className={`border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer transition flex flex-col items-center justify-center gap-2 ${
                           isArtDragging ? 'border-[#FF1E27] bg-[#FF1E27]/10' : 'border-white/15 bg-[#0A0A0C] hover:border-white/30'
                         }`}
                       >
@@ -994,14 +1089,14 @@ export default function AdminPage() {
                           </div>
                         ) : (
                           <>
-                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
-                              <i className="fa-solid fa-newspaper text-[#FF1E27] text-xl"></i>
+                            <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                              <i className="fa-solid fa-newspaper text-[#FF1E27] text-lg"></i>
                             </div>
                             <p className="text-xs font-semibold text-gray-200">
-                              {isAr ? 'اضغط هنا لرفع صورة الغلاف أو اسحب الملف هنا' : 'Click or drag cover image here'}
+                              {artImage ? (isAr ? 'صورة جاهزة ✅ — اضغط لتغييرها' : 'Image ready ✅ — click to change') : (isAr ? 'اضغط أو اسحب الصورة هنا (اختياري)' : 'Click or drag image (optional)')}
                             </p>
                             <p className="text-[10px] text-gray-500">
-                              {isAr ? 'تتم المعالجة والضغط التلقائي صيغة WebP' : 'Compressed to WebP via Canvas'}
+                              {isAr ? 'يُضغط تلقائياً WebP • أو اترك فارغاً للصورة الافتراضية' : 'Auto-compressed to WebP • or leave blank for default'}
                             </p>
                           </>
                         )}
@@ -1013,18 +1108,22 @@ export default function AdminPage() {
                         type="url"
                         value={artImage}
                         onChange={(e) => setArtImage(e.target.value)}
-                        placeholder="https://..."
+                        placeholder="https://... (اتركه فارغاً للصورة الافتراضية)"
                         className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                       />
                     )}
 
-                    {/* Preview Thumbnail */}
                     {artImage && (
                       <div className="mt-3 p-3 bg-[#0A0A0C] border border-white/10 rounded-2xl flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 overflow-hidden">
-                          <img src={artImage} alt="Article Cover" className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0" />
+                          <img
+                            src={artImage}
+                            alt="Article Cover"
+                            className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0"
+                            onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }}
+                          />
                           <div className="overflow-hidden">
-                            <p className="text-xs font-bold text-emerald-400">{isAr ? 'تم جاهزية صورة الغلاف' : 'Cover Image Ready'}</p>
+                            <p className="text-xs font-bold text-emerald-400">{isAr ? 'تم جاهزية صورة الغلاف ✅' : 'Cover Image Ready ✅'}</p>
                             <p className="text-[10px] text-gray-500 truncate max-w-[180px]">{artImage}</p>
                           </div>
                         </div>
@@ -1035,40 +1134,66 @@ export default function AdminPage() {
                     )}
                   </div>
 
+                  {/* Summary (optional) */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'ملخص المقال (عربي)' : 'Article Summary (Arabic)'}
+                      {isAr ? 'ملخص المقال (عربي) — اختياري' : 'Article Summary (Arabic) — Optional'}
                     </label>
                     <textarea
                       rows={2}
                       value={artSummaryAr}
                       onChange={(e) => setArtSummaryAr(e.target.value)}
-                      placeholder="ملخص مختصر يظهر في القائمة..."
+                      placeholder="ملخص مختصر يظهر في قائمة المقالات..."
                       className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                     />
                   </div>
 
+                  {/* Arabic content (required) */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'المحتوى الهندسي الكامل (عربي)' : 'Full Content (Arabic)'}
+                      {isAr ? 'المحتوى الهندسي الكامل (عربي)' : 'Full Content (Arabic)'} <span className="text-[#FF1E27]">❊</span>
                     </label>
                     <textarea
-                      rows={5}
+                      rows={6}
                       value={artContentAr}
                       onChange={(e) => setArtContentAr(e.target.value)}
-                      placeholder="اكتب المحتوى الهندسي للمقال..."
+                      placeholder="اكتب المحتوى الهندسي التفصيلي للمقال هنا... يمكنك استخدام سطور جديدة للفقرات."
                       required
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none leading-relaxed"
+                    />
+                  </div>
+
+                  {/* Read time */}
+                  <div className="flex items-center gap-3">
+                    <label className="text-xs font-semibold text-gray-300 whitespace-nowrap">
+                      {isAr ? 'وقت القراءة (دقائق):' : 'Read Time (mins):'}
+                    </label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={60}
+                      value={artReadTime}
+                      onChange={(e) => setArtReadTime(Number(e.target.value))}
+                      className="w-20 bg-[#0A0A0C] border border-white/15 rounded-xl p-2 text-xs text-white focus:border-[#FF1E27] focus:outline-none text-center"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSavingArticle}
-                    className="w-full py-3.5 bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold rounded-xl shadow-lg shadow-red-600/30 hover:opacity-95 transition flex items-center justify-center gap-2 text-sm cursor-pointer"
+                    className="w-full py-3.5 bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold rounded-xl shadow-lg shadow-red-600/30 hover:opacity-95 transition flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-60"
                   >
-                    <i className="fa-solid fa-paper-plane"></i>
-                    <span>{isSavingArticle ? (isAr ? 'جاري النشر...' : 'Publishing...') : (isAr ? 'نشر المقال الهندسي' : 'Publish Article')}</span>
+                    {isSavingArticle ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>{isAr ? 'جاري النشر...' : 'Publishing...'}</span>
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-paper-plane"></i>
+                        <span>{isAr ? 'نشر المقال الهندسي' : 'Publish Article'}</span>
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
@@ -1084,32 +1209,66 @@ export default function AdminPage() {
                   </h2>
                 </div>
 
-                <div className="space-y-3 max-h-[650px] overflow-y-auto pr-1 custom-scrollbar">
-                  {articles.map((art) => (
-                    <div key={art.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-4 flex items-center justify-between gap-4 hover:border-white/20 transition shadow-lg">
-                      <div className="flex items-center gap-4 min-w-0">
-                        <img src={art.image} alt={art.titleAr} className="w-16 h-16 rounded-xl object-cover border border-white/10 flex-shrink-0" />
-                        <div className="min-w-0">
-                          <span className="text-[10px] font-extrabold text-gray-400 block mb-1">
-                            {art.readTimeMin} دقائق قراءة
-                          </span>
-                          <h3 className="text-xs font-extrabold text-white truncate">{art.titleAr}</h3>
-                          <p className="text-[11px] text-gray-400 truncate">{art.slug}</p>
+                <div className="space-y-3 max-h-[700px] overflow-y-auto pr-1">
+                  {articles.length === 0 ? (
+                    <div className="py-12 flex flex-col items-center gap-3 text-center">
+                      <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                        <i className="fa-solid fa-newspaper text-gray-600 text-2xl"></i>
+                      </div>
+                      <p className="text-sm font-bold text-gray-500">{isAr ? 'لا توجد مقالات منشورة بعد' : 'No articles published yet'}</p>
+                      <p className="text-xs text-gray-600">{isAr ? 'انشر مقالك الأول من النموذج على اليسار' : 'Publish your first article from the form'}</p>
+                    </div>
+                  ) : (
+                    articles.map((art) => (
+                      <div key={art.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-4 hover:border-white/20 transition shadow-lg">
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-4 min-w-0 flex-1">
+                            <img
+                              src={art.image}
+                              alt={art.titleAr}
+                              className="w-16 h-16 rounded-xl object-cover border border-white/10 flex-shrink-0"
+                              onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }}
+                            />
+                            <div className="min-w-0 flex-1">
+                              <span className="text-[10px] font-extrabold text-gray-400 block mb-1 flex items-center gap-1">
+                                <i className="fa-solid fa-clock text-[9px]"></i> {art.readTimeMin} {isAr ? 'دقائق' : 'min read'}
+                              </span>
+                              <h3 className="text-xs font-extrabold text-white truncate">{art.titleAr}</h3>
+                              <p className="text-[11px] text-gray-500 truncate font-mono">{art.slug}</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <a
+                              href={`/blog/${art.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title={isAr ? 'عرض المقال' : 'View Article'}
+                              className="px-3 py-2 text-xs bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded-xl hover:bg-emerald-500/25 transition"
+                            >
+                              <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                            <button
+                              onClick={() => handleDeleteArticle(art.id, art.titleAr)}
+                              title={isAr ? 'حذف' : 'Delete'}
+                              className="px-3 py-2 text-xs bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/25 transition flex-shrink-0"
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </button>
+                          </div>
                         </div>
                       </div>
-
-                      <button onClick={() => handleDeleteArticle(art.id, art.titleAr)} className="px-3 py-2 text-xs bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/25 transition flex-shrink-0">
-                        <i className="fa-solid fa-trash"></i>
-                      </button>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>
           </div>
         )}
 
+        {/* ====================================================== */}
         {/* TAB 3: ANALYTICS */}
+        {/* ====================================================== */}
         {activeTab === 'analytics' && (
           <div className="space-y-6">
             <div className="bg-[#131317] border border-white/10 rounded-3xl p-8 shadow-2xl space-y-6">
@@ -1125,21 +1284,49 @@ export default function AdminPage() {
                   <p className="text-[11px] text-gray-500">مفعل ISR 60s Revalidation</p>
                 </div>
                 <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">
-                  <span className="text-xs text-gray-400">حجم صور CDN المضغوطة</span>
-                  <p className="text-3xl font-extrabold text-blue-400">WebP Auto</p>
-                  <p className="text-[11px] text-gray-500">توفير 95% من سعة التخزين</p>
+                  <span className="text-xs text-gray-400">إجمالي المقالات المنشورة</span>
+                  <p className="text-3xl font-extrabold text-purple-400">{stats.totalArticles}</p>
+                  <p className="text-[11px] text-gray-500">مقالات هندسية متخصصة</p>
                 </div>
                 <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">
                   <span className="text-xs text-gray-400">حالة الربط مع Supabase</span>
-                  <p className="text-3xl font-extrabold text-purple-400">نشط وحي</p>
+                  <p className="text-3xl font-extrabold text-blue-400">نشط وحي</p>
                   <p className="text-[11px] text-gray-500">مشروع dpptnkehkzolqrifbagx</p>
+                </div>
+              </div>
+
+              {/* Category breakdown */}
+              <div className="border-t border-white/10 pt-6">
+                <h3 className="text-sm font-bold text-white mb-4">توزيع المشاريع حسب التصنيف</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { key: 'retail', label: 'مبيعات وتجزئة', color: 'bg-blue-500' },
+                    { key: 'dining', label: 'مطاعم وكافيهات', color: 'bg-orange-500' },
+                    { key: 'showrooms', label: 'معارض سيارات', color: 'bg-purple-500' },
+                    { key: 'supermarket', label: 'سوبرماركت', color: 'bg-emerald-500' },
+                  ].map((cat) => {
+                    const count = projects.filter(p => p.category === cat.key).length;
+                    const pct = stats.totalProjects > 0 ? Math.round((count / stats.totalProjects) * 100) : 0;
+                    return (
+                      <div key={cat.key} className="bg-[#0A0A0C] border border-white/10 rounded-xl p-4 space-y-2">
+                        <p className="text-xs text-gray-400">{cat.label}</p>
+                        <p className="text-2xl font-extrabold text-white">{count}</p>
+                        <div className="w-full bg-white/5 rounded-full h-1.5">
+                          <div className={`h-1.5 rounded-full ${cat.color}`} style={{ width: `${pct}%` }}></div>
+                        </div>
+                        <p className="text-[10px] text-gray-500">{pct}% من الإجمالي</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
         )}
 
+        {/* ====================================================== */}
         {/* TAB 4: SYSTEM SETTINGS */}
+        {/* ====================================================== */}
         {activeTab === 'settings' && (
           <div className="space-y-6">
             <div className="bg-[#131317] border border-white/10 rounded-3xl p-8 shadow-2xl space-y-6 max-w-2xl mx-auto">
@@ -1148,22 +1335,21 @@ export default function AdminPage() {
                 <span>إعدادات النظام والاتصال بقاعدة البيانات</span>
               </h2>
 
-              <div className="space-y-4 text-xs">
-                <div className="flex justify-between p-3.5 bg-[#0A0A0C] rounded-2xl border border-white/10">
-                  <span className="text-gray-400">البريد الإلكتروني الحالي للأدمن:</span>
-                  <span className="font-bold text-white">admin@emep-egy.com</span>
-                </div>
-                <div className="flex justify-between p-3.5 bg-[#0A0A0C] rounded-2xl border border-white/10">
-                  <span className="text-gray-400">رابط مشروع Supabase Live:</span>
-                  <span className="font-mono text-emerald-400">https://dpptnkehkzolqrifbagx.supabase.co</span>
-                </div>
-                <div className="flex justify-between p-3.5 bg-[#0A0A0C] rounded-2xl border border-white/10">
-                  <span className="text-gray-400">صندوق تخزين الصور Storage Bucket:</span>
-                  <span className="font-mono text-blue-400">public / projects</span>
-                </div>
+              <div className="space-y-3 text-xs">
+                {[
+                  { label: 'البريد الإلكتروني للأدمن:', value: 'admin@emep-egy.com', color: 'text-white' },
+                  { label: 'رابط مشروع Supabase Live:', value: 'https://dpptnkehkzolqrifbagx.supabase.co', color: 'text-emerald-400 font-mono' },
+                  { label: 'Storage Bucket:', value: 'public / projects', color: 'text-blue-400 font-mono' },
+                  { label: 'الموقع الحي:', value: 'https://emep.vercel.app', color: 'text-purple-400 font-mono' },
+                ].map((item, i) => (
+                  <div key={i} className="flex justify-between items-center p-3.5 bg-[#0A0A0C] rounded-2xl border border-white/10 gap-4">
+                    <span className="text-gray-400 flex-shrink-0">{item.label}</span>
+                    <span className={`font-bold text-right break-all ${item.color}`}>{item.value}</span>
+                  </div>
+                ))}
               </div>
 
-              <div className="pt-4 border-t border-white/10">
+              <div className="space-y-3 pt-4 border-t border-white/10">
                 <button
                   onClick={() => { fetchProjects(); fetchArticles(); setStatusMessage({ type: 'success', text: 'تم تحديث وسحب البيانات من السيرفر بنجاح!' }); }}
                   className="w-full py-3.5 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl border border-white/20 transition flex items-center justify-center gap-2 cursor-pointer text-xs"
@@ -1171,6 +1357,15 @@ export default function AdminPage() {
                   <i className="fa-solid fa-rotate"></i>
                   <span>إعادة تحديث ومزامنة البيانات مع Supabase</span>
                 </button>
+                <a
+                  href="https://emep.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-bold rounded-2xl border border-emerald-500/20 transition flex items-center justify-center gap-2 cursor-pointer text-xs"
+                >
+                  <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                  <span>فتح الموقع الحي في تبويب جديد</span>
+                </a>
               </div>
             </div>
           </div>
