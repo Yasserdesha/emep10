@@ -350,7 +350,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               <div className="bim-visual">
                 <div className="bim-frame-preview">
                   <Image 
-                    src="/Animated background images/ezgif-frame-185.jpg" 
+                    src="/Animated background images/compressed/frame-035.webp" 
                     alt={isAr ? "مخطط كهروميكانيكي ثلاثي الأبعاد BIM Revit" : "BIM Revit Electromechanical 3D Engineering Model"} 
                     width={600}
                     height={400}

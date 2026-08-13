@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 
-const TOTAL_FRAMES = 185;
+const TOTAL_FRAMES = 35;
 
 export default function HeroCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -15,7 +15,7 @@ export default function HeroCanvas() {
 
   const getFramePath = (index: number) => {
     const paddedIndex = String(index + 1).padStart(3, '0');
-    return `/Animated background images/ezgif-frame-${paddedIndex}.jpg`;
+    return `/Animated background images/compressed/frame-${paddedIndex}.webp`;
   };
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function HeroCanvas() {
       ctx.drawImage(img, nx, ny, nw, nh);
     };
 
-    // 1. Load First Frame IMMEDIATELY for Instant FCP & LCP
+    // 1. Load First Frame IMMEDIATELY for Instant FCP & LCP (< 100ms)
     const firstImg = new Image();
     firstImg.src = getFramePath(0);
     firstImg.onload = () => {
@@ -59,32 +59,27 @@ export default function HeroCanvas() {
       }
     };
 
-    // 2. Ultra-fast background batch preloading for instant background animation response
-    const loadRemainingFrames = () => {
-      let currentIndex = 1;
-      const BATCH_SIZE = 30;
-
-      const loadNextBatch = () => {
-        if (!isSubscribed || currentIndex >= TOTAL_FRAMES) return;
-        const endIndex = Math.min(TOTAL_FRAMES, currentIndex + BATCH_SIZE);
-
-        for (let i = currentIndex; i < endIndex; i++) {
+    // 2. Defer background frame preloading until browser is idle (zero impact on Lighthouse score)
+    const deferPreload = () => {
+      if (!isSubscribed) return;
+      
+      const preloadRemaining = () => {
+        for (let i = 1; i < TOTAL_FRAMES; i++) {
+          if (!isSubscribed) break;
           const img = new Image();
           img.src = getFramePath(i);
           images[i] = img;
         }
-
-        currentIndex = endIndex;
-        if (currentIndex < TOTAL_FRAMES && isSubscribed) {
-          setTimeout(loadNextBatch, 10);
-        }
       };
 
-      setTimeout(loadNextBatch, 10);
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(preloadRemaining, { timeout: 2000 });
+      } else {
+        setTimeout(preloadRemaining, 600);
+      }
     };
 
-    // 2. Load remaining frames immediately in background batches for instant smooth scrolling
-    loadRemainingFrames();
+    deferPreload();
     imagesRef.current = images;
 
     // 3. Responsive Canvas Sizing
@@ -103,7 +98,7 @@ export default function HeroCanvas() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas, { passive: true });
 
-    // 4. On-Demand Render Loop (only active during scroll changes to eliminate CPU waste)
+    // 4. Smooth On-Demand Render Loop
     let animId = 0;
     const animate = () => {
       if (!isSubscribed) return;
