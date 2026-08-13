@@ -22,16 +22,6 @@ body {
   color: var(--foreground);
 }
 
-/* Off-screen layout rendering optimization */
-.services-section,
-.bim-section,
-.projects-section,
-.contact-section,
-.footer {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 800px;
-}
-
 /* Custom Webkit scrollbar for premium dark aesthetic */
 ::-webkit-scrollbar {
   width: 8px;
