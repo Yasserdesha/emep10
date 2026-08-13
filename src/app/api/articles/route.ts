@@ -5,6 +5,8 @@ import { verifySessionToken } from '../admin/login/route';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import initialArticles from '@/data/articles.json';
 
+const DEFAULT_ARTICLE_IMAGE = 'https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0004.webp';
+
 // Verify admin authorization
 function isAuthorized(req: NextRequest): boolean {
   const cookieToken = req.cookies.get('admin_token')?.value;
@@ -51,7 +53,7 @@ export async function GET() {
             summaryAr: row.summary_ar,
             contentEn: row.content_en,
             contentAr: row.content_ar,
-            image: row.image,
+            image: row.image || DEFAULT_ARTICLE_IMAGE,
             author: row.author,
             readTimeMin: Number(row.read_time_min) || 5,
             createdAt: row.created_at,
@@ -81,12 +83,18 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { slug, titleEn, titleAr, summaryEn, summaryAr, contentEn, contentAr, image, author, readTimeMin } = body;
 
-    if (!titleAr || !titleEn || !contentAr || !image) {
-      return NextResponse.json({ message: 'يرجى ملء كافة العناوين وإرفاق صورة المقال' }, { status: 400 });
+    const finalTitleAr = (titleAr || titleEn || '').trim();
+    const finalTitleEn = (titleEn || titleAr || '').trim();
+
+    if (!finalTitleAr && !finalTitleEn) {
+      return NextResponse.json({ message: 'يرجى كتابة عنوان المقال (عربي أو إنجليزي)' }, { status: 400 });
     }
 
+    const finalContentAr = (contentAr || summaryAr || finalTitleAr).trim();
+    const finalImage = (image || '').trim() || DEFAULT_ARTICLE_IMAGE;
+
     // Fail-safe slug generator that handles non-ASCII characters and guarantees a unique slug
-    const cleanBase = (slug || titleEn || titleAr || 'article')
+    const cleanBase = (slug || finalTitleEn || finalTitleAr || 'article')
       .toLowerCase()
       .trim()
       .replace(/[^a-z0-9]/g, '-')
@@ -102,13 +110,13 @@ export async function POST(req: NextRequest) {
           .from('articles')
           .insert([{
             slug: generatedSlug,
-            title_en: titleEn,
-            title_ar: titleAr,
-            summary_en: summaryEn || summaryAr || '',
-            summary_ar: summaryAr || '',
-            content_en: contentEn || contentAr || '',
-            content_ar: contentAr || '',
-            image,
+            title_en: finalTitleEn,
+            title_ar: finalTitleAr,
+            summary_en: summaryEn || summaryAr || finalTitleEn,
+            summary_ar: summaryAr || finalTitleAr,
+            content_en: contentEn || finalContentAr,
+            content_ar: finalContentAr,
+            image: finalImage,
             author: author || 'E-MEP Engineering Team',
             read_time_min: Number(readTimeMin) || 5,
           }])
@@ -129,13 +137,13 @@ export async function POST(req: NextRequest) {
     const newArticle = {
       id: Date.now(),
       slug: generatedSlug,
-      titleEn,
-      titleAr,
-      summaryEn: summaryEn || summaryAr || '',
-      summaryAr: summaryAr || '',
-      contentEn: contentEn || contentAr || '',
-      contentAr: contentAr || '',
-      image,
+      titleEn: finalTitleEn,
+      titleAr: finalTitleAr,
+      summaryEn: summaryEn || summaryAr || finalTitleEn,
+      summaryAr: summaryAr || finalTitleAr,
+      contentEn: contentEn || finalContentAr,
+      contentAr: finalContentAr,
+      image: finalImage,
       author: author || 'E-MEP Engineering Team',
       readTimeMin: Number(readTimeMin) || 5,
       createdAt: new Date().toISOString(),
