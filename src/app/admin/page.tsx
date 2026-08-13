@@ -124,6 +124,14 @@ export default function AdminPage() {
   const [artReadTime, setArtReadTime] = useState(5);
   const [isSavingArticle, setIsSavingArticle] = useState(false);
 
+  // Auto-dismiss status message after 6 seconds
+  useEffect(() => {
+    if (statusMessage) {
+      const timer = setTimeout(() => setStatusMessage(null), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusMessage]);
+
   // Check auth session on mount
   useEffect(() => {
     async function checkAuth() {
@@ -164,7 +172,7 @@ export default function AdminPage() {
     }
   };
 
-  // Login submit handler (Automatic instant refresh fix)
+  // Login submit handler
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
@@ -181,7 +189,6 @@ export default function AdminPage() {
 
       if (res.ok && data.success) {
         setIsAuthenticated(true);
-        // Instant reload to attach session cookie to all sub-fetches
         window.location.reload();
       } else {
         setLoginError(data.message || (isAr ? 'البريد الإلكتروني أو كلمة السر غير صحيحة' : 'Invalid email or password'));
@@ -231,7 +238,7 @@ export default function AdminPage() {
     setImageUrl(p.image);
     setImageMode('url');
     setActiveTab('projects');
-    window.scrollTo({ top: 300, behavior: 'smooth' });
+    window.scrollTo({ top: 200, behavior: 'smooth' });
   };
 
   // Fail-proof File Upload Handler for Projects
@@ -396,11 +403,13 @@ export default function AdminPage() {
   const handleSubmitArticle = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!artTitleAr.trim() || !artTitleEn.trim() || !artContentAr.trim() || !artImage) {
-      setStatusMessage({ type: 'error', text: isAr ? 'يرجى اختيار صورة ومثال عنوان ومحتوى المقال' : 'Please fill required article fields' });
+      setStatusMessage({ type: 'error', text: isAr ? 'يرجى إدخال عنوان وصورة ومحتوى المقال' : 'Please fill required article fields' });
       return;
     }
 
     setIsSavingArticle(true);
+    setStatusMessage(null);
+
     try {
       const res = await fetch('/api/articles', {
         method: 'POST',
@@ -418,16 +427,18 @@ export default function AdminPage() {
         }),
       });
 
-      if (res.ok) {
-        setStatusMessage({ type: 'success', text: isAr ? 'تم نشر المقال الهندسي الجديد بنجاح!' : 'Article published successfully!' });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setStatusMessage({ type: 'success', text: isAr ? 'تم نشر المقال الهندسي بنجاح!' : 'Article published successfully!' });
         setArtTitleAr(''); setArtTitleEn(''); setArtSummaryAr(''); setArtSummaryEn(''); setArtContentAr(''); setArtContentEn(''); setArtImage('');
         fetchArticles();
       } else {
-        const data = await res.json();
-        setStatusMessage({ type: 'error', text: data.message || 'Failed to publish article' });
+        setStatusMessage({ type: 'error', text: data.message || (isAr ? 'حدث خطأ أثناء حفظ المقال' : 'Failed to publish article') });
       }
     } catch (err) {
       console.error('Save article error:', err);
+      setStatusMessage({ type: 'error', text: isAr ? 'حدث خطأ في السيرفر أثناء نشر المقال' : 'Server error publishing article' });
     } finally {
       setIsSavingArticle(false);
     }
@@ -494,8 +505,8 @@ export default function AdminPage() {
 
           <form onSubmit={handleLogin} className="space-y-5 relative z-10">
             {loginError && (
-              <div className="p-3 bg-red-500/15 border border-red-500/40 rounded-xl text-red-400 text-xs flex items-center gap-2">
-                <i className="fa-solid fa-triangle-exclamation"></i>
+              <div className="p-3.5 bg-red-500/15 border border-red-500/40 rounded-2xl text-red-400 text-xs flex items-center gap-2">
+                <i className="fa-solid fa-circle-exclamation"></i>
                 <span>{loginError}</span>
               </div>
             )}
@@ -552,12 +563,12 @@ export default function AdminPage() {
   }
 
   // -------------------------------------------------------------
-  // STATE-OF-THE-ART OVERHAULED DASHBOARD
+  // STATE-OF-THE-ART HIGH-CONTRAST DASHBOARD
   // -------------------------------------------------------------
   return (
     <div className="min-h-screen bg-[#0A0A0C] text-white" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Top Bar Navigation Header */}
-      <header className="bg-[#131317]/90 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 px-4 py-3">
+      <header className="bg-[#131317]/95 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 px-4 py-3 shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/10 rounded-xl p-2 border border-white/20 flex items-center justify-center shadow-lg">
@@ -593,7 +604,7 @@ export default function AdminPage() {
       <main className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
         
         {/* Navigation Tabs Header */}
-        <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
+        <div className="flex items-center gap-3 border-b border-white/10 pb-4 overflow-x-auto">
           {[
             { id: 'projects', labelAr: '📁 إدارة المشاريع والأعمال', labelEn: 'Projects CMS', icon: 'fa-folder-open' },
             { id: 'articles', labelAr: '✍️ إدارة المقالات والمدونة', labelEn: 'Blog CMS', icon: 'fa-newspaper' },
@@ -603,28 +614,29 @@ export default function AdminPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-5 py-3 rounded-2xl text-xs font-bold transition flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              className={`px-5 py-3 rounded-2xl text-xs font-extrabold transition flex items-center gap-2.5 whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
                   ? 'bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white shadow-lg shadow-red-600/30'
                   : 'bg-[#131317] border border-white/10 text-gray-400 hover:bg-white/5 hover:text-white'
               }`}
             >
+              <i className={`fa-solid ${tab.icon}`}></i>
               <span>{isAr ? tab.labelAr : tab.labelEn}</span>
             </button>
           ))}
         </div>
 
-        {/* Global Feedback Banner */}
+        {/* Floating Toast Notification Banner */}
         {statusMessage && (
-          <div className={`p-4 rounded-2xl border text-xs font-semibold flex items-center justify-between ${
-            statusMessage.type === 'success' ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400' : 'bg-red-500/15 border-red-500/30 text-red-400'
+          <div className={`p-4 rounded-2xl border text-xs font-bold flex items-center justify-between shadow-2xl transition animate-fadeIn ${
+            statusMessage.type === 'success' ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' : 'bg-red-500/20 border-red-500/40 text-red-300'
           }`}>
-            <div className="flex items-center gap-2">
-              <i className={`fa-solid ${statusMessage.type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}`}></i>
+            <div className="flex items-center gap-2.5">
+              <i className={`fa-solid ${statusMessage.type === 'success' ? 'fa-circle-check text-lg' : 'fa-circle-exclamation text-lg'}`}></i>
               <span>{statusMessage.text}</span>
             </div>
-            <button onClick={() => setStatusMessage(null)} className="underline hover:opacity-80">
-              {isAr ? 'إغلاق' : 'Close'}
+            <button onClick={() => setStatusMessage(null)} className="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-white text-[11px] transition">
+              {isAr ? 'إغلاق' : 'Dismiss'}
             </button>
           </div>
         )}
@@ -648,9 +660,9 @@ export default function AdminPage() {
                 </div>
 
                 <form onSubmit={handleSubmitProject} className="space-y-4">
-                  {/* Category Selection */}
+                  {/* Category Selection Cards */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-2">
+                    <label className="block text-xs font-bold text-gray-200 mb-2">
                       {isAr ? 'تصنيف المشروع' : 'Project Category'}
                     </label>
                     <div className="grid grid-cols-2 gap-2">
@@ -664,13 +676,14 @@ export default function AdminPage() {
                           key={cat.key}
                           type="button"
                           onClick={() => handleCategorySelect(cat.key)}
-                          className={`p-2.5 rounded-xl border text-xs font-semibold text-center transition cursor-pointer ${
+                          className={`p-3 rounded-xl border text-xs font-bold text-center transition cursor-pointer flex items-center justify-between ${
                             categoryKey === cat.key
-                              ? 'bg-[#FF1E27]/20 border-[#FF1E27] text-white shadow-md'
-                              : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                              ? 'bg-[#FF1E27]/25 border-[#FF1E27] text-white shadow-lg'
+                              : 'bg-[#0A0A0C] border-white/10 text-gray-400 hover:bg-white/5'
                           }`}
                         >
-                          {isAr ? cat.ar : cat.en}
+                          <span>{isAr ? cat.ar : cat.en}</span>
+                          {categoryKey === cat.key && <i className="fa-solid fa-circle-check text-[#FF1E27]"></i>}
                         </button>
                       ))}
                     </div>
@@ -688,7 +701,7 @@ export default function AdminPage() {
                         onChange={(e) => setTitleAr(e.target.value)}
                         placeholder="مثال: ستاربكس سيتي سنتر"
                         required
-                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
                       />
                     </div>
                     <div>
@@ -701,14 +714,14 @@ export default function AdminPage() {
                         onChange={(e) => setTitleEn(e.target.value)}
                         placeholder="e.g. Starbucks City Centre"
                         required
-                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
                       />
                     </div>
                   </div>
 
                   {/* Fail-Proof WebP Image Drag & Drop Uploader */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-2">
+                    <label className="block text-xs font-bold text-gray-200 mb-2">
                       {isAr ? 'صورة المشروع (رفع مباشر مضغوط بنسبة 100%)' : 'Project Image Upload'}
                     </label>
 
@@ -779,21 +792,21 @@ export default function AdminPage() {
                         value={imageUrl}
                         onChange={(e) => setImageUrl(e.target.value)}
                         placeholder="https://dpptnkehkzolqrifbagx.supabase.co/..."
-                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
                       />
                     )}
 
                     {/* Preview Thumbnail */}
                     {imageUrl && (
-                      <div className="mt-3 p-2.5 bg-[#0A0A0C] border border-white/10 rounded-xl flex items-center justify-between gap-3">
+                      <div className="mt-3 p-3 bg-[#0A0A0C] border border-white/10 rounded-2xl flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 overflow-hidden">
-                          <img src={imageUrl} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-white/10" />
+                          <img src={imageUrl} alt="Preview" className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0" />
                           <div className="overflow-hidden">
-                            <p className="text-xs font-semibold text-emerald-400">{isAr ? 'تم تجهيز الصورة' : 'Image Ready'}</p>
+                            <p className="text-xs font-bold text-emerald-400">{isAr ? 'تم جاهزية الصورة' : 'Image Ready'}</p>
                             <p className="text-[10px] text-gray-500 truncate max-w-[180px]">{imageUrl}</p>
                           </div>
                         </div>
-                        <button type="button" onClick={() => setImageUrl('')} className="text-xs text-red-400 p-1">
+                        <button type="button" onClick={() => setImageUrl('')} className="text-xs text-red-400 p-2 hover:bg-red-500/10 rounded-lg transition">
                           <i className="fa-solid fa-trash"></i>
                         </button>
                       </div>
@@ -811,7 +824,7 @@ export default function AdminPage() {
                         value={descAr}
                         onChange={(e) => setDescAr(e.target.value)}
                         placeholder="تفاصيل نطاق التكييف والكهرباء والإنذار..."
-                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
                       />
                     </div>
                     <div>
@@ -823,7 +836,7 @@ export default function AdminPage() {
                         value={descEn}
                         onChange={(e) => setDescEn(e.target.value)}
                         placeholder="Full MEP scope details..."
-                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white placeholder-gray-600 focus:border-[#FF1E27] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -852,29 +865,29 @@ export default function AdminPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={isAr ? 'بحث في المشاريع...' : 'Search...'}
-                    className="bg-[#0A0A0C] border border-white/15 rounded-xl px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-[#FF1E27] focus:outline-none"
+                    className="bg-[#0A0A0C] border border-white/15 rounded-xl px-4 py-2 text-xs text-white placeholder-gray-500 focus:border-[#FF1E27] focus:outline-none"
                   />
                 </div>
 
-                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1 custom-scrollbar">
+                <div className="space-y-3 max-h-[650px] overflow-y-auto pr-1 custom-scrollbar">
                   {filteredProjects.map((p) => (
-                    <div key={p.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-3 hover:border-white/20 transition">
-                      <div className="flex items-center gap-3 overflow-hidden">
-                        <img src={p.image} alt={p.titleAr} className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0" />
-                        <div className="overflow-hidden">
-                          <span className="text-[10px] font-bold px-2 py-0.5 bg-[#FF1E27]/20 text-[#FF1E27] rounded-full">
+                    <div key={p.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-4 flex items-center justify-between gap-4 hover:border-white/20 transition shadow-lg">
+                      <div className="flex items-center gap-4 min-w-0">
+                        <img src={p.image} alt={p.titleAr} className="w-16 h-16 rounded-xl object-cover border border-white/10 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-extrabold px-2.5 py-0.5 bg-[#FF1E27]/20 text-[#FF1E27] rounded-full inline-block mb-1">
                             {p.catAr}
                           </span>
-                          <h3 className="text-xs font-bold text-white truncate mt-1">{p.titleAr}</h3>
+                          <h3 className="text-xs font-extrabold text-white truncate">{p.titleAr}</h3>
                           <p className="text-[11px] text-gray-400 truncate">{p.titleEn}</p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 flex-shrink-0">
-                        <button onClick={() => handleEditInit(p)} className="px-2.5 py-1.5 text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg hover:bg-blue-500/20 transition">
+                        <button onClick={() => handleEditInit(p)} className="px-3 py-2 text-xs bg-blue-500/15 text-blue-400 border border-blue-500/30 rounded-xl hover:bg-blue-500/25 transition">
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button onClick={() => handleDeleteProject(p.id, p.titleAr)} className="px-2.5 py-1.5 text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition">
+                        <button onClick={() => handleDeleteProject(p.id, p.titleAr)} className="px-3 py-2 text-xs bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/25 transition">
                           <i className="fa-solid fa-trash"></i>
                         </button>
                       </div>
@@ -886,7 +899,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* TAB 2: BLOG CMS & ARTICLES EDITOR (WITH DEDICATED IMAGE UPLOADER) */}
+        {/* TAB 2: BLOG CMS & ARTICLES EDITOR */}
         {activeTab === 'articles' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* New Article Form (6 cols) */}
@@ -910,7 +923,7 @@ export default function AdminPage() {
                       onChange={(e) => setArtTitleAr(e.target.value)}
                       placeholder="مثال: اشتراطات الكود المصري للحريق في المحلات والمطاعم"
                       required
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                     />
                   </div>
 
@@ -924,13 +937,13 @@ export default function AdminPage() {
                       onChange={(e) => setArtTitleEn(e.target.value)}
                       placeholder="e.g. Egyptian Firefighting Code Standards"
                       required
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                     />
                   </div>
 
                   {/* DEDICATED FILE UPLOADER FOR ARTICLES */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-2">
+                    <label className="block text-xs font-bold text-gray-200 mb-2">
                       {isAr ? 'صورة الغلاف (رفع مباشر أو رابط)' : 'Article Cover Image'}
                     </label>
 
@@ -1001,21 +1014,21 @@ export default function AdminPage() {
                         value={artImage}
                         onChange={(e) => setArtImage(e.target.value)}
                         placeholder="https://..."
-                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                       />
                     )}
 
                     {/* Preview Thumbnail */}
                     {artImage && (
-                      <div className="mt-3 p-2.5 bg-[#0A0A0C] border border-white/10 rounded-xl flex items-center justify-between gap-3">
+                      <div className="mt-3 p-3 bg-[#0A0A0C] border border-white/10 rounded-2xl flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 overflow-hidden">
-                          <img src={artImage} alt="Article Cover" className="w-12 h-12 rounded-lg object-cover border border-white/10" />
+                          <img src={artImage} alt="Article Cover" className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0" />
                           <div className="overflow-hidden">
-                            <p className="text-xs font-semibold text-emerald-400">{isAr ? 'تم جاهزية صورة الغلاف' : 'Cover Image Ready'}</p>
+                            <p className="text-xs font-bold text-emerald-400">{isAr ? 'تم جاهزية صورة الغلاف' : 'Cover Image Ready'}</p>
                             <p className="text-[10px] text-gray-500 truncate max-w-[180px]">{artImage}</p>
                           </div>
                         </div>
-                        <button type="button" onClick={() => setArtImage('')} className="text-xs text-red-400 p-1">
+                        <button type="button" onClick={() => setArtImage('')} className="text-xs text-red-400 p-2 hover:bg-red-500/10 rounded-lg transition">
                           <i className="fa-solid fa-trash"></i>
                         </button>
                       </div>
@@ -1031,7 +1044,7 @@ export default function AdminPage() {
                       value={artSummaryAr}
                       onChange={(e) => setArtSummaryAr(e.target.value)}
                       placeholder="ملخص مختصر يظهر في القائمة..."
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                     />
                   </div>
 
@@ -1045,7 +1058,7 @@ export default function AdminPage() {
                       onChange={(e) => setArtContentAr(e.target.value)}
                       placeholder="اكتب المحتوى الهندسي للمقال..."
                       required
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-2.5 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
                     />
                   </div>
 
@@ -1071,21 +1084,21 @@ export default function AdminPage() {
                   </h2>
                 </div>
 
-                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1 custom-scrollbar">
+                <div className="space-y-3 max-h-[650px] overflow-y-auto pr-1 custom-scrollbar">
                   {articles.map((art) => (
-                    <div key={art.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-3 flex items-center justify-between gap-3 hover:border-white/20 transition">
-                      <div className="flex items-center gap-3 overflow-hidden">
-                        <img src={art.image} alt={art.titleAr} className="w-14 h-14 rounded-xl object-cover border border-white/10 flex-shrink-0" />
-                        <div className="overflow-hidden">
-                          <span className="text-[10px] font-bold text-gray-400">
+                    <div key={art.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-4 flex items-center justify-between gap-4 hover:border-white/20 transition shadow-lg">
+                      <div className="flex items-center gap-4 min-w-0">
+                        <img src={art.image} alt={art.titleAr} className="w-16 h-16 rounded-xl object-cover border border-white/10 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-extrabold text-gray-400 block mb-1">
                             {art.readTimeMin} دقائق قراءة
                           </span>
-                          <h3 className="text-xs font-bold text-white truncate mt-0.5">{art.titleAr}</h3>
+                          <h3 className="text-xs font-extrabold text-white truncate">{art.titleAr}</h3>
                           <p className="text-[11px] text-gray-400 truncate">{art.slug}</p>
                         </div>
                       </div>
 
-                      <button onClick={() => handleDeleteArticle(art.id, art.titleAr)} className="px-2.5 py-1.5 text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition flex-shrink-0">
+                      <button onClick={() => handleDeleteArticle(art.id, art.titleAr)} className="px-3 py-2 text-xs bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/25 transition flex-shrink-0">
                         <i className="fa-solid fa-trash"></i>
                       </button>
                     </div>
@@ -1136,15 +1149,15 @@ export default function AdminPage() {
               </h2>
 
               <div className="space-y-4 text-xs">
-                <div className="flex justify-between p-3 bg-[#0A0A0C] rounded-xl border border-white/10">
+                <div className="flex justify-between p-3.5 bg-[#0A0A0C] rounded-2xl border border-white/10">
                   <span className="text-gray-400">البريد الإلكتروني الحالي للأدمن:</span>
                   <span className="font-bold text-white">admin@emep-egy.com</span>
                 </div>
-                <div className="flex justify-between p-3 bg-[#0A0A0C] rounded-xl border border-white/10">
+                <div className="flex justify-between p-3.5 bg-[#0A0A0C] rounded-2xl border border-white/10">
                   <span className="text-gray-400">رابط مشروع Supabase Live:</span>
                   <span className="font-mono text-emerald-400">https://dpptnkehkzolqrifbagx.supabase.co</span>
                 </div>
-                <div className="flex justify-between p-3 bg-[#0A0A0C] rounded-xl border border-white/10">
+                <div className="flex justify-between p-3.5 bg-[#0A0A0C] rounded-2xl border border-white/10">
                   <span className="text-gray-400">صندوق تخزين الصور Storage Bucket:</span>
                   <span className="font-mono text-blue-400">public / projects</span>
                 </div>
@@ -1153,7 +1166,7 @@ export default function AdminPage() {
               <div className="pt-4 border-t border-white/10">
                 <button
                   onClick={() => { fetchProjects(); fetchArticles(); setStatusMessage({ type: 'success', text: 'تم تحديث وسحب البيانات من السيرفر بنجاح!' }); }}
-                  className="w-full py-3 bg-white/10 hover:bg-white/15 text-white font-bold rounded-xl border border-white/20 transition flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl border border-white/20 transition flex items-center justify-center gap-2 cursor-pointer text-xs"
                 >
                   <i className="fa-solid fa-rotate"></i>
                   <span>إعادة تحديث ومزامنة البيانات مع Supabase</span>

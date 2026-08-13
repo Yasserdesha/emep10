@@ -53,7 +53,7 @@ export async function GET() {
             contentAr: row.content_ar,
             image: row.image,
             author: row.author,
-            readTimeMin: row.read_time_min,
+            readTimeMin: Number(row.read_time_min) || 5,
             createdAt: row.created_at,
           }));
 
@@ -82,10 +82,18 @@ export async function POST(req: NextRequest) {
     const { slug, titleEn, titleAr, summaryEn, summaryAr, contentEn, contentAr, image, author, readTimeMin } = body;
 
     if (!titleAr || !titleEn || !contentAr || !image) {
-      return NextResponse.json({ message: 'Missing required article fields' }, { status: 400 });
+      return NextResponse.json({ message: 'يرجى ملء كافة العناوين وإرفاق صورة المقال' }, { status: 400 });
     }
 
-    const generatedSlug = slug || titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    // Fail-safe slug generator that handles non-ASCII characters and guarantees a unique slug
+    const cleanBase = (slug || titleEn || titleAr || 'article')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    
+    const generatedSlug = cleanBase ? `${cleanBase}-${Date.now().toString().slice(-4)}` : `article-${Date.now()}`;
 
     // Try Supabase first
     if (isSupabaseConfigured() && supabase) {
@@ -96,18 +104,20 @@ export async function POST(req: NextRequest) {
             slug: generatedSlug,
             title_en: titleEn,
             title_ar: titleAr,
-            summary_en: summaryEn || '',
+            summary_en: summaryEn || summaryAr || '',
             summary_ar: summaryAr || '',
-            content_en: contentEn || '',
+            content_en: contentEn || contentAr || '',
             content_ar: contentAr || '',
             image,
             author: author || 'E-MEP Engineering Team',
-            read_time_min: readTimeMin || 5,
+            read_time_min: Number(readTimeMin) || 5,
           }])
           .select();
 
         if (!error && data) {
           return NextResponse.json({ success: true, article: data[0], source: 'supabase' }, { status: 201 });
+        } else if (error) {
+          console.error('Supabase article insert error:', error);
         }
       } catch (sbErr) {
         console.warn('Supabase article insert failed, saving to local JSON:', sbErr);
@@ -121,13 +131,13 @@ export async function POST(req: NextRequest) {
       slug: generatedSlug,
       titleEn,
       titleAr,
-      summaryEn: summaryEn || '',
+      summaryEn: summaryEn || summaryAr || '',
       summaryAr: summaryAr || '',
-      contentEn: contentEn || '',
+      contentEn: contentEn || contentAr || '',
       contentAr: contentAr || '',
       image,
       author: author || 'E-MEP Engineering Team',
-      readTimeMin: readTimeMin || 5,
+      readTimeMin: Number(readTimeMin) || 5,
       createdAt: new Date().toISOString(),
     };
 
@@ -136,7 +146,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, article: newArticle, source: 'local' }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ message: 'Error creating article' }, { status: 500 });
+    console.error('Create article server error:', error);
+    return NextResponse.json({ message: 'حدث خطأ في حفظ المقال، يرجى إعادة المحاولة' }, { status: 500 });
   }
 }
 
