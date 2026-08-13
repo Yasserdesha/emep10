@@ -126,6 +126,12 @@ export default function AdminPage() {
   const [artContentEn, setArtContentEn] = useState('');
   const [artReadTime, setArtReadTime] = useState(5);
   const [isSavingArticle, setIsSavingArticle] = useState(false);
+  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+
+  // Analytics state
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [analyticsRefreshed, setAnalyticsRefreshed] = useState<string | null>(null);
+  const [dbHealth, setDbHealth] = useState<'unknown' | 'ok' | 'error'>('unknown');
 
   // Auto-dismiss status message after 6 seconds
   useEffect(() => {
@@ -190,9 +196,12 @@ export default function AdminPage() {
 
       const data = await res.json();
 
-      if (res.ok && data.success) {
+      // API returns { authenticated: true } on success (not data.success)
+      if (res.ok && (data.authenticated || data.success)) {
         setIsAuthenticated(true);
-        window.location.reload();
+        setLoading(false);
+        // Fetch dashboard data immediately — no page reload needed
+        await Promise.all([fetchProjects(), fetchArticles()]);
       } else {
         setLoginError(data.message || (isAr ? 'البريد الإلكتروني أو كلمة السر غير صحيحة' : 'Invalid email or password'));
       }
@@ -203,6 +212,7 @@ export default function AdminPage() {
       setIsLoggingIn(false);
     }
   };
+
 
   const handleLogout = async () => {
     if (!confirm(isAr ? 'هل تريد تسجيل الخروج من لوحة التحكم؟' : 'Are you sure you want to logout?')) return;
@@ -228,6 +238,52 @@ export default function AdminPage() {
     setImageUrl('');
     setImageMode('upload');
     setStatusMessage(null);
+  };
+
+  const resetArticleForm = () => {
+    setEditingArticle(null);
+    setArtTitleAr('');
+    setArtTitleEn('');
+    setArtSummaryAr('');
+    setArtSummaryEn('');
+    setArtContentAr('');
+    setArtContentEn('');
+    setArtImage('');
+    setArtReadTime(5);
+    setArtImageMode('upload');
+    setStatusMessage(null);
+  };
+
+  const handleArticleEditInit = (art: Article) => {
+    setEditingArticle(art);
+    setArtTitleAr(art.titleAr);
+    setArtTitleEn(art.titleEn);
+    setArtSummaryAr(art.summaryAr);
+    setArtSummaryEn(art.summaryEn);
+    setArtContentAr(art.contentAr);
+    setArtContentEn(art.contentEn);
+    setArtImage(art.image);
+    setArtReadTime(art.readTimeMin);
+    setArtImageMode('url');
+    setActiveTab('articles');
+    window.scrollTo({ top: 200, behavior: 'smooth' });
+  };
+
+  const checkDbHealth = async () => {
+    setAnalyticsLoading(true);
+    try {
+      const res = await fetch('/api/projects');
+      if (res.ok) {
+        setDbHealth('ok');
+        setAnalyticsRefreshed(new Date().toLocaleTimeString('ar-EG'));
+      } else {
+        setDbHealth('error');
+      }
+    } catch {
+      setDbHealth('error');
+    } finally {
+      setAnalyticsLoading(false);
+    }
   };
 
   const handleEditInit = (p: Project) => {
@@ -409,10 +465,9 @@ export default function AdminPage() {
     }
   };
 
-  // Submit Article (Blog CMS)
+  // Submit Article (Blog CMS) — handles both Create (POST) and Edit (PUT)
   const handleSubmitArticle = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Only Arabic title and content are required — image and English title are optional (server provides fallbacks)
     if (!artTitleAr.trim()) {
       setStatusMessage({ type: 'error', text: isAr ? 'يرجى كتابة عنوان المقال بالعربي على الأقل' : 'Arabic article title is required' });
       return;
@@ -421,39 +476,44 @@ export default function AdminPage() {
       setStatusMessage({ type: 'error', text: isAr ? 'يرجى كتابة محتوى المقال' : 'Article content is required' });
       return;
     }
-
     setIsSavingArticle(true);
     setStatusMessage(null);
-
+    const payload = {
+      titleAr: artTitleAr,
+      titleEn: artTitleEn || artTitleAr,
+      summaryAr: artSummaryAr,
+      summaryEn: artSummaryEn,
+      contentAr: artContentAr,
+      contentEn: artContentEn,
+      image: artImage || '',
+      readTimeMin: artReadTime,
+      author: 'E-MEP Engineering Team',
+    };
     try {
-      const res = await fetch('/api/articles', {
-        method: 'POST',
+      const isEdit = Boolean(editingArticle);
+      const method = isEdit ? 'PUT' : 'POST';
+      const url = isEdit ? `/api/articles?id=${editingArticle!.id}` : '/api/articles';
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          titleAr: artTitleAr,
-          titleEn: artTitleEn || artTitleAr, // fallback to Arabic if English is empty
-          summaryAr: artSummaryAr,
-          summaryEn: artSummaryEn,
-          contentAr: artContentAr,
-          contentEn: artContentEn,
-          image: artImage || '', // server will use default image if empty
-          readTimeMin: artReadTime,
-          author: 'E-MEP Engineering Team',
-        }),
+        body: JSON.stringify(isEdit ? { ...payload, id: editingArticle!.id } : payload),
       });
-
       const data = await res.json();
-
-      if (res.ok && data.success) {
-        setStatusMessage({ type: 'success', text: isAr ? 'تم نشر المقال الهندسي بنجاح! ✅' : 'Article published successfully! ✅' });
-        setArtTitleAr(''); setArtTitleEn(''); setArtSummaryAr(''); setArtSummaryEn(''); setArtContentAr(''); setArtContentEn(''); setArtImage(''); setArtReadTime(5);
+      if (res.ok && (data.success || data.article)) {
+        setStatusMessage({
+          type: 'success',
+          text: isEdit
+            ? (isAr ? 'تم تعديل المقال بنجاح! ✅' : 'Article updated successfully! ✅')
+            : (isAr ? 'تم نشر المقال الهندسي بنجاح! ✅' : 'Article published successfully! ✅')
+        });
+        resetArticleForm();
         fetchArticles();
       } else {
-        setStatusMessage({ type: 'error', text: data.message || (isAr ? 'حدث خطأ أثناء حفظ المقال' : 'Failed to publish article') });
+        setStatusMessage({ type: 'error', text: data.message || (isAr ? 'حدث خطأ أثناء حفظ المقال' : 'Failed to save article') });
       }
     } catch (err) {
       console.error('Save article error:', err);
-      setStatusMessage({ type: 'error', text: isAr ? 'حدث خطأ في السيرفر أثناء نشر المقال' : 'Server error publishing article' });
+      setStatusMessage({ type: 'error', text: isAr ? 'حدث خطأ في السيرفر' : 'Server error' });
     } finally {
       setIsSavingArticle(false);
     }
@@ -996,15 +1056,23 @@ export default function AdminPage() {
             {/* New Article Form (6 cols) */}
             <div className="lg:col-span-6 space-y-6">
               <div className="bg-[#131317] border border-white/10 rounded-3xl p-6 shadow-2xl space-y-5">
-                <div className="border-b border-white/10 pb-4">
-                  <h2 className="text-base font-extrabold text-white flex items-center gap-2">
-                    <i className="fa-solid fa-pen-nib text-[#FF1E27]"></i>
-                    <span>{isAr ? 'كتابة ونشر مقال هندسي جديد' : 'Publish New Engineering Article'}</span>
-                  </h2>
-                  <p className="text-[11px] text-gray-500 mt-1">
-                    {isAr ? 'الحقول المطلوبة مُعلَّمة بـ ❊ — باقي الحقول اختيارية والسيرفر يكمّلها تلقائياً' : 'Required fields marked with ❊ — others are auto-filled by server'}
-                  </p>
+                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                  <div>
+                    <h2 className="text-base font-extrabold text-white flex items-center gap-2">
+                      <i className={`fa-solid ${editingArticle ? 'fa-pen-to-square' : 'fa-pen-nib'} text-[#FF1E27]`}></i>
+                      <span>{editingArticle ? (isAr ? 'تعديل المقال الهندسي' : 'Edit Article') : (isAr ? 'كتابة ونشر مقال هندسي جديد' : 'Publish New Engineering Article')}</span>
+                    </h2>
+                    <p className="text-[11px] text-gray-500 mt-1">
+                      {isAr ? 'الحقول المطلوبة مُعلَّمة بـ ❊ — باقي الحقول اختيارية والسيرفر يكمّلها تلقائياً' : 'Required fields marked with ❊ — others are auto-filled by server'}
+                    </p>
+                  </div>
+                  {editingArticle && (
+                    <button type="button" onClick={resetArticleForm} className="text-xs text-gray-400 hover:text-white underline flex-shrink-0">
+                      {isAr ? 'إلغاء التعديل' : 'Cancel Edit'}
+                    </button>
+                  )}
                 </div>
+
 
                 <form onSubmit={handleSubmitArticle} className="space-y-4">
                   {/* Arabic Title (required) */}
@@ -1249,6 +1317,13 @@ export default function AdminPage() {
                               <i className="fa-solid fa-arrow-up-right-from-square"></i>
                             </a>
                             <button
+                              onClick={() => handleArticleEditInit(art)}
+                              title={isAr ? 'تعديل' : 'Edit'}
+                              className="px-3 py-2 text-xs bg-blue-500/15 text-blue-400 border border-blue-500/30 rounded-xl hover:bg-blue-500/25 transition"
+                            >
+                              <i className="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button
                               onClick={() => handleDeleteArticle(art.id, art.titleAr)}
                               title={isAr ? 'حذف' : 'Delete'}
                               className="px-3 py-2 text-xs bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/25 transition flex-shrink-0"
@@ -1272,10 +1347,35 @@ export default function AdminPage() {
         {activeTab === 'analytics' && (
           <div className="space-y-6">
             <div className="bg-[#131317] border border-white/10 rounded-3xl p-8 shadow-2xl space-y-6">
-              <h2 className="text-lg font-extrabold text-white flex items-center gap-2">
-                <i className="fa-solid fa-chart-pie text-[#FF1E27]"></i>
-                <span>مؤشرات الأداء والمعاينة العامة للمنصة</span>
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-extrabold text-white flex items-center gap-2">
+                  <i className="fa-solid fa-chart-pie text-[#FF1E27]"></i>
+                  <span>مؤشرات الأداء والمعاينة العامة للمنصة</span>
+                </h2>
+                <button
+                  onClick={checkDbHealth}
+                  disabled={analyticsLoading}
+                  className="flex items-center gap-2 px-4 py-2 text-xs font-bold bg-white/5 border border-white/15 rounded-xl hover:bg-white/10 transition disabled:opacity-50 cursor-pointer"
+                >
+                  {analyticsLoading ? <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <i className="fa-solid fa-satellite-dish"></i>}
+                  <span>{isAr ? 'فحص حالة الاتصال' : 'Check DB Health'}</span>
+                </button>
+              </div>
+
+              {/* DB Health Status */}
+              {dbHealth !== 'unknown' && (
+                <div className={`p-4 rounded-2xl border flex items-center gap-3 text-xs font-bold ${
+                  dbHealth === 'ok' ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300' : 'bg-red-500/15 border-red-500/30 text-red-300'
+                }`}>
+                  <i className={`fa-solid ${dbHealth === 'ok' ? 'fa-circle-check' : 'fa-circle-xmark'} text-base`}></i>
+                  <span>
+                    {dbHealth === 'ok'
+                      ? `✅ الاتصال ب Supabase سليم تماماً — تم الفحص ${analyticsRefreshed || ''}`
+                      : '❌ تعذر الاتصال ب Supabase — تحقق من متغيرات البيئة'
+                    }
+                  </span>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">
@@ -1290,10 +1390,33 @@ export default function AdminPage() {
                 </div>
                 <div className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-6 space-y-2">
                   <span className="text-xs text-gray-400">حالة الربط مع Supabase</span>
-                  <p className="text-3xl font-extrabold text-blue-400">نشط وحي</p>
+                  <p className={`text-3xl font-extrabold ${dbHealth === 'ok' ? 'text-emerald-400' : dbHealth === 'error' ? 'text-red-400' : 'text-blue-400'}`}>
+                    {dbHealth === 'ok' ? 'نشط ✅' : dbHealth === 'error' ? 'خطأ ❌' : 'جار الفحص...'}
+                  </p>
                   <p className="text-[11px] text-gray-500">مشروع dpptnkehkzolqrifbagx</p>
                 </div>
               </div>
+
+              {/* Articles breakdown */}
+              {articles.length > 0 && (
+                <div className="border-t border-white/10 pt-6">
+                  <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+                    <i className="fa-solid fa-newspaper text-[#FF1E27]"></i>
+                    <span>آخر المقالات المنشورة</span>
+                  </h3>
+                  <div className="space-y-2">
+                    {articles.slice(0, 5).map((art) => (
+                      <div key={art.id} className="flex items-center justify-between p-3 bg-[#0A0A0C] rounded-xl border border-white/10">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <img src={art.image} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }} />
+                          <p className="text-xs font-semibold text-white truncate">{art.titleAr}</p>
+                        </div>
+                        <span className="text-[10px] text-gray-500 flex-shrink-0 ml-2">{art.readTimeMin} دقائق</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Category breakdown */}
               <div className="border-t border-white/10 pt-6">
@@ -1341,6 +1464,7 @@ export default function AdminPage() {
                   { label: 'رابط مشروع Supabase Live:', value: 'https://dpptnkehkzolqrifbagx.supabase.co', color: 'text-emerald-400 font-mono' },
                   { label: 'Storage Bucket:', value: 'public / projects', color: 'text-blue-400 font-mono' },
                   { label: 'الموقع الحي:', value: 'https://emep.vercel.app', color: 'text-purple-400 font-mono' },
+                  { label: 'Next.js Version:', value: '16.x (Turbopack)', color: 'text-yellow-400 font-mono' },
                 ].map((item, i) => (
                   <div key={i} className="flex justify-between items-center p-3.5 bg-[#0A0A0C] rounded-2xl border border-white/10 gap-4">
                     <span className="text-gray-400 flex-shrink-0">{item.label}</span>
@@ -1350,6 +1474,19 @@ export default function AdminPage() {
               </div>
 
               <div className="space-y-3 pt-4 border-t border-white/10">
+                <button
+                  onClick={checkDbHealth}
+                  disabled={analyticsLoading}
+                  className="w-full py-3.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 font-bold rounded-2xl border border-blue-500/20 transition flex items-center justify-center gap-2 cursor-pointer text-xs disabled:opacity-50"
+                >
+                  {analyticsLoading ? <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div> : <i className="fa-solid fa-satellite-dish"></i>}
+                  <span>فحص حالة اتصال Supabase</span>
+                  {dbHealth !== 'unknown' && (
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full ${dbHealth === 'ok' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                      {dbHealth === 'ok' ? '✅ متصل' : '❌ خطأ'}
+                    </span>
+                  )}
+                </button>
                 <button
                   onClick={() => { fetchProjects(); fetchArticles(); setStatusMessage({ type: 'success', text: 'تم تحديث وسحب البيانات من السيرفر بنجاح!' }); }}
                   className="w-full py-3.5 bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl border border-white/20 transition flex items-center justify-center gap-2 cursor-pointer text-xs"
@@ -1365,6 +1502,15 @@ export default function AdminPage() {
                 >
                   <i className="fa-solid fa-arrow-up-right-from-square"></i>
                   <span>فتح الموقع الحي في تبويب جديد</span>
+                </a>
+                <a
+                  href="https://supabase.com/dashboard/project/dpptnkehkzolqrifbagx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 bg-white/5 hover:bg-white/10 text-gray-400 font-bold rounded-2xl border border-white/10 transition flex items-center justify-center gap-2 cursor-pointer text-xs"
+                >
+                  <i className="fa-solid fa-database"></i>
+                  <span>فتح لوحة تحكم Supabase</span>
                 </a>
               </div>
             </div>

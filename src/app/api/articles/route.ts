@@ -159,6 +159,67 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// PUT: Update existing article by ID
+export async function PUT(req: NextRequest) {
+  try {
+    if (!isAuthorized(req)) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const body = await req.json();
+    const { titleEn, titleAr, summaryEn, summaryAr, contentEn, contentAr, image, author, readTimeMin } = body;
+    const id = searchParams.get('id') || body.id;
+
+    if (!id) {
+      return NextResponse.json({ message: 'Article ID is required' }, { status: 400 });
+    }
+
+    const updateData: Record<string, unknown> = {
+      updated_at: new Date().toISOString(),
+    };
+    if (titleAr) updateData.title_ar = titleAr;
+    if (titleEn) updateData.title_en = titleEn || titleAr;
+    if (summaryAr) updateData.summary_ar = summaryAr;
+    if (summaryEn) updateData.summary_en = summaryEn;
+    if (contentAr) updateData.content_ar = contentAr;
+    if (contentEn) updateData.content_en = contentEn;
+    if (image) updateData.image = image;
+    if (author) updateData.author = author;
+    if (readTimeMin) updateData.read_time_min = Number(readTimeMin);
+
+    if (isSupabaseConfigured() && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('articles')
+          .update(updateData)
+          .eq('id', id)
+          .select();
+
+        if (!error && data) {
+          return NextResponse.json({ success: true, article: data[0], source: 'supabase' });
+        } else if (error) {
+          console.error('Supabase article update error:', error);
+        }
+      } catch (sbErr) {
+        console.warn('Supabase article update failed:', sbErr);
+      }
+    }
+
+    // Local JSON fallback
+    const localArticles = await getLocalArticles();
+    const idx = localArticles.findIndex((a: any) => String(a.id) === String(id));
+    if (idx !== -1) {
+      localArticles[idx] = { ...localArticles[idx], ...{ titleAr, titleEn, summaryAr, summaryEn, contentAr, contentEn, image, readTimeMin } };
+      await saveLocalArticles(localArticles);
+    }
+
+    return NextResponse.json({ success: true, source: 'local' });
+  } catch (error) {
+    return NextResponse.json({ message: 'Error updating article' }, { status: 500 });
+  }
+}
+
 // DELETE: Remove article by id
 export async function DELETE(req: NextRequest) {
   try {
@@ -190,3 +251,4 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ message: 'Error deleting article' }, { status: 500 });
   }
 }
+

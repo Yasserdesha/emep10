@@ -2,10 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
+
 
 export default function Header() {
   const { language, setLanguage, t } = useLanguage();
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
@@ -95,21 +100,33 @@ export default function Header() {
     <header className="site-header" id="navbar" role="banner">
       <div className="header-container">
 
-        {/* Brand logo & Text */}
-        <button
-          type="button"
-          className="brand-logo-link cursor-pointer"
-          onClick={() => handleScrollTo('hero')}
-          aria-label="E-MEP Electromechanical Works Home"
-        >
-          <div className="header-logo-badge">
-            <Image src="/logo/logo.png" alt="E-MEP Electromechanical Works Logo" width={38} height={38} className="brand-logo" priority style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
-          </div>
-          <div className="brand-text">
-            <span className="brand-name">E-MEP</span>
-            <span className="brand-sub">Electromechanical Works</span>
-          </div>
-        </button>
+        {/* Brand logo & Text — on homepage scrolls to hero, on other pages links to / */}
+        {isHomePage ? (
+          <button
+            type="button"
+            className="brand-logo-link cursor-pointer"
+            onClick={() => handleScrollTo('hero')}
+            aria-label="E-MEP Electromechanical Works Home"
+          >
+            <div className="header-logo-badge">
+              <Image src="/logo/logo.png" alt="E-MEP Electromechanical Works Logo" width={38} height={38} className="brand-logo" priority style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
+            </div>
+            <div className="brand-text">
+              <span className="brand-name">E-MEP</span>
+              <span className="brand-sub">Electromechanical Works</span>
+            </div>
+          </button>
+        ) : (
+          <Link href="/" className="brand-logo-link" aria-label="E-MEP Electromechanical Works Home">
+            <div className="header-logo-badge">
+              <Image src="/logo/logo.png" alt="E-MEP Electromechanical Works Logo" width={38} height={38} className="brand-logo" priority style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
+            </div>
+            <div className="brand-text">
+              <span className="brand-name">E-MEP</span>
+              <span className="brand-sub">Electromechanical Works</span>
+            </div>
+          </Link>
+        )}
 
         {/* Main Navigation */}
         <nav
