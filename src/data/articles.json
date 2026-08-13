@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "slug": "mep-engineering-egyptian-code-firefighting-standards",
+    "titleEn": "Egyptian Firefighting Code Standards for Commercial Stores & Restaurants",
+    "titleAr": "اشتراطات ودليل كود الحريق المصري للمحلات التجارية والمطاعم",
+    "summaryEn": "Comprehensive guide on Egyptian Civil Defense code compliance, sprinkler density, NFPA guidelines, and fire alarm integration for retail & dining establishments.",
+    "summaryAr": "دليل شامل حول الكود المصري للحماية المدنية، كتافة الرشاشات التلقائية، ومعايير NFPA المعتمدة للمحلات التجارية والمطاعم بمصر والخليج.",
+    "contentEn": "Electromechanical engineering compliance for commercial establishments requires strict adherence to Civil Defense standards. In this article, our senior engineering team breaks down the critical requirements for Firefighting, Automatic Sprinklers (NFPA 13), Fire Alarm Zone Systems (NFPA 72), and Smoke Control Ducts. Proper BIM coordination ensures zero clash between HVAC ducting and sprinkler piping before installation.",
+    "contentAr": "تعد السلامة والكود المصري للحماية المدنية من أهم الركائز عند تصميم وتنفيذ شبكات إطفاء و إنذار الحريق للمحلات التجارية والمطاعم. يوضح هذا المقال التفصيلي من فريق E-MEP الهندسي أهم اشتراطات شبكات الرشاشات التلقائية (NFPA 13) وأنظمة الإنذار المبكر (NFPA 72) ومراوح سحب الدخان. وتساهم نمذجة معلومات البناء BIM في منع التعارضات نهائياً بين مسارات التكييف ومواسير الحريق قبل البدء بالموقع.",
+    "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/starbucks-citycenter.webp",
+    "author": "Eng. E-MEP Engineering Team",
+    "readTimeMin": 5,
+    "createdAt": "2026-08-10T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "slug": "bim-revit-mep-clash-detection-construction-roi",
+    "titleEn": "How 3D BIM Revit Modeling Reduces MEP Construction Waste by 30%",
+    "titleAr": "كيف تساهم تقنية 3D BIM Revit في تقليل هالك الأعمال الكهروميكانيكية بنسبة 30%",
+    "summaryEn": "Learn how building information modeling (BIM) detects spatial clashes between HVAC, Electrical, and Plumbing systems before physical site installation.",
+    "summaryAr": "تعرف على كيفية كشف التعارضات بين مسارات التكييف، الكابلات الكهربائية، ومواسير السباكة إلكترونياً قبل التنفيذ لتوفير الوقت والمال.",
+    "contentEn": "Traditional 2D CAD drawings often lead to costly site re-works due to overlapping pipes and ducts. By deploying BIM LOD 300/350 models, E-MEP coordinates mechanical, electrical, and plumbing engineering designs in a unified 3D digital space, dramatically shortening construction schedules and eliminating material waste.",
+    "contentAr": "غالباً ما تتسبب المخططات ثنائية الأبعاد 2D التقليدية في حدوث تعارضات مكلفة في الموقع بين دكتات التكييف وكابلات الكهرباء ومواسير التغذية والصرف. تضمن تقنية BIM Revit بمستوى تفاصيل LOD 300/350 حل جميع التعارضات إلكترونياً قبل نزول الفنيين للموقع، مما يضمن أسرع تسليم وأعلى توفير للميزانية.",
+    "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/costa-coffee.webp",
+    "author": "Eng. BIM Technology Division",
+    "readTimeMin": 6,
+    "createdAt": "2026-08-12T14:30:00Z"
+  }
+]
