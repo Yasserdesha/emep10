@@ -1,5 +1,19 @@
 [
   {
+    "id": 8931,
+    "slug": "بللارسيليرس-8931",
+    "titleEn": "Central HVAC & Chiller Systems Engineering Guide",
+    "titleAr": "بلارسيليراس - حلول وهندسة التكييف والتبريد المركزي للمنشآت التجارية",
+    "summaryEn": "Comprehensive engineering guide for central HVAC chiller systems in commercial projects and malls.",
+    "summaryAr": "دليل هندسي شامل حول أنظمة التكييف والتبريد المركزي للشيلرات (Chillers) في المحلات والمولات التجارية.",
+    "contentEn": "Central HVAC Chiller Systems are essential engineering solutions for commercial projects and shopping malls.\n\n1. Air-Cooled vs Water-Cooled Chillers\n2. Chilled Water Piping Design\n3. BIM Integration & Clash Detection\n\nE-MEP provides end-to-end central HVAC design and execution per ASHRAE standards.",
+    "contentAr": "تعتبر أنظمة التبريد والتكييف المركزي (Chiller Systems) من أهم الحلول الهندسية للمشاريع التجارية والمباني الإدارية والمولات الكبرى.\n\nأولاً: أنواع الشيلرات\n1. شيلرات التبريد بالهواء (Air-Cooled Chillers): الأنسب للمناطق ذات المساحات الخارجية المتاحة وسهولة الصيانة.\n2. شيلرات التبريد بالماء (Water-Cooled Chillers): الأكثر كفاءة في استهلاك الطاقة للمشاريع الضخمة.\n\nثانياً: تصميم شبكات المياه المثلجة\nيتم استخدام أنابيب الصلب المقاومة مع عازل حراري عالي الكفاءة لمنع تكثف الرطوبة وضمان نقل البرودة بأقل مفقود طاقة.\n\nثالثاً: التكامل مع نمذجة البناء BIM\nتضمن تقنية BIM منع التعارضات نهائياً بين مسارات مواسير الشيلر ودكتات التهوية وقنوات الكهرباء قبل التنفيذ بالموقع.\n\nE-MEP تقدم حلول التكييف المركزي والتبريد من التصميم وحتى التوريد والتركيب والتشغيل وفق معايير ASHRAE الدولية.",
+    "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/proj_1786597771217_article_hvac_restaurants_1786596951908.png",
+    "author": "E-MEP Engineering Team",
+    "readTimeMin": 7,
+    "createdAt": "2026-08-13T05:44:32.000Z"
+  },
+  {
     "id": 1786597785500,
     "slug": "smart-fire-alarm-system-design-and-installation-fundamentals-7785",
     "titleEn": "Smart Fire Alarm System - Design and Installation Fundamentals per International Standards",
