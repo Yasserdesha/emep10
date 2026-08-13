@@ -2,7 +2,7 @@
   "projects": [
     {
       "id": 1,
-      "image": "/assets/projects/portfolio-2_page-0004.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0004.jpg",
       "titleEn": "ARIIKA",
       "titleAr": "أريكا (ARIIKA)",
       "category": "retail",
@@ -13,7 +13,7 @@
     },
     {
       "id": 2,
-      "image": "/assets/projects/portfolio-2_page-0005.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0005.jpg",
       "titleEn": "MAGRABI",
       "titleAr": "مغربي (MAGRABI)",
       "category": "retail",
@@ -24,7 +24,7 @@
     },
     {
       "id": 3,
-      "image": "/assets/projects/portfolio-2_page-0006.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0006.jpg",
       "titleEn": "SIP",
       "titleAr": "سيب (SIP)",
       "category": "dining",
@@ -35,7 +35,7 @@
     },
     {
       "id": 4,
-      "image": "/assets/projects/portfolio-2_page-0007.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0007.jpg",
       "titleEn": "GARTEN",
       "titleAr": "غارتن (GARTEN)",
       "category": "dining",
@@ -46,7 +46,7 @@
     },
     {
       "id": 5,
-      "image": "/assets/projects/portfolio-2_page-0008.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0008.jpg",
       "titleEn": "MIAM MIAM",
       "titleAr": "ميعام ميعام (MIAM MIAM)",
       "category": "dining",
@@ -57,7 +57,7 @@
     },
     {
       "id": 6,
-      "image": "/assets/projects/portfolio-2_page-0009.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0009.jpg",
       "titleEn": "UNDER ARMOUR",
       "titleAr": "أندر آرمر (UNDER ARMOUR)",
       "category": "retail",
@@ -68,7 +68,7 @@
     },
     {
       "id": 7,
-      "image": "/assets/projects/portfolio-2_page-0010.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0010.jpg",
       "titleEn": "NAGUIB SELIM",
       "titleAr": "نجيب سليم (NAGUIB SELIM)",
       "category": "retail",
@@ -79,7 +79,7 @@
     },
     {
       "id": 8,
-      "image": "/assets/projects/portfolio-2_page-0011.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0011.jpg",
       "titleEn": "HONGQI",
       "titleAr": "هونغتشي (HONGQI)",
       "category": "showrooms",
@@ -90,7 +90,7 @@
     },
     {
       "id": 9,
-      "image": "/assets/projects/portfolio-2_page-0012.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0012.jpg",
       "titleEn": "ZEEKR",
       "titleAr": "زيكر (ZEEKR)",
       "category": "showrooms",
@@ -101,7 +101,7 @@
     },
     {
       "id": 10,
-      "image": "/assets/projects/portfolio-2_page-0013.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0013.jpg",
       "titleEn": "COLE HAAN",
       "titleAr": "كول هان (COLE HAAN)",
       "category": "retail",
@@ -112,7 +112,7 @@
     },
     {
       "id": 11,
-      "image": "/assets/projects/portfolio-2_page-0014.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0014.jpg",
       "titleEn": "ALPHA",
       "titleAr": "ألفا (ALPHA)",
       "category": "retail",
@@ -123,7 +123,7 @@
     },
     {
       "id": 12,
-      "image": "/assets/projects/portfolio-2_page-0015.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0015.jpg",
       "titleEn": "COLORTEK",
       "titleAr": "كلرتك (COLORTEK)",
       "category": "retail",
@@ -134,7 +134,7 @@
     },
     {
       "id": 13,
-      "image": "/assets/projects/portfolio-2_page-0016.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0016.jpg",
       "titleEn": "HAIER",
       "titleAr": "هاير (HAIER)",
       "category": "showrooms",
@@ -145,7 +145,7 @@
     },
     {
       "id": 14,
-      "image": "/assets/projects/portfolio-2_page-0017.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0017.jpg",
       "titleEn": "T.B.S (Kode)",
       "titleAr": "تي بي إس - كود (T.B.S Kode)",
       "category": "dining",
@@ -156,7 +156,7 @@
     },
     {
       "id": 15,
-      "image": "/assets/projects/portfolio-2_page-0018.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0018.jpg",
       "titleEn": "T.B.S (Mivida)",
       "titleAr": "تي بي إس - ميفيدا (T.B.S Mivida)",
       "category": "dining",
@@ -167,7 +167,7 @@
     },
     {
       "id": 16,
-      "image": "/assets/projects/portfolio-2_page-0019.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0019.jpg",
       "titleEn": "VENTI",
       "titleAr": "فينتي (VENTI)",
       "category": "dining",
@@ -178,7 +178,7 @@
     },
     {
       "id": 17,
-      "image": "/assets/projects/portfolio-2_page-0020.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0020.jpg",
       "titleEn": "DEFACTO",
       "titleAr": "ديفاكتو (DEFACTO)",
       "category": "retail",
@@ -189,7 +189,7 @@
     },
     {
       "id": 18,
-      "image": "/assets/projects/portfolio-2_page-0021.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0021.jpg",
       "titleEn": "AGTHIA",
       "titleAr": "أغذية (AGTHIA)",
       "category": "retail",
@@ -200,7 +200,7 @@
     },
     {
       "id": 19,
-      "image": "/assets/projects/portfolio-2_page-0022.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0022.jpg",
       "titleEn": "ABU AUF (Mivida)",
       "titleAr": "أبو عوف - ميفيدا (ABU AUF)",
       "category": "retail",
@@ -211,7 +211,7 @@
     },
     {
       "id": 20,
-      "image": "/assets/projects/portfolio-2_page-0023.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0023.jpg",
       "titleEn": "ABU AUF (CCM)",
       "titleAr": "أبو عوف - سي سي إم (ABU AUF)",
       "category": "retail",
@@ -222,7 +222,7 @@
     },
     {
       "id": 21,
-      "image": "/assets/projects/portfolio-2_page-0024.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0024.jpg",
       "titleEn": "STARBUCKS",
       "titleAr": "ستاربكس (STARBUCKS)",
       "category": "dining",
@@ -233,7 +233,7 @@
     },
     {
       "id": 22,
-      "image": "/assets/projects/portfolio-2_page-0025.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0025.jpg",
       "titleEn": "NISANTASI",
       "titleAr": "نيشانتاشي (NISANTASI)",
       "category": "dining",
@@ -244,7 +244,7 @@
     },
     {
       "id": 23,
-      "image": "/assets/projects/portfolio-2_page-0026.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0026.jpg",
       "titleEn": "NISANTASI Lounge",
       "titleAr": "لاونج نيشانتاشي (NISANTASI)",
       "category": "dining",
@@ -255,7 +255,7 @@
     },
     {
       "id": 24,
-      "image": "/assets/projects/portfolio-2_page-0027.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0027.jpg",
       "titleEn": "ACTIV",
       "titleAr": "أكتيف (ACTIV)",
       "category": "retail",
@@ -266,7 +266,7 @@
     },
     {
       "id": 25,
-      "image": "/assets/projects/portfolio-2_page-0028.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0028.jpg",
       "titleEn": "SECOND CUP",
       "titleAr": "second cup (SECOND CUP)",
       "category": "dining",
@@ -277,7 +277,7 @@
     },
     {
       "id": 26,
-      "image": "/assets/projects/portfolio-2_page-0029.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0029.jpg",
       "titleEn": "COPPER MELT",
       "titleAr": "كوبر ميلت (COPPER MELT)",
       "category": "dining",
@@ -288,7 +288,7 @@
     },
     {
       "id": 27,
-      "image": "/assets/projects/portfolio-2_page-0030.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0030.jpg",
       "titleEn": "LODGE",
       "titleAr": "لودج (LODGE)",
       "category": "dining",
@@ -299,7 +299,7 @@
     },
     {
       "id": 28,
-      "image": "/assets/projects/portfolio-2_page-0031.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0031.jpg",
       "titleEn": "AKHER EL ANKOUD",
       "titleAr": "آخر العنقود (AKHER EL ANKOUD)",
       "category": "retail",
@@ -310,7 +310,7 @@
     },
     {
       "id": 29,
-      "image": "/assets/projects/portfolio-2_page-0032.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0032.jpg",
       "titleEn": "AKHER EL ANKOUD Stores",
       "titleAr": "فروع آخر العنقود",
       "category": "retail",
@@ -321,7 +321,7 @@
     },
     {
       "id": 30,
-      "image": "/assets/projects/portfolio-2_page-0033.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0033.jpg",
       "titleEn": "GOSTO",
       "titleAr": "غوستو (GOSTO)",
       "category": "dining",
@@ -332,7 +332,7 @@
     },
     {
       "id": 31,
-      "image": "/assets/projects/portfolio-2_page-0034.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0034.jpg",
       "titleEn": "VILLEROY & BOCH",
       "titleAr": "فيلروي أند بوخ (VILLEROY & BOCH)",
       "category": "retail",
@@ -343,7 +343,7 @@
     },
     {
       "id": 32,
-      "image": "/assets/projects/portfolio-2_page-0035.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0035.jpg",
       "titleEn": "SET ELKOLL",
       "titleAr": "ست الكل (SET ELKOLL)",
       "category": "retail",
@@ -354,7 +354,7 @@
     },
     {
       "id": 33,
-      "image": "/assets/projects/portfolio-2_page-0036.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0036.jpg",
       "titleEn": "DUBETTA",
       "titleAr": "دوبيتا (DUBETTA)",
       "category": "retail",
@@ -365,7 +365,7 @@
     },
     {
       "id": 34,
-      "image": "/assets/projects/portfolio-2_page-0037.jpg",
+      "image": "https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/assets/projects/portfolio-2_page-0037.jpg",
       "titleEn": "FANSHY",
       "titleAr": "فانشي (FANSHY)",
       "category": "dining",

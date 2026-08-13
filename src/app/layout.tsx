@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Cairo, Outfit } from "next/font/google";
 import { LanguageProvider } from "@/components/LanguageContext";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 
 const inter = Inter({
@@ -65,6 +66,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className="theme-dark bg-[#0A0A0C] text-[#F8FAFC]">
         <LanguageProvider>
+          <ServiceWorkerRegister />
           {children}
         </LanguageProvider>
       </body>
