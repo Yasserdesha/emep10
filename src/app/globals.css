@@ -4,23 +4,39 @@
   --font-sans: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
 }
 
-/* Import E-MEP Legacy Custom CSS Modules & FontAwesome */
+/* Import E-MEP Custom CSS Modules & FontAwesome */
 @import "../../public/fontawesome/all.min.css";
 @import "../styles/variables.css";
 @import "../styles/hero.css";
 @import "../styles/sections.css";
 
-/* Additional Next.js specific overrides */
+/* CSS Custom Properties for Typography & Aesthetics */
 :root {
   --background: #0A0A0C;
   --foreground: #F8FAFC;
-  --font-en: var(--font-inter), var(--font-outfit), sans-serif;
-  --font-ar: var(--font-cairo), sans-serif;
+}
+
+/* Symmetrical Typography & RTL/LTR Balancing */
+html[lang="ar"],
+html[dir="rtl"],
+html[dir="rtl"] body {
+  font-family: var(--font-cairo), system-ui, -apple-system, sans-serif !important;
+  letter-spacing: 0 !important;
+  text-align: right;
+}
+
+html[lang="en"],
+html[dir="ltr"],
+html[dir="ltr"] body {
+  font-family: var(--font-inter), var(--font-outfit), system-ui, -apple-system, sans-serif !important;
+  text-align: left;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Custom Webkit scrollbar for premium dark aesthetic */
@@ -65,10 +81,6 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 30, 39, 0.9);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #D31019;
 }
 
 /* 1. Suppress Paused Floating Chat Widgets / Banners */
