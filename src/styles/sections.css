@@ -252,33 +252,44 @@ html[dir="rtl"] .bim-badge-overlay { right: auto; left: 1rem; }
 }
 
 .project-filter-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--clr-text-muted);
-  padding: 0.65rem 1.4rem;
-  min-height: 44px;
-  border-radius: 50px;
-  font-size: 0.9rem;
+  padding: 0.55rem 1.15rem;
+  min-height: 40px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all var(--transition-fast);
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .project-filter-btn:hover {
-  background: rgba(211, 16, 25, 0.15);
-  border-color: rgba(211, 16, 25, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
   color: #fff;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.project-filter-btn:active {
+  transform: scale(0.98);
 }
 
 .project-filter-btn.active {
-  background: linear-gradient(135deg, #d31019, #9e080f);
-  border-color: #d31019;
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(211, 16, 25, 0.4);
+  background: linear-gradient(180deg, #FF2B33 0%, #D31019 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 10px rgba(211, 16, 25, 0.45) !important;
 }
 
 /* BRAND LOGOS WHITE MARQUEE TICKER (LIKE NEWS TICKER) */

@@ -120,7 +120,7 @@ export default function Header() {
   return (
     <>
       {/* ========================================================================= */}
-      {/* 1. TOP HEADER (الموقع بالكامل) */}
+      {/* 1. TOP HEADER (Shadcn Architecture with E-MEP Brand Identity) */}
       {/* ========================================================================= */}
       <header 
         className="fixed top-0 inset-x-0 z-50 bg-[#0A0A0C]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_25px_rgba(0,0,0,0.7)]"
@@ -140,7 +140,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => handleNavigate('hero')}
-            className="flex items-center gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0 touch-manipulation"
+            className="flex items-center gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0 touch-manipulation active:scale-[0.98] transition-transform"
             aria-label="E-MEP Homepage"
           >
             <div className="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
@@ -166,9 +166,9 @@ export default function Header() {
             </div>
           </button>
 
-          {/* Desktop Navigation Links (>= 1024px) */}
+          {/* Desktop Navigation Links (Shadcn Pill Design) */}
           <nav className="hidden lg:flex items-center" aria-label="Desktop Navigation">
-            <ul className="flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+            <ul className="flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06] shadow-inner">
               {desktopNavItems.map((item) => {
                 const isActive = isHomePage && activeSection === item.id;
                 return (
@@ -176,9 +176,9 @@ export default function Header() {
                     <button
                       type="button"
                       onClick={() => handleNavigate(item.id)}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap touch-manipulation ${
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap touch-manipulation active:scale-[0.98] ${
                         isActive 
-                          ? 'text-white bg-[#FF1E27] shadow-[0_0_15px_rgba(255,30,39,0.4)]' 
+                          ? 'text-white bg-gradient-to-b from-[#FF2B33] to-[#D31019] border border-white/20 border-t-white/35 shadow-[0_2px_10px_rgba(211,16,25,0.45)] font-bold' 
                           : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.06]'
                       }`}
                     >
@@ -190,16 +190,16 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* Right Action Controls: Blog Button + Language Switcher */}
+          {/* Right Action Controls: Shadcn Blog Button + Language Switcher */}
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             
-            {/* Direct Blog Access Button */}
+            {/* Direct Blog Access Button (Shadcn Outline / Glass Variant) */}
             <Link
               href="/blog"
-              className={`inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer h-9 shadow-sm whitespace-nowrap touch-manipulation ${
+              className={`inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer h-9 shadow-sm whitespace-nowrap touch-manipulation active:scale-[0.98] ${
                 pathname.startsWith('/blog')
-                  ? 'bg-[#FF1E27] text-white shadow-[0_0_15px_rgba(255,30,39,0.4)]'
-                  : 'bg-white/[0.06] hover:bg-[#FF1E27]/15 text-white hover:text-[#FF1E27] border border-white/[0.12] hover:border-[#FF1E27]/40'
+                  ? 'bg-gradient-to-b from-[#FF2B33] to-[#D31019] text-white border border-white/20 border-t-white/35 shadow-[0_2px_10px_rgba(211,16,25,0.45)]'
+                  : 'bg-white/[0.04] hover:bg-white/[0.08] text-white hover:text-white border border-white/[0.12] hover:border-white/25 backdrop-blur-md'
               }`}
               aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
             >
@@ -207,11 +207,11 @@ export default function Header() {
               <span>{isAr ? 'المقالات' : 'Blog'}</span>
             </Link>
 
-            {/* Language Switcher */}
+            {/* Language Switcher (Shadcn Outline Variant) */}
             <button
               type="button"
               onClick={toggleLanguage}
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-9 whitespace-nowrap touch-manipulation"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm h-9 whitespace-nowrap touch-manipulation active:scale-[0.98] backdrop-blur-md"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>
@@ -223,7 +223,7 @@ export default function Header() {
       </header>
 
       {/* ========================================================================= */}
-      {/* 2. MOBILE BOTTOM NAVIGATION DOCK (Home, About Us, Services, BIM, Projects) */}
+      {/* 2. MOBILE BOTTOM NAVIGATION DOCK (Shadcn Mobile Glass Surface) */}
       {/* ========================================================================= */}
       <nav 
         className="lg:hidden fixed inset-x-3 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-2 px-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)] select-none"
@@ -243,9 +243,9 @@ export default function Header() {
                 onClick={() => handleNavigate(item.id)}
                 aria-label={t(item.i18nKey)}
                 title={t(item.i18nKey)}
-                className={`flex flex-col items-center justify-center w-12 h-11 rounded-xl transition-all cursor-pointer touch-manipulation ${
+                className={`flex flex-col items-center justify-center w-12 h-11 rounded-xl transition-all cursor-pointer touch-manipulation active:scale-[0.95] ${
                   isActive 
-                    ? 'text-[#FF1E27] bg-[#FF1E27]/15 shadow-[0_0_12px_rgba(255,30,39,0.35)] scale-105' 
+                    ? 'text-white bg-gradient-to-b from-[#FF2B33]/25 to-[#D31019]/30 border border-[#FF1E27]/40 shadow-[0_0_15px_rgba(255,30,39,0.35)] font-bold' 
                     : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
