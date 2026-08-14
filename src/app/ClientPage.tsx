@@ -44,13 +44,39 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
     return [...initialProjects].reverse();
   });
 
-  // Force page to scroll to top (0,0) on every initial load or F5 refresh
+  // Handle scroll target upon navigation from other pages (e.g. /blog)
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if ('scrollRestoration' in window.history) {
-        window.history.scrollRestoration = 'manual';
+      let targetId: string | null = null;
+      try {
+        targetId = sessionStorage.getItem('emep_scroll_target');
+        if (targetId) {
+          sessionStorage.removeItem('emep_scroll_target');
+        }
+      } catch {
+        // ignore
       }
-      window.scrollTo(0, 0);
+
+      if (!targetId && window.location.hash) {
+        targetId = window.location.hash.replace('#', '');
+      }
+
+      if (targetId && targetId !== 'hero') {
+        const scrollToElement = () => {
+          const el = document.getElementById(targetId!);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        };
+        // Run immediately or after micro-task
+        setTimeout(scrollToElement, 150);
+        setTimeout(scrollToElement, 450);
+      } else {
+        if ('scrollRestoration' in window.history) {
+          window.history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+      }
     }
   }, []);
 

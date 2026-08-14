@@ -18,7 +18,7 @@ export default function Header() {
 
   const isAr = isMounted && language === 'ar';
 
-  // Nav links items definition
+  // Nav links items definition (Contact removed from text list as requested, accessible via quick CTA button)
   const navItems = [
     { id: 'hero', i18nKey: 'nav_home' },
     { id: 'about', i18nKey: 'nav_about' },
@@ -26,7 +26,6 @@ export default function Header() {
     { id: 'bim', i18nKey: 'nav_bim' },
     { id: 'projects', i18nKey: 'nav_projects' },
     { id: 'blog', i18nKey: 'nav_blog', href: '/blog' },
-    { id: 'contact', i18nKey: 'nav_contact' },
   ];
 
   // Scroll listener for header background and scroll-spy
@@ -79,7 +78,16 @@ export default function Header() {
     }
 
     if (!isHomePage) {
-      router.push(id === 'hero' ? '/' : `/#${id}`);
+      if (id === 'hero') {
+        router.push('/');
+      } else {
+        try {
+          sessionStorage.setItem('emep_scroll_target', id);
+        } catch {
+          // ignore
+        }
+        router.push(`/#${id}`);
+      }
       return;
     }
 
