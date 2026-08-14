@@ -68,8 +68,21 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const dir = language === 'ar' ? 'rtl' : 'ltr';
 
+  // Server always renders 'en'. Client switches after mount from localStorage.
+  // To prevent hydration mismatch, expose 'en' until client is mounted.
+  const contextValue: LanguageContextType = {
+    language: isMounted ? language : 'en',
+    setLanguage,
+    t: isMounted ? t : (key: string) => {
+      const fallbackDict = translations['en'];
+      return (fallbackDict && fallbackDict[key]) ? fallbackDict[key] : key;
+    },
+    dir: isMounted ? dir : 'ltr',
+    isMounted,
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, dir, isMounted }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
