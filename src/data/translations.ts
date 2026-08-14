@@ -114,7 +114,7 @@ export const translations: { [lang: string]: TranslationDict } = {
   },
   ar: {
     nav_home: "الرئيسية",
-    nav_about: "عن الشركة",
+    nav_about: "من نحن",
     nav_services: "خدماتنا",
     nav_bim: "تقنية BIM",
     nav_projects: "مشروعاتنا",

@@ -27,13 +27,13 @@ export default function Header() {
     { id: 'contact', i18nKey: 'nav_contact' },
   ];
 
-  // Mobile Bottom Dock Quick Items (5 Essential Destinations)
+  // Mobile Bottom Dock Quick Items (5 Essential Destinations: Home, About Us, Services, BIM, Projects)
   const mobileBottomItems = [
     { id: 'hero', i18nKey: 'nav_home', icon: 'fa-solid fa-house' },
+    { id: 'about', i18nKey: 'nav_about', icon: 'fa-solid fa-building' },
     { id: 'services', i18nKey: 'nav_services', icon: 'fa-solid fa-gears' },
     { id: 'bim', i18nKey: 'nav_bim', icon: 'fa-solid fa-cube' },
     { id: 'projects', i18nKey: 'nav_projects', icon: 'fa-solid fa-layer-group' },
-    { id: 'blog', i18nKey: 'nav_blog', icon: 'fa-solid fa-newspaper', href: '/blog' },
   ];
 
   // ScrollSpy & Progress Tracker
@@ -223,7 +223,7 @@ export default function Header() {
       </header>
 
       {/* ========================================================================= */}
-      {/* 2. MOBILE BOTTOM NAVIGATION DOCK WITH iOS SAFE-AREA SUPPORT */}
+      {/* 2. MOBILE BOTTOM NAVIGATION DOCK (Home, About Us, Services, BIM, Projects) */}
       {/* ========================================================================= */}
       <nav 
         className="lg:hidden fixed inset-x-3 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-2 px-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)] select-none"
@@ -234,15 +234,13 @@ export default function Header() {
       >
         <div className="grid grid-cols-5 w-full items-center justify-items-center">
           {mobileBottomItems.map((item) => {
-            const isActive = item.href 
-              ? pathname.startsWith('/blog') 
-              : (isHomePage && activeSection === item.id);
+            const isActive = isHomePage && activeSection === item.id;
               
             return (
               <button
                 key={item.id}
                 type="button"
-                onClick={() => handleNavigate(item.id, item.href)}
+                onClick={() => handleNavigate(item.id)}
                 aria-label={t(item.i18nKey)}
                 title={t(item.i18nKey)}
                 className={`flex flex-col items-center justify-center w-12 h-11 rounded-xl transition-all cursor-pointer touch-manipulation ${
@@ -252,7 +250,7 @@ export default function Header() {
                 }`}
               >
                 <i className={`${item.icon} text-lg mb-0.5 ${isActive ? 'text-[#FF1E27]' : ''}`} aria-hidden="true"></i>
-                <span className="text-[9px] font-bold leading-none tracking-tight">
+                <span className="text-[9px] font-bold leading-none tracking-tight whitespace-nowrap">
                   {t(item.i18nKey)}
                 </span>
               </button>
