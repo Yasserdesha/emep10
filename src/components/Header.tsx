@@ -140,7 +140,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => handleNavigate('hero')}
-            className="flex items-center gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0"
+            className="flex items-center gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0 touch-manipulation"
             aria-label="E-MEP Homepage"
           >
             <div className="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
@@ -176,7 +176,7 @@ export default function Header() {
                     <button
                       type="button"
                       onClick={() => handleNavigate(item.id)}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap touch-manipulation ${
                         isActive 
                           ? 'text-white bg-[#FF1E27] shadow-[0_0_15px_rgba(255,30,39,0.4)]' 
                           : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.06]'
@@ -196,7 +196,7 @@ export default function Header() {
             {/* Direct Blog Access Button */}
             <Link
               href="/blog"
-              className={`inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer h-9 shadow-sm whitespace-nowrap ${
+              className={`inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer h-9 shadow-sm whitespace-nowrap touch-manipulation ${
                 pathname.startsWith('/blog')
                   ? 'bg-[#FF1E27] text-white shadow-[0_0_15px_rgba(255,30,39,0.4)]'
                   : 'bg-white/[0.06] hover:bg-[#FF1E27]/15 text-white hover:text-[#FF1E27] border border-white/[0.12] hover:border-[#FF1E27]/40'
@@ -211,7 +211,7 @@ export default function Header() {
             <button
               type="button"
               onClick={toggleLanguage}
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-9 whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-9 whitespace-nowrap touch-manipulation"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>
@@ -223,10 +223,13 @@ export default function Header() {
       </header>
 
       {/* ========================================================================= */}
-      {/* 2. MOBILE BOTTOM NAVIGATION DOCK (شريط التنقل السفلي للهواتف) */}
+      {/* 2. MOBILE BOTTOM NAVIGATION DOCK WITH iOS SAFE-AREA SUPPORT */}
       {/* ========================================================================= */}
       <nav 
-        className="lg:hidden fixed bottom-3 inset-x-3 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-2 px-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)]"
+        className="lg:hidden fixed inset-x-3 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-2 px-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)] select-none"
+        style={{
+          bottom: 'max(0.75rem, env(safe-area-inset-bottom, 0.75rem))'
+        }}
         aria-label="Mobile Navigation Dock"
       >
         <div className="grid grid-cols-5 w-full items-center justify-items-center">
@@ -242,7 +245,7 @@ export default function Header() {
                 onClick={() => handleNavigate(item.id, item.href)}
                 aria-label={t(item.i18nKey)}
                 title={t(item.i18nKey)}
-                className={`flex flex-col items-center justify-center w-12 h-11 rounded-xl transition-all cursor-pointer ${
+                className={`flex flex-col items-center justify-center w-12 h-11 rounded-xl transition-all cursor-pointer touch-manipulation ${
                   isActive 
                     ? 'text-[#FF1E27] bg-[#FF1E27]/15 shadow-[0_0_12px_rgba(255,30,39,0.35)] scale-105' 
                     : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'

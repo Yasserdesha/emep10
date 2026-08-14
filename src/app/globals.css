@@ -1,11 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-cairo), system-ui, -apple-system, sans-serif;
 }
 
-/* Import E-MEP Custom CSS Modules & FontAwesome */
-@import "../../public/fontawesome/all.min.css";
+/* Import E-MEP Custom CSS Modules */
 @import "../styles/variables.css";
 @import "../styles/hero.css";
 @import "../styles/sections.css";
@@ -14,6 +13,17 @@
 :root {
   --background: #0A0A0C;
   --foreground: #F8FAFC;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+}
+
+/* Mobile & WebKit Optimizations (iOS Safari & Chrome) */
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+  background-color: #0A0A0C;
 }
 
 /* Symmetrical Typography & RTL/LTR Balancing */
@@ -28,7 +38,7 @@ html[dir="rtl"] body {
 html[lang="en"],
 html[dir="ltr"],
 html[dir="ltr"] body {
-  font-family: var(--font-inter), var(--font-outfit), system-ui, -apple-system, sans-serif !important;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif !important;
   text-align: left;
 }
 
@@ -37,6 +47,21 @@ body {
   color: var(--foreground);
   overflow-x: hidden;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* WebKit Glassmorphism Fallback for Safari */
+.backdrop-blur-xl {
+  -webkit-backdrop-filter: blur(24px) !important;
+  backdrop-filter: blur(24px) !important;
+}
+
+.backdrop-blur-2xl {
+  -webkit-backdrop-filter: blur(40px) !important;
+  backdrop-filter: blur(40px) !important;
 }
 
 /* Custom Webkit scrollbar for premium dark aesthetic */
@@ -83,7 +108,7 @@ body {
   background: rgba(255, 30, 39, 0.9);
 }
 
-/* 1. Suppress Paused Floating Chat Widgets / Banners */
+/* Suppress Paused Floating Chat Widgets / Banners */
 .floating-chat-widget,
 .paused-chat-banner,
 #chat-widget-container,
@@ -93,27 +118,11 @@ body {
   pointer-events: none !important;
 }
 
-/* 2. Site-Wide Email Hover Tooltip Suppression */
+/* Site-Wide Email Hover Tooltip Suppression */
 a[href^="mailto:"],
 a[href^="mailto:"]:hover,
 a[href^="mailto:"]::before,
 a[href^="mailto:"]::after {
   content: none !important;
-}
-
-/* 3. Cross-Browser Button Normalization Reset */
-button,
-.btn {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  border-style: solid;
-}
-
-button:focus-visible,
-.btn:focus-visible {
-  outline: 2px solid #FF1E27 !important;
-  outline-offset: 2px !important;
+  text-decoration: none;
 }
