@@ -98,19 +98,19 @@ export const translations: { [lang: string]: TranslationDict } = {
     lbl_name: "Full Name / Company Name",
     lbl_email: "Email Address",
     lbl_service: "Selected MEP Service",
-    lbl_message: "Project Details / Message",
-    btn_send_email: "Send via Email",
-    btn_send_wa: "Send via WhatsApp",
+    lbl_message: "Project Requirements & Message",
+    btn_send_email: "Send Official Email Inquiry",
+    btn_send_wa: "Contact via WhatsApp",
+
+    err_title: "Page Not Found",
+    err_desc: "The engineering page or resource you are looking for does not exist or has been moved.",
+    err_btn_home: "Return to Homepage",
+    err_btn_support: "Contact Engineering Support",
 
     footer_bio: "Founded in 2019, E-MEP Electromechanical Works delivers high-precision Mechanical, Electrical, Plumbing, and Firefighting contracting solutions built on Integrity, Honesty, Authenticity, and Devotion.",
     footer_col_links: "Quick Links",
     footer_col_services: "MEP Services",
-    footer_col_contact: "Contact Info",
-    social_heading: "Follow Our Official Channels",
-    err_title: "Page Not Found",
-    err_desc: "The requested page or resource could not be found. It may have been moved, renamed, or is temporarily unavailable.",
-    err_btn_home: "Return to Homepage",
-    err_btn_support: "Contact Technical Support"
+    footer_col_contact: "Contact Info"
   },
   ar: {
     nav_home: "الرئيسية",

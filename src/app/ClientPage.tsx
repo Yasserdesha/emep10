@@ -256,7 +256,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 dangerouslySetInnerHTML={{ __html: t('about_desc2') }}
               />
 
-              <div className="about-features-list grid grid-cols-2 gap-4 mt-6">
+              <div className="about-features-list grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-6">
                 <div className="feature-card bg-white/[0.02] border border-white/[0.06] p-4 rounded-xl">
                   <div className="feature-icon"><i className="fa-solid fa-fan" aria-hidden="true"></i></div>
                   <div className="feature-info">

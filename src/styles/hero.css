@@ -120,16 +120,25 @@
 }
 
 @media (max-width: 768px) {
+  .hero-track {
+    height: 120vh;
+  }
+  .hero-centered-logo-overlay {
+    gap: 1rem;
+    padding: 0 1rem;
+  }
   .hero-logo-white-glass {
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 14px;
   }
   .hero-pure-logo {
-    max-width: 100px;
-    width: 40vw;
+    max-width: 110px;
+    width: 32vw;
     height: auto !important;
   }
   .hero-cta-btn {
-    padding: 0.7rem 1.4rem;
-    font-size: 0.82rem;
+    padding: 0.75rem 1.6rem;
+    font-size: 0.85rem;
+    min-height: 44px;
   }
 }
