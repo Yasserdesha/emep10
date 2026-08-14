@@ -231,6 +231,47 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
 
       {/* About Section */}
       <section className="about-section section-padding relative overflow-hidden" id="about" aria-labelledby="about-title-heading">
+        {/* Floating Trust & Performance Metrics Strip */}
+        <div className="container mb-12 relative z-20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#111116]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/40 transition-all">
+              <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono">
+                2019+
+              </div>
+              <div className="text-[10px] sm:text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-1">
+                {isAr ? 'سنة التأسيس والخبرة' : 'Founded Year'}
+              </div>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#111116]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/40 transition-all">
+              <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono">
+                100+
+              </div>
+              <div className="text-[10px] sm:text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-1">
+                {isAr ? 'مشروع هندسي مكتمل' : 'Completed Projects'}
+              </div>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#111116]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/40 transition-all">
+              <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono">
+                LOD 500
+              </div>
+              <div className="text-[10px] sm:text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-1">
+                {isAr ? 'دقة نمذجة الـ BIM' : 'BIM Precision'}
+              </div>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#111116]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/40 transition-all">
+              <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono">
+                100%
+              </div>
+              <div className="text-[10px] sm:text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-1">
+                {isAr ? 'مطابقة للأكواد الهندسية' : 'Code Compliance'}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="container relative z-10">
           <div className="grid grid-2 align-center">
             
