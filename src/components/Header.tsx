@@ -12,7 +12,6 @@ export default function Header() {
   const router = useRouter();
   const isHomePage = pathname === '/';
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [scrollProgress, setScrollProgress] = useState(0);
 
@@ -122,21 +121,7 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isHomePage]);
 
-  // Lock body scroll when mobile drawer is open
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [mobileMenuOpen]);
-
   const handleScrollTo = (id: string, href?: string) => {
-    setMobileMenuOpen(false);
-
     if (href) {
       router.push(href);
       return;
@@ -189,14 +174,14 @@ export default function Header() {
           aria-hidden="true"
         />
 
-        {/* Clean Proportionate Header Container with Generous Padding */}
-        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+        {/* Clean Proportionate Header Container */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
 
           {/* Brand Logo & Title */}
           {isHomePage ? (
             <button
               type="button"
-              className="flex items-center gap-2 sm:gap-2.5 text-start group cursor-pointer flex-shrink-0"
+              className="flex items-center gap-2.5 text-start group cursor-pointer flex-shrink-0"
               onClick={() => handleScrollTo('hero')}
               aria-label="E-MEP Electromechanical Works Homepage"
             >
@@ -225,7 +210,7 @@ export default function Header() {
           ) : (
             <Link 
               href="/" 
-              className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0" 
+              className="flex items-center gap-2.5 group flex-shrink-0" 
               aria-label="E-MEP Electromechanical Works Homepage"
             >
               <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
@@ -258,14 +243,14 @@ export default function Header() {
             role="navigation"
             aria-label="Main Navigation"
           >
-            <ul className="flex items-center gap-0.5 sm:gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+            <ul className="flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
               {navItems.map((item) => {
                 const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
                 return (
                   <li key={item.id} className="flex-shrink-0">
                     <button
                       type="button"
-                      className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap flex-shrink-0 ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap flex-shrink-0 ${
                         isActive 
                           ? 'text-white bg-[#FF1E27] shadow-[0_0_15px_rgba(255,30,39,0.4)]' 
                           : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.06]'
@@ -287,7 +272,7 @@ export default function Header() {
             {/* Language Switcher */}
             <button
               id="langToggleBtn"
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-8 sm:h-9 whitespace-nowrap flex-shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-8 sm:h-9 whitespace-nowrap flex-shrink-0"
               onClick={toggleLanguage}
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
               type="button"
@@ -296,115 +281,17 @@ export default function Header() {
               <span id="langText" className="whitespace-nowrap">{isAr ? 'EN' : 'العربية'}</span>
             </button>
 
-            {/* Quick Contact CTA (Desktop >= 1280px) */}
+            {/* Quick Contact CTA (Desktop >= 1024px) */}
             <button
               type="button"
               onClick={() => handleScrollTo('contact')}
-              className="hidden xl:inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-8 sm:h-9 whitespace-nowrap flex-shrink-0"
+              className="hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-9 sm:h-10 whitespace-nowrap flex-shrink-0"
             >
               <i className="fa-solid fa-paper-plane text-xs"></i>
               <span className="whitespace-nowrap">{t('nav_contact')}</span>
             </button>
-
-            {/* Mobile Icon-Only Hamburger Menu Button */}
-            <button
-              className={`lg:hidden flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-white/[0.12] bg-white/[0.04] text-white hover:border-[#FF1E27]/50 transition-all cursor-pointer flex-shrink-0 ${
-                mobileMenuOpen ? 'border-[#FF1E27] bg-[#FF1E27]/20 text-[#FF1E27]' : ''
-              }`}
-              id="mobileMenuBtn"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-expanded={mobileMenuOpen}
-              aria-controls="mobileNavDrawer"
-              aria-label={isAr ? "فتح قائمة الأقسام" : "Open sections menu"}
-              type="button"
-            >
-              <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark text-[#FF1E27]' : 'fa-bars text-white'} text-sm`}></i>
-            </button>
           </div>
         </div>
-
-        {/* Modern Collapsible Mobile Menu Drawer (Attached Directly Below Header on Mobile/Tablet < 1024px) */}
-        {mobileMenuOpen && (
-          <div 
-            id="mobileNavDrawer"
-            className="lg:hidden fixed top-14 inset-x-0 bottom-0 bg-[#0A0A0C]/98 backdrop-blur-3xl z-[100] overflow-y-auto border-t border-white/[0.08] shadow-[0_30px_60px_rgba(0,0,0,0.95)] animate-fadeIn"
-          >
-            <div className="px-4 py-6 space-y-4 max-w-lg mx-auto pb-28">
-              {/* Header Drawer Info */}
-              <div className="flex items-center justify-between px-2 pb-2 border-b border-white/[0.06]">
-                <span className="text-xs font-bold text-[#94A3B8] uppercase tracking-wider">
-                  {isAr ? 'أقسام الموقع الرئيسية' : 'Website Sections'}
-                </span>
-                <button 
-                  type="button" 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-xs text-[#FF1E27] font-bold p-1 hover:underline cursor-pointer"
-                >
-                  {isAr ? 'إغلاق ✕' : 'Close ✕'}
-                </button>
-              </div>
-
-              {/* Nav list of all 7 sections */}
-              <ul className="space-y-2">
-                {navItems.map((item) => {
-                  const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
-                  return (
-                    <li key={item.id}>
-                      <button
-                        type="button"
-                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-sm font-bold transition-all cursor-pointer ${
-                          isActive 
-                            ? 'bg-[#FF1E27] text-white shadow-[0_0_20px_rgba(255,30,39,0.4)]' 
-                            : 'bg-white/[0.03] border border-white/[0.06] text-[#CBD5E1] hover:bg-white/[0.08] hover:text-white'
-                        }`}
-                        onClick={() => handleScrollTo(item.id, item.href)}
-                      >
-                        <div className="flex items-center gap-3">
-                          <i className={`${item.iconClass} ${isActive ? 'text-white' : 'text-[#FF1E27]'} text-base`}></i>
-                          <span className="whitespace-nowrap">{t(item.i18nKey)}</span>
-                        </div>
-                        <i className={`fa-solid fa-chevron-right rtl:rotate-180 text-xs ${isActive ? 'text-white' : 'text-gray-500'}`}></i>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-
-              {/* In-drawer Quick WhatsApp Cards */}
-              <div className="pt-4 border-t border-white/[0.08] space-y-2">
-                <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider block px-2">
-                  {isAr ? 'تواصل مباشر مع مهندسي التنفيذ' : 'Direct Engineering Support'}
-                </span>
-
-                <a
-                  href="https://wa.me/201111079467"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3.5 px-4 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-bold text-xs flex items-center justify-between hover:bg-[#25D366]/25 transition-all min-h-[46px]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <i className="fa-brands fa-whatsapp text-lg"></i>
-                    <span>{isAr ? 'م. أسامة محمد (واتساب)' : 'Eng. Osama Mohamed (WhatsApp)'}</span>
-                  </div>
-                  <span className="text-[11px] text-[#25D366]/80 font-mono">01111079467</span>
-                </a>
-
-                <a
-                  href="https://wa.me/201030834372"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3.5 px-4 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-bold text-xs flex items-center justify-between hover:bg-[#25D366]/25 transition-all min-h-[46px]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <i className="fa-brands fa-whatsapp text-lg"></i>
-                    <span>{isAr ? 'م. علي ربيع (واتساب)' : 'Eng. Ali Rabie (WhatsApp)'}</span>
-                  </div>
-                  <span className="text-[11px] text-[#25D366]/80 font-mono">01030834372</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
       </header>
 
       {/* Floating Bottom Quick-Action Dock: ICON-ONLY, ALL 7 SECTIONS in ONE STATIC BAR */}
