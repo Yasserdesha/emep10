@@ -18,84 +18,55 @@ export default function Header() {
 
   const isAr = isMounted && language === 'ar';
 
-  // All 7 complete sections defined clearly for desktop and mobile
+  // All 7 complete sections with standard classic web icons (FontAwesome)
   const navItems = [
     { 
       id: 'hero', 
       i18nKey: 'nav_home',
-      icon: (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      )
+      iconClass: 'fa-solid fa-house'
     },
     { 
       id: 'about', 
       i18nKey: 'nav_about',
-      icon: (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-      )
+      iconClass: 'fa-solid fa-building'
     },
     { 
       id: 'services', 
       i18nKey: 'nav_services',
-      icon: (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      )
+      iconClass: 'fa-solid fa-gears'
     },
     { 
       id: 'bim', 
       i18nKey: 'nav_bim',
-      icon: (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
-        </svg>
-      )
+      iconClass: 'fa-solid fa-cube'
     },
     { 
       id: 'projects', 
       i18nKey: 'nav_projects',
-      icon: (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-        </svg>
-      )
+      iconClass: 'fa-solid fa-layer-group'
     },
     { 
       id: 'blog', 
       i18nKey: 'nav_blog', 
       href: '/blog',
-      icon: (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-        </svg>
-      )
+      iconClass: 'fa-solid fa-newspaper'
     },
     { 
       id: 'contact', 
       i18nKey: 'nav_contact',
-      icon: (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      )
+      iconClass: 'fa-solid fa-envelope'
     },
   ];
 
-  // All 7 sections for horizontal swipeable mobile bottom dock
+  // All 7 sections for the Icon-Only mobile bottom bar
   const allBottomNavItems = [
-    { id: 'hero', i18nKey: 'nav_home', icon: 'fa-solid fa-house' },
-    { id: 'about', i18nKey: 'nav_about', icon: 'fa-solid fa-building' },
-    { id: 'services', i18nKey: 'nav_services', icon: 'fa-solid fa-gears' },
-    { id: 'bim', i18nKey: 'nav_bim', icon: 'fa-solid fa-cube' },
-    { id: 'projects', i18nKey: 'nav_projects', icon: 'fa-solid fa-layer-group' },
-    { id: 'blog', i18nKey: 'nav_blog', icon: 'fa-solid fa-newspaper', href: '/blog' },
-    { id: 'contact', i18nKey: 'nav_contact', icon: 'fa-solid fa-envelope' },
+    { id: 'hero', i18nKey: 'nav_home', iconClass: 'fa-solid fa-house' },
+    { id: 'about', i18nKey: 'nav_about', iconClass: 'fa-solid fa-building' },
+    { id: 'services', i18nKey: 'nav_services', iconClass: 'fa-solid fa-gears' },
+    { id: 'bim', i18nKey: 'nav_bim', iconClass: 'fa-solid fa-cube' },
+    { id: 'projects', i18nKey: 'nav_projects', iconClass: 'fa-solid fa-layer-group' },
+    { id: 'blog', i18nKey: 'nav_blog', iconClass: 'fa-solid fa-newspaper', href: '/blog' },
+    { id: 'contact', i18nKey: 'nav_contact', iconClass: 'fa-solid fa-envelope' },
   ];
 
   // Scroll listener for progress bar, active section, and live URL hash update
@@ -218,30 +189,30 @@ export default function Header() {
           aria-hidden="true"
         />
 
-        {/* Compact, Featherlight Header Container */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+        {/* Clean Proportionate Header Container */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
 
           {/* Brand Logo & Title */}
           {isHomePage ? (
             <button
               type="button"
-              className="flex items-center gap-2 sm:gap-2.5 text-start group cursor-pointer flex-shrink-0"
+              className="flex items-center gap-2.5 text-start group cursor-pointer flex-shrink-0"
               onClick={() => handleScrollTo('hero')}
               aria-label="E-MEP Electromechanical Works Homepage"
             >
-              <div className="w-7 h-7 sm:w-9 sm:h-9 bg-white rounded-lg p-0.5 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
                 <Image 
                   src="/logo/logo.png" 
                   alt="E-MEP Logo" 
-                  width={24} 
-                  height={24} 
-                  style={{ width: '24px', height: '24px', objectFit: 'contain' }} 
+                  width={26} 
+                  height={26} 
+                  style={{ width: '26px', height: '26px', objectFit: 'contain' }} 
                   priority 
                 />
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
-                  <span className="font-black text-xs sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+                  <span className="font-black text-sm sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
                     E-MEP
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
@@ -254,22 +225,22 @@ export default function Header() {
           ) : (
             <Link 
               href="/" 
-              className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0" 
+              className="flex items-center gap-2.5 group flex-shrink-0" 
               aria-label="E-MEP Electromechanical Works Homepage"
             >
-              <div className="w-7 h-7 sm:w-9 sm:h-9 bg-white rounded-lg p-0.5 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
                 <Image 
                   src="/logo/logo.png" 
                   alt="E-MEP Logo" 
-                  width={24} 
-                  height={24} 
-                  style={{ width: '24px', height: '24px', objectFit: 'contain' }} 
+                  width={26} 
+                  height={26} 
+                  style={{ width: '26px', height: '26px', objectFit: 'contain' }} 
                   priority 
                 />
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
-                  <span className="font-black text-xs sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+                  <span className="font-black text-sm sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
                     E-MEP
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
@@ -311,19 +282,17 @@ export default function Header() {
           </nav>
 
           {/* Header Action Controls */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             
-            {/* Compact Language Switcher */}
+            {/* Language Switcher */}
             <button
               id="langToggleBtn"
-              className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-[11px] sm:text-xs font-bold transition-all cursor-pointer shadow-sm h-8 sm:h-9"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-8 sm:h-9"
               onClick={toggleLanguage}
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
               type="button"
             >
-              <svg className="w-3 h-3 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>
               <span id="langText">{isAr ? 'EN' : 'العربية'}</span>
             </button>
 
@@ -333,15 +302,13 @@ export default function Header() {
               onClick={() => handleScrollTo('contact')}
               className="hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-9 sm:h-10"
             >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
+              <i className="fa-solid fa-paper-plane text-xs"></i>
               <span>{t('nav_contact')}</span>
             </button>
 
-            {/* Mobile Icon-Only Hamburger Menu Button (Compact 32x32px / 36x36px) */}
+            {/* Mobile Icon-Only Hamburger Menu Button */}
             <button
-              className={`lg:hidden flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/[0.12] bg-white/[0.04] text-white hover:border-[#FF1E27]/50 transition-all cursor-pointer flex-shrink-0 ${
+              className={`lg:hidden flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-white/[0.12] bg-white/[0.04] text-white hover:border-[#FF1E27]/50 transition-all cursor-pointer flex-shrink-0 ${
                 mobileMenuOpen ? 'border-[#FF1E27] bg-[#FF1E27]/20 text-[#FF1E27]' : ''
               }`}
               id="mobileMenuBtn"
@@ -351,15 +318,7 @@ export default function Header() {
               aria-label={isAr ? "فتح قائمة الأقسام" : "Open sections menu"}
               type="button"
             >
-              {mobileMenuOpen ? (
-                <svg className="w-4 h-4 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              )}
+              <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark text-[#FF1E27]' : 'fa-bars text-white'} text-sm`}></i>
             </button>
           </div>
         </div>
@@ -401,12 +360,10 @@ export default function Header() {
                         onClick={() => handleScrollTo(item.id, item.href)}
                       >
                         <div className="flex items-center gap-3">
-                          <span className={isActive ? 'text-white' : 'text-[#FF1E27]'}>{item.icon}</span>
+                          <i className={`${item.iconClass} ${isActive ? 'text-white' : 'text-[#FF1E27]'} text-base`}></i>
                           <span>{t(item.i18nKey)}</span>
                         </div>
-                        <svg className={`w-4 h-4 rtl:rotate-180 transition-transform ${isActive ? 'text-white' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
+                        <i className={`fa-solid fa-chevron-right rtl:rotate-180 text-xs ${isActive ? 'text-white' : 'text-gray-500'}`}></i>
                       </button>
                     </li>
                   );
@@ -450,13 +407,12 @@ export default function Header() {
         )}
       </header>
 
-      {/* Modern Horizontal Swipeable Bottom Dock with ALL 7 Sections on Mobile (< 1024px) */}
+      {/* Floating Bottom Quick-Action Dock: ICON-ONLY, ALL 7 SECTIONS in ONE STATIC BAR */}
       <nav 
-        className="lg:hidden fixed bottom-2.5 inset-x-2 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-1.5 px-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)] overflow-x-auto no-scrollbar"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="lg:hidden fixed bottom-3 inset-x-3 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-2 px-1 shadow-[0_12px_40px_rgba(0,0,0,0.9)]"
         aria-label="Mobile Quick Bottom Navigation"
       >
-        <div className="flex items-center gap-1.5 w-max mx-auto">
+        <div className="grid grid-cols-7 w-full items-center justify-items-center">
           {allBottomNavItems.map((item) => {
             const isActive = item.href 
               ? pathname.startsWith('/blog') 
@@ -467,16 +423,18 @@ export default function Header() {
                 key={item.id}
                 type="button"
                 onClick={() => handleScrollTo(item.id, item.href)}
-                className={`flex items-center gap-1.5 py-1.5 px-2.5 rounded-xl transition-all cursor-pointer whitespace-nowrap flex-shrink-0 ${
+                aria-label={t(item.i18nKey)}
+                title={t(item.i18nKey)}
+                className={`flex flex-col items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl transition-all cursor-pointer ${
                   isActive 
-                    ? 'bg-[#FF1E27] text-white shadow-[0_0_12px_rgba(255,30,39,0.45)] font-bold' 
-                    : 'bg-white/[0.03] border border-white/[0.06] text-[#94A3B8] hover:text-white'
+                    ? 'text-[#FF1E27] bg-[#FF1E27]/20 shadow-[0_0_12px_rgba(255,30,39,0.4)] scale-105' 
+                    : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
-                <i className={`${item.icon} text-xs ${isActive ? 'text-white' : 'text-[#FF1E27]'}`} aria-hidden="true"></i>
-                <span className="text-[10px] sm:text-[11px] font-bold leading-none">
-                  {t(item.i18nKey)}
-                </span>
+                <i className={`${item.iconClass} text-base sm:text-lg`} aria-hidden="true"></i>
+                {isActive && (
+                  <span className="w-1 h-1 rounded-full bg-[#FF1E27] mt-0.5 shadow-[0_0_6px_#FF1E27]"></span>
+                )}
               </button>
             );
           })}
