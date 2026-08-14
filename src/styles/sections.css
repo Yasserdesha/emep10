@@ -768,25 +768,68 @@ html[dir="rtl"] .project-modal-close { right: auto; left: 1rem; }
 .form-sub { font-size: 0.9rem; color: var(--clr-text-muted); margin-bottom: 1.5rem; }
 
 .form-group { margin-bottom: 1.25rem; }
-.form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--clr-text-main); }
+.form-group label { 
+  display: block; 
+  font-size: 0.85rem; 
+  font-weight: 600; 
+  margin-bottom: 0.5rem; 
+  color: var(--clr-text-main); 
+  letter-spacing: 0.2px;
+}
 
+/* Shadcn-Inspired Input Fields */
 .form-group input,
 .form-group select,
-.form-group textarea {
+.form-group textarea,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
   width: 100%;
-  padding: 0.85rem 1rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--clr-border);
-  border-radius: var(--radius-sm);
-  color: #fff;
-  transition: border-color var(--transition-fast);
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  color: #F8FAFC;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) inset;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: #64748B;
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover,
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .form-group input:focus,
 .form-group select:focus,
-.form-group textarea:focus {
-  border-color: var(--clr-red-bright);
-  box-shadow: 0 0 10px rgba(211, 16, 25, 0.2);
+.form-group textarea:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #FF1E27 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 0 0 1px #FF1E27, 0 0 0 4px rgba(255, 30, 39, 0.18) !important;
+  outline: none;
 }
 
 .form-group option { background: #131317; color: #fff; }
