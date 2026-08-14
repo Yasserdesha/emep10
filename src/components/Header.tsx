@@ -122,7 +122,6 @@ export default function Header() {
           const top = element.offsetTop;
           if (scrollPos >= top) {
             setActiveSection(id);
-            // Live update browser URL hash without causing page jump
             if (typeof window !== 'undefined') {
               const targetHash = id === 'hero' ? '' : `#${id}`;
               if (window.location.hash !== targetHash && !(id === 'hero' && !window.location.hash)) {
@@ -140,6 +139,18 @@ export default function Header() {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isHomePage]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const handleScrollTo = (id: string, href?: string) => {
     setMobileMenuOpen(false);
@@ -257,7 +268,7 @@ export default function Header() {
           </Link>
         )}
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links (Visible on >= 1024px) */}
         <nav
           className="hidden lg:flex items-center"
           role="navigation"
@@ -303,11 +314,11 @@ export default function Header() {
             <span id="langText">{isAr ? 'EN' : 'العربية'}</span>
           </button>
 
-          {/* Quick Contact CTA (Desktop) */}
+          {/* Quick Contact CTA (Desktop >= 1024px) */}
           <button
             type="button"
             onClick={() => handleScrollTo('contact')}
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-10"
+            className="hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-10"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -315,40 +326,39 @@ export default function Header() {
             <span>{t('nav_contact')}</span>
           </button>
 
-          {/* Mobile Collapsible Menu Toggle Button */}
+          {/* Mobile Sleek Square Icon Button (Hidden on Desktop >= 1024px, Visible on Mobile/Tablet < 1024px) */}
           <button
-            className={`lg:hidden flex items-center justify-center gap-1.5 px-3 h-9 sm:h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer ${
+            className={`lg:hidden flex items-center justify-center w-10 h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer flex-shrink-0 ${
               mobileMenuOpen ? 'border-[#FF1E27]/60 bg-[#FF1E27]/20 text-[#FF1E27]' : ''
             }`}
             id="mobileMenuBtn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobileNavDrawer"
-            aria-label="Toggle navigation menu"
+            aria-label={isAr ? "فتح القائمة الرئيسية" : "Toggle navigation menu"}
             type="button"
           >
             {mobileMenuOpen ? (
-              <svg className="w-5 h-5 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-5 h-5 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
-            <span className="text-xs font-bold">{isAr ? 'القائمة' : 'Menu'}</span>
           </button>
         </div>
       </div>
 
-      {/* Modern Collapsible Mobile Menu Drawer (Attached Directly Below Header) */}
+      {/* Modern Collapsible Mobile Menu Drawer (Attached Directly Below Header on Mobile/Tablet < 1024px) */}
       {mobileMenuOpen && (
         <div 
           id="mobileNavDrawer"
           className="lg:hidden fixed top-16 inset-x-0 bottom-0 bg-[#0A0A0C]/98 backdrop-blur-3xl z-50 overflow-y-auto border-t border-white/[0.08] shadow-[0_30px_60px_rgba(0,0,0,0.95)] animate-fadeIn"
         >
           <div className="px-4 py-6 space-y-4 max-w-lg mx-auto pb-24">
-            {/* Header info */}
+            {/* Header Drawer Info */}
             <div className="flex items-center justify-between px-2 pb-2 border-b border-white/[0.06]">
               <span className="text-xs font-bold text-[#94A3B8] uppercase tracking-wider">
                 {isAr ? 'أقسام الموقع الرئيسية' : 'Website Sections'}
@@ -356,7 +366,7 @@ export default function Header() {
               <button 
                 type="button" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-xs text-[#FF1E27] font-bold p-1 hover:underline"
+                className="text-xs text-[#FF1E27] font-bold p-1 hover:underline cursor-pointer"
               >
                 {isAr ? 'إغلاق ✕' : 'Close ✕'}
               </button>
