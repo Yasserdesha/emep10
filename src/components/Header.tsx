@@ -87,12 +87,12 @@ export default function Header() {
     },
   ];
 
-  // Quick bottom bar items for 1-tap instant thumb navigation on mobile
+  // Quick bottom bar items with direct 1-tap access to Home, Services, Projects, Blog, and Contact
   const bottomNavItems = [
     { id: 'hero', i18nKey: 'nav_home', icon: 'fa-solid fa-house' },
     { id: 'services', i18nKey: 'nav_services', icon: 'fa-solid fa-gears' },
-    { id: 'bim', i18nKey: 'nav_bim', icon: 'fa-solid fa-cube' },
     { id: 'projects', i18nKey: 'nav_projects', icon: 'fa-solid fa-layer-group' },
+    { id: 'blog', i18nKey: 'nav_blog', icon: 'fa-solid fa-newspaper', href: '/blog' },
     { id: 'contact', i18nKey: 'nav_contact', icon: 'fa-solid fa-envelope' },
   ];
 
@@ -308,7 +308,7 @@ export default function Header() {
           </nav>
 
           {/* Header Action Controls */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-2.5">
             
             {/* Language Switcher */}
             <button
@@ -324,6 +324,20 @@ export default function Header() {
               <span id="langText">{isAr ? 'EN' : 'العربية'}</span>
             </button>
 
+            {/* Direct Blog Link Button on Mobile */}
+            <Link
+              href="/blog"
+              className={`lg:hidden flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-bold transition-all h-9 sm:h-10 cursor-pointer ${
+                pathname.startsWith('/blog')
+                  ? 'bg-[#FF1E27] border-[#FF1E27] text-white shadow-[0_0_12px_rgba(255,30,39,0.4)]'
+                  : 'bg-white/[0.04] border-white/[0.12] text-gray-200 hover:text-white hover:border-[#FF1E27]/40'
+              }`}
+              aria-label={isAr ? "صفحة المقالات الهندسية" : "Engineering Blog"}
+            >
+              <i className="fa-solid fa-newspaper text-xs text-[#FF1E27]"></i>
+              <span className="text-[11px] sm:text-xs">{isAr ? 'المقالات' : 'Blog'}</span>
+            </Link>
+
             {/* Quick Contact CTA (Desktop >= 1024px) */}
             <button
               type="button"
@@ -336,9 +350,9 @@ export default function Header() {
               <span>{t('nav_contact')}</span>
             </button>
 
-            {/* Mobile Prominent Menu Button (Visible on Mobile/Tablet < 1024px) */}
+            {/* Mobile Clean Square Icon Button (Hidden on Desktop >= 1024px, strictly icon-only) */}
             <button
-              className={`lg:hidden flex items-center justify-center gap-1.5 px-3 h-9 sm:h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] text-white hover:border-[#FF1E27]/50 transition-all cursor-pointer ${
+              className={`lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] text-white hover:border-[#FF1E27]/50 transition-all cursor-pointer flex-shrink-0 ${
                 mobileMenuOpen ? 'border-[#FF1E27] bg-[#FF1E27]/20 text-[#FF1E27]' : ''
               }`}
               id="mobileMenuBtn"
@@ -349,20 +363,19 @@ export default function Header() {
               type="button"
             >
               {mobileMenuOpen ? (
-                <svg className="w-4 h-4 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="w-4 h-4 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
-              <span className="text-xs font-bold text-white">{isAr ? 'الأقسام' : 'Menu'}</span>
             </button>
           </div>
         </div>
 
-        {/* Modern Collapsible Mobile Menu Drawer (Attached Directly Below Header on Mobile/Tablet < 1024px) */}
+        {/* Modern Collapsible Mobile Menu Drawer */}
         {mobileMenuOpen && (
           <div 
             id="mobileNavDrawer"
@@ -454,12 +467,15 @@ export default function Header() {
         aria-label="Mobile Quick Bottom Navigation"
       >
         {bottomNavItems.map((item) => {
-          const isActive = isHomePage && activeSection === item.id;
+          const isActive = item.href 
+            ? pathname.startsWith('/blog') 
+            : (isHomePage && activeSection === item.id);
+            
           return (
             <button
               key={item.id}
               type="button"
-              onClick={() => handleScrollTo(item.id)}
+              onClick={() => handleScrollTo(item.id, item.href)}
               className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[54px] ${
                 isActive 
                   ? 'text-[#FF1E27] font-bold scale-105' 
