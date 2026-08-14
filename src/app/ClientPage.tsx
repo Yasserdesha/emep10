@@ -177,7 +177,6 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 alt={isAr ? "شعار شركة E-MEP للأنظمة الكهروميكانيكية" : "E-MEP Electromechanical Works Official Brand Logo"} 
                 width={150}
                 height={150}
-                priority
                 className="hero-pure-logo" 
                 style={{ width: '150px', height: '150px', aspectRatio: '1/1' }}
               />

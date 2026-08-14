@@ -121,7 +121,7 @@ export default function Header() {
             aria-label="E-MEP Electromechanical Works Home"
           >
             <div className="header-logo-badge">
-              <Image src="/logo/logo.png" alt="E-MEP Electromechanical Works Logo" width={38} height={38} className="brand-logo" priority style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
+              <Image src="/logo/logo.png" alt="E-MEP Electromechanical Works Logo" width={38} height={38} className="brand-logo" style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
             </div>
             <div className="brand-text">
               <span className="brand-name">E-MEP</span>
@@ -131,7 +131,7 @@ export default function Header() {
         ) : (
           <Link href="/" className="brand-logo-link" aria-label="E-MEP Electromechanical Works Home">
             <div className="header-logo-badge">
-              <Image src="/logo/logo.png" alt="E-MEP Electromechanical Works Logo" width={38} height={38} className="brand-logo" priority style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
+              <Image src="/logo/logo.png" alt="E-MEP Electromechanical Works Logo" width={38} height={38} className="brand-logo" style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
             </div>
             <div className="brand-text">
               <span className="brand-name">E-MEP</span>
