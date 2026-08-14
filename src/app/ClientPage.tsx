@@ -33,7 +33,7 @@ interface ClientPageProps {
 }
 
 export default function ClientPage({ initialProjects, brandLogos }: ClientPageProps) {
-  const { t, language } = useLanguage();
+  const { t, language, isMounted } = useLanguage();
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [isExpanded, setIsExpanded] = useState(false);
@@ -87,7 +87,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
     }
   }, [selectedProject]);
 
-  const isAr = language === 'ar';
+  const isAr = isMounted && language === 'ar';
 
   // Filter projects based on tab selection
   const filteredProjects = selectedFilter === 'all'
@@ -195,12 +195,12 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
       </div>
 
       {/* About Section */}
-      <section className="about-section section-padding" id="about" aria-labelledby="about-title-heading">
-        <div className="container">
+      <section className="about-section section-padding relative overflow-hidden" id="about" aria-labelledby="about-title-heading">
+        <div className="container relative z-10">
           <div className="grid grid-2 align-center">
             
             <div className="about-image-column">
-              <div className="brand-showcase-box glass-panel white-logo-bg">
+              <div className="brand-showcase-box glass-panel white-logo-bg shadow-2xl rounded-3xl p-8 md:p-12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="/logo/logo.png" 
@@ -208,7 +208,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   className="about-logo-hero" 
                 />
                 <div className="badge-tag" role="status">
-                  <i className="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                  <i className="fa-solid fa-shield-halved text-[#FF1E27]" aria-hidden="true"></i>
                   <span>{t('about_tag')}</span>
                 </div>
               </div>
@@ -218,48 +218,48 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               <div className="section-tag">
                 <span>{t('about_section_tag')}</span>
               </div>
-              <h2 className="section-title text-3xl font-extrabold mb-4" id="about-title-heading">
+              <h2 className="section-title text-3xl md:text-4xl font-extrabold mb-4 text-white leading-tight" id="about-title-heading">
                 {t('about_title')}
               </h2>
               <p 
-                className="section-desc mb-4 text-[#94A3B8]"
+                className="section-desc mb-4 text-[#94A3B8] leading-relaxed text-sm md:text-base"
                 dangerouslySetInnerHTML={{ __html: t('about_desc1') }}
               />
               <p 
-                className="section-desc mb-6 text-[#94A3B8]"
+                className="section-desc mb-6 text-[#94A3B8] leading-relaxed text-sm md:text-base"
                 dangerouslySetInnerHTML={{ __html: t('about_desc2') }}
               />
 
-              <div className="about-features-list">
-                <div className="feature-card">
+              <div className="about-features-list grid grid-cols-2 gap-4 mt-6">
+                <div className="feature-card bg-white/[0.02] border border-white/[0.06] p-4 rounded-xl">
                   <div className="feature-icon"><i className="fa-solid fa-fan" aria-hidden="true"></i></div>
                   <div className="feature-info">
-                    <h3>{t('feat_hvac_title')}</h3>
-                    <p>{t('feat_hvac_desc')}</p>
+                    <h3 className="font-bold text-sm text-white">{t('feat_hvac_title')}</h3>
+                    <p className="text-xs text-[#94A3B8] mt-1">{t('feat_hvac_desc')}</p>
                   </div>
                 </div>
 
-                <div className="feature-card">
+                <div className="feature-card bg-white/[0.02] border border-white/[0.06] p-4 rounded-xl">
                   <div className="feature-icon"><i className="fa-solid fa-bolt" aria-hidden="true"></i></div>
                   <div className="feature-info">
-                    <h3>{t('feat_elec_title')}</h3>
-                    <p>{t('feat_elec_desc')}</p>
+                    <h3 className="font-bold text-sm text-white">{t('feat_elec_title')}</h3>
+                    <p className="text-xs text-[#94A3B8] mt-1">{t('feat_elec_desc')}</p>
                   </div>
                 </div>
 
-                <div className="feature-card">
+                <div className="feature-card bg-white/[0.02] border border-white/[0.06] p-4 rounded-xl">
                   <div className="feature-icon"><i className="fa-solid fa-faucet-drip" aria-hidden="true"></i></div>
                   <div className="feature-info">
-                    <h3>{t('feat_plumb_title')}</h3>
-                    <p>{t('feat_plumb_desc')}</p>
+                    <h3 className="font-bold text-sm text-white">{t('feat_plumb_title')}</h3>
+                    <p className="text-xs text-[#94A3B8] mt-1">{t('feat_plumb_desc')}</p>
                   </div>
                 </div>
 
-                <div className="feature-card">
+                <div className="feature-card bg-white/[0.02] border border-white/[0.06] p-4 rounded-xl">
                   <div className="feature-icon"><i className="fa-solid fa-fire-extinguisher" aria-hidden="true"></i></div>
                   <div className="feature-info">
-                    <h3>{t('feat_fire_title')}</h3>
-                    <p>{t('feat_fire_desc')}</p>
+                    <h3 className="font-bold text-sm text-white">{t('feat_fire_title')}</h3>
+                    <p className="text-xs text-[#94A3B8] mt-1">{t('feat_fire_desc')}</p>
                   </div>
                 </div>
               </div>
@@ -268,23 +268,23 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           </div>
 
           {/* Pillars Grid */}
-          <div className="pillars-grid">
-            <div className="pillar-card glass-panel">
-              <div className="pillar-icon red-glow"><i className="fa-solid fa-bullseye" aria-hidden="true"></i></div>
-              <h3>{t('mission_title')}</h3>
-              <p>{t('mission_desc')}</p>
+          <div className="pillars-grid grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+            <div className="pillar-card glass-panel bg-[#111116] border border-white/[0.08] hover:border-[#FF1E27]/40 p-8 rounded-2xl transition-all">
+              <div className="pillar-icon red-glow text-[#FF1E27] mb-4 text-2xl"><i className="fa-solid fa-bullseye" aria-hidden="true"></i></div>
+              <h3 className="font-bold text-lg text-white mb-2">{t('mission_title')}</h3>
+              <p className="text-xs text-[#94A3B8] leading-relaxed">{t('mission_desc')}</p>
             </div>
 
-            <div className="pillar-card glass-panel">
-              <div className="pillar-icon red-glow"><i className="fa-solid fa-eye" aria-hidden="true"></i></div>
-              <h3>{t('vision_title')}</h3>
-              <p>{t('vision_desc')}</p>
+            <div className="pillar-card glass-panel bg-[#111116] border border-white/[0.08] hover:border-[#FF1E27]/40 p-8 rounded-2xl transition-all">
+              <div className="pillar-icon red-glow text-[#FF1E27] mb-4 text-2xl"><i className="fa-solid fa-eye" aria-hidden="true"></i></div>
+              <h3 className="font-bold text-lg text-white mb-2">{t('vision_title')}</h3>
+              <p className="text-xs text-[#94A3B8] leading-relaxed">{t('vision_desc')}</p>
             </div>
 
-            <div className="pillar-card glass-panel">
-              <div className="pillar-icon red-glow"><i className="fa-solid fa-gem" aria-hidden="true"></i></div>
-              <h3>{t('values_title')}</h3>
-              <p>{t('values_desc')}</p>
+            <div className="pillar-card glass-panel bg-[#111116] border border-white/[0.08] hover:border-[#FF1E27]/40 p-8 rounded-2xl transition-all">
+              <div className="pillar-icon red-glow text-[#FF1E27] mb-4 text-2xl"><i className="fa-solid fa-gem" aria-hidden="true"></i></div>
+              <h3 className="font-bold text-lg text-white mb-2">{t('values_title')}</h3>
+              <p className="text-xs text-[#94A3B8] leading-relaxed">{t('values_desc')}</p>
             </div>
           </div>
         </div>

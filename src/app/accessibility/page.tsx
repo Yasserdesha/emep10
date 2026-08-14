@@ -5,45 +5,50 @@ import { useLanguage } from '@/components/LanguageContext';
 import Link from 'next/link';
 
 export default function AccessibilityPage() {
-  const { language } = useLanguage();
-  const isAr = language === 'ar';
+  const { language, isMounted } = useLanguage();
+  const isAr = isMounted && language === 'ar';
 
   return (
-    <div className="min-h-screen bg-[#0A0A0C] text-[#F8FAFC] font-sans antialiased py-16 px-4">
+    <div className="min-h-screen bg-[#0A0A0C] text-[#F8FAFC] font-sans antialiased py-20 px-4 selection:bg-[#FF1E27] selection:text-white" dir={isMounted ? (isAr ? 'rtl' : 'ltr') : 'ltr'}>
       <div className="max-w-3xl mx-auto space-y-8">
         
         {/* Navigation back */}
         <div>
           <Link 
             href="/" 
-            className="text-sm font-semibold text-[#94A3B8] hover:text-[#FF1E27] flex items-center gap-2"
+            className="inline-flex items-center gap-2 text-xs font-bold text-[#94A3B8] hover:text-[#FF1E27] transition-colors group"
           >
-            <i className="fa-solid fa-arrow-left"></i>
+            <svg className={`w-4 h-4 group-hover:-translate-x-1 transition-transform ${isAr ? 'rotate-180 group-hover:translate-x-1 group-hover:-translate-x-0' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
             <span>{isAr ? 'العودة للصفحة الرئيسية' : 'Back to Homepage'}</span>
           </Link>
         </div>
 
         {/* Accessibility Statement Card */}
-        <div className="glass-panel p-8 md:p-10 rounded-2xl border border-white/10 relative overflow-hidden">
-          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#D31019] to-[#FF1E27]"></div>
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#111116] border border-white/[0.08] relative overflow-hidden shadow-2xl space-y-8">
+          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#D31019] via-[#FF1E27] to-[#FF4040]" />
 
-          <div className="mb-8">
-            <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">
-              <i className="fa-solid fa-universal-access text-[#FF1E27]"></i>
-              <span>
-                {isAr ? 'إعلان إمكانية الوصول' : 'Accessibility Statement'}
-              </span>
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FF1E27]/10 border border-[#FF1E27]/25 rounded-full text-xs font-bold text-[#FF1E27] mb-3">
+              <i className="fa-solid fa-universal-access text-xs"></i>
+              <span>{isAr ? 'معايير إمكانية الوصول' : 'WCAG 2.1 AA Compliance'}</span>
+            </div>
+            
+            <h1 className="text-2xl sm:text-3xl font-black text-white">
+              {isAr ? 'إعلان إمكانية الوصول الشامل' : 'Accessibility Statement'}
             </h1>
-            <p className="text-xs text-[#94A3B8] mt-2">
-              {isAr ? 'آخر تحديث: 31 يوليو 2026' : 'Last updated: July 31, 2026'}
+            <p className="text-xs text-[#64748B] mt-1.5 font-mono">
+              {isAr ? 'آخر تحديث: أغسطس 2026' : 'Last updated: August 2026'}
             </p>
           </div>
 
-          <div className="space-y-6 text-sm text-[#94A3B8] leading-relaxed">
+          <div className="space-y-8 text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
             
-            <section className="space-y-3">
-              <h2 className="text-lg font-bold text-white">
-                {isAr ? 'التزامنا الكلي بالوصول الشامل' : 'Our Commitment'}
+            <section className="space-y-3 bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl">
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#FF1E27]" />
+                <span>{isAr ? 'التزامنا الكلي بالوصول الشامل' : 'Our Commitment'}</span>
               </h2>
               <p>
                 {isAr 
@@ -52,64 +57,75 @@ export default function AccessibilityPage() {
               </p>
             </section>
 
-            <section className="space-y-3">
-              <h2 className="text-lg font-bold text-white">
-                {isAr ? 'أهم الميزات التي قمنا بتنفيذها' : 'Accessibility Features'}
+            <section className="space-y-4">
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#FF1E27]" />
+                <span>{isAr ? 'أهم الميزات التي قمنا بتنفيذها' : 'Accessibility Features'}</span>
               </h2>
-              <ul className="list-disc pl-5 rtl:pr-5 rtl:pl-0 space-y-2">
-                <li>
-                  <strong>{isAr ? 'التصفح الكامل بلوحة المفاتيح:' : 'Keyboard Navigation:'}</strong>{' '}
-                  {isAr 
-                    ? 'يمكن تصفح جميع الأزرار، الروابط، القوائم المنسدلة، والنماذج بشكل كامل باستخدام مفتاحي Tab و Shift+Tab، وتفعيلها بضغطة زر Enter أو المسافة (Space).'
-                    : 'All buttons, interactive links, dropdown menus, and contact forms are fully navigable using standard Tab and Shift+Tab, and can be activated using Enter or Spacebar keys.'}
-                </li>
-                <li>
-                  <strong>{isAr ? 'مؤشرات التركيز البصري:' : 'Visible Focus Indicators:'}</strong>{' '}
-                  {isAr
-                    ? 'تظهر حلقات تركيز بصرية واضحة ومتباينة الألوان حول أي عنصر يتم الوقوف عليه عبر لوحة المفاتيح لتسهيل التصفح البصري.'
-                    : 'High contrast outlines appear around focused components to guide keyboard users visually.'}
-                </li>
-                <li>
-                  <strong>{isAr ? 'النصوص البديلة للصور:' : 'Alt Text for Images:'}</strong>{' '}
-                  {isAr
-                    ? 'تحتوي جميع الصور الهامة والرسومات التوضيحية على نصوص بديلة (Alt Text) دقيقة باللغتين تصف محتواها لمساعدة قوارئ الشاشة.'
-                    : 'All descriptive images and branding graphics contain meaningful Alt text in both languages to support screen-reader engines.'}
-                </li>
-                <li>
-                  <strong>{isAr ? 'دعم اتجاه RTL الصحيح:' : 'Proper RTL Direction Support:'}</strong>{' '}
-                  {isAr
-                    ? 'يتم تبديل اتجاهات التصفح بالكامل (Right-to-Left) ولغة المستند ديناميكياً لتناسب قوارئ الشاشة العربية بشكل صحيح، وليس مجرد ترجمة نصوص.'
-                    : 'The page layout flips completely (RTL) and updates HTML document lang attributes dynamically to support Arabic voice synthesizers correctly.'}
-                </li>
-                <li>
-                  <strong>{isAr ? 'بنية هيكلية دقيقة:' : 'Semantic HTML Hierarchy:'}</strong>{' '}
-                  {isAr
-                    ? 'تأسس الموقع بالاعتماد على وسوم HTML5 الدلالية وبنية عناوين هرمية دقيقة (H1, H2, H3) لتسهيل التنقل والتصفح السريع.'
-                    : 'The application uses semantic HTML5 tags and structured heading tags (H1, H2, H3) to map layout sections logically.'}
-                </li>
-              </ul>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  {
+                    titleAr: 'التصفح الكامل بلوحة المفاتيح',
+                    titleEn: 'Keyboard Navigation',
+                    descAr: 'تصفح وتفعيل جميع الأزرار والروابط والنماذج بمفتاحي Tab و Enter.',
+                    descEn: 'Navigate all links, buttons and forms with Tab and Enter.',
+                    icon: 'fa-keyboard'
+                  },
+                  {
+                    titleAr: 'مؤشرات التركيز البصري',
+                    titleEn: 'Visible Focus Rings',
+                    descAr: 'حلقات تركيز واضحة ومتباينة الألوان حول العناصر النشطة.',
+                    descEn: 'High contrast outlines around focused interactive elements.',
+                    icon: 'fa-eye'
+                  },
+                  {
+                    titleAr: 'النصوص البديلة للصور',
+                    titleEn: 'Descriptive Alt Text',
+                    descAr: 'نصوص بديلة دقيقة لجميع المخططات والرسومات الهندسية.',
+                    descEn: 'Accurate text descriptions for all diagrams and visuals.',
+                    icon: 'fa-image'
+                  },
+                  {
+                    titleAr: 'دعم كامل للغة العربية (RTL)',
+                    titleEn: 'Dynamic RTL Support',
+                    descAr: 'تبديل الاتجاه وهيكلية قراءة الشاشات الصوتية بنسبة 100%.',
+                    descEn: 'Full Right-to-Left bidirectional layout for screen readers.',
+                    icon: 'fa-language'
+                  }
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-white/[0.02] border border-white/[0.05] p-4 rounded-xl space-y-1.5">
+                    <div className="flex items-center gap-2 text-[#FF1E27] font-bold text-xs">
+                      <i className={`fa-solid ${item.icon}`}></i>
+                      <span>{isAr ? item.titleAr : item.titleEn}</span>
+                    </div>
+                    <p className="text-[11px] text-[#64748B] leading-normal">
+                      {isAr ? item.descAr : item.descEn}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </section>
 
-            <section className="space-y-3">
-              <h2 className="text-lg font-bold text-white">
-                {isAr ? 'تأكيد التوافقية' : 'Compatibility Status'}
+            <section className="space-y-3 bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl">
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#FF1E27]" />
+                <span>{isAr ? 'ملاحظات وتواصل' : 'Feedback & Contact'}</span>
               </h2>
               <p>
                 {isAr 
-                  ? 'تم تصميم موقعنا ليعمل بشكل متوافق تماماً مع متصفحات الويب الحديثة (Chrome, Edge, Safari, Firefox) وقوارئ الشاشة القياسية على الهواتف والأجهزة المكتبية.'
-                  : 'Our codebase is designed to be fully compatible with major modern browsers (Chrome, Edge, Safari, Firefox) and standard assistive screen-readers on both mobile and desktop platforms.'}
+                  ? 'نرحب دائماً بملاحظاتكم حول إمكانية الوصول. إذا واجهت أي صعوبة في تصفح الموقع أو استخدام أي من ميزاته، يرجى الاتصال بنا وسنعمل على حل المشكلة فوراً.'
+                  : 'We welcome your feedback on the accessibility of E-MEP. If you encounter accessibility barriers, please contact us and we will assist promptly.'}
               </p>
-            </section>
-
-            <section className="space-y-3">
-              <h2 className="text-lg font-bold text-white">
-                {isAr ? 'ملاحظات وتواصل' : 'Feedback & Contact'}
-              </h2>
-              <p>
-                {isAr 
-                  ? 'نرحب دائماً بملاحظاتكم حول إمكانية الوصول. إذا واجهت أي صعوبة في تصفح الموقع أو استخدام أي من ميزاته، يرجى الاتصال بنا عبر البريد الإلكتروني Info@emep-egy.com وسنعمل على حل المشكلة فوراً.'
-                  : 'We welcome your feedback on the accessibility of E-MEP Electromechanical Works. If you encounter accessibility barriers or have suggestions for improvement, please let us know at Info@emep-egy.com. We make every effort to respond within 24 hours.'}
-              </p>
+              <div className="pt-2">
+                <a 
+                  href="mailto:Info@emep-egy.com" 
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#FF1E27]/10 border border-[#FF1E27]/30 text-[#FF1E27] text-xs font-bold rounded-lg hover:bg-[#FF1E27] hover:text-white transition-all"
+                >
+                  <i className="fa-solid fa-envelope"></i>
+                  <span>Info@emep-egy.com</span>
+                </a>
+              </div>
             </section>
             
           </div>

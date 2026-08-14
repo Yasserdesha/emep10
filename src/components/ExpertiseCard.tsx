@@ -34,8 +34,8 @@ interface ExpertiseCardProps {
 }
 
 export default function ExpertiseCard({ img, datSrc, titleKey, descKey }: ExpertiseCardProps) {
-  const { t, language } = useLanguage();
-  const isAr = language === 'ar';
+  const { t, language, isMounted } = useLanguage();
+  const isAr = isMounted && language === 'ar';
 
   const cardRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
