@@ -189,14 +189,14 @@ export default function Header() {
           aria-hidden="true"
         />
 
-        {/* Clean Proportionate Header Container */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+        {/* Clean Proportionate Header Container with Generous Padding */}
+        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
 
           {/* Brand Logo & Title */}
           {isHomePage ? (
             <button
               type="button"
-              className="flex items-center gap-2.5 text-start group cursor-pointer flex-shrink-0"
+              className="flex items-center gap-2 sm:gap-2.5 text-start group cursor-pointer flex-shrink-0"
               onClick={() => handleScrollTo('hero')}
               aria-label="E-MEP Electromechanical Works Homepage"
             >
@@ -210,14 +210,14 @@ export default function Header() {
                   priority 
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col flex-shrink-0">
                 <div className="flex items-center gap-1">
-                  <span className="font-black text-sm sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+                  <span className="font-black text-sm sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none whitespace-nowrap">
                     E-MEP
                   </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27] flex-shrink-0"></span>
                 </div>
-                <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
+                <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none whitespace-nowrap">
                   Electromechanical
                 </span>
               </div>
@@ -225,7 +225,7 @@ export default function Header() {
           ) : (
             <Link 
               href="/" 
-              className="flex items-center gap-2.5 group flex-shrink-0" 
+              className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0" 
               aria-label="E-MEP Electromechanical Works Homepage"
             >
               <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
@@ -238,14 +238,14 @@ export default function Header() {
                   priority 
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col flex-shrink-0">
                 <div className="flex items-center gap-1">
-                  <span className="font-black text-sm sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+                  <span className="font-black text-sm sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none whitespace-nowrap">
                     E-MEP
                   </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27] flex-shrink-0"></span>
                 </div>
-                <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
+                <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none whitespace-nowrap">
                   Electromechanical
                 </span>
               </div>
@@ -254,18 +254,18 @@ export default function Header() {
 
           {/* Desktop Navigation Links (Visible on >= 1024px) */}
           <nav
-            className="hidden lg:flex items-center"
+            className="hidden lg:flex items-center flex-shrink-0"
             role="navigation"
             aria-label="Main Navigation"
           >
-            <ul className="flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+            <ul className="flex items-center gap-0.5 sm:gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
               {navItems.map((item) => {
                 const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
                 return (
-                  <li key={item.id}>
+                  <li key={item.id} className="flex-shrink-0">
                     <button
                       type="button"
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+                      className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap flex-shrink-0 ${
                         isActive 
                           ? 'text-white bg-[#FF1E27] shadow-[0_0_15px_rgba(255,30,39,0.4)]' 
                           : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.06]'
@@ -287,23 +287,23 @@ export default function Header() {
             {/* Language Switcher */}
             <button
               id="langToggleBtn"
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-8 sm:h-9"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-8 sm:h-9 whitespace-nowrap flex-shrink-0"
               onClick={toggleLanguage}
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
               type="button"
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>
-              <span id="langText">{isAr ? 'EN' : 'العربية'}</span>
+              <span id="langText" className="whitespace-nowrap">{isAr ? 'EN' : 'العربية'}</span>
             </button>
 
-            {/* Quick Contact CTA (Desktop >= 1024px) */}
+            {/* Quick Contact CTA (Desktop >= 1280px) */}
             <button
               type="button"
               onClick={() => handleScrollTo('contact')}
-              className="hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-9 sm:h-10"
+              className="hidden xl:inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-8 sm:h-9 whitespace-nowrap flex-shrink-0"
             >
               <i className="fa-solid fa-paper-plane text-xs"></i>
-              <span>{t('nav_contact')}</span>
+              <span className="whitespace-nowrap">{t('nav_contact')}</span>
             </button>
 
             {/* Mobile Icon-Only Hamburger Menu Button */}
@@ -361,7 +361,7 @@ export default function Header() {
                       >
                         <div className="flex items-center gap-3">
                           <i className={`${item.iconClass} ${isActive ? 'text-white' : 'text-[#FF1E27]'} text-base`}></i>
-                          <span>{t(item.i18nKey)}</span>
+                          <span className="whitespace-nowrap">{t(item.i18nKey)}</span>
                         </div>
                         <i className={`fa-solid fa-chevron-right rtl:rotate-180 text-xs ${isActive ? 'text-white' : 'text-gray-500'}`}></i>
                       </button>
