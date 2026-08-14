@@ -44,7 +44,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
     return [...initialProjects].reverse();
   });
 
-  // Handle scroll target upon navigation from other pages (e.g. /blog)
+  // Handle scroll target upon navigation from other pages or direct hash URL
   useEffect(() => {
     if (typeof window !== 'undefined') {
       let targetId: string | null = null;
@@ -58,19 +58,28 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
       }
 
       if (!targetId && window.location.hash) {
-        targetId = window.location.hash.replace('#', '');
+        targetId = window.location.hash.replace('#', '').trim();
       }
 
-      if (targetId && targetId !== 'hero') {
-        const scrollToElement = () => {
-          const el = document.getElementById(targetId!);
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          }
-        };
-        // Run immediately or after micro-task
-        setTimeout(scrollToElement, 150);
-        setTimeout(scrollToElement, 450);
+      const VALID_SECTIONS = ['hero', 'about', 'services', 'bim', 'projects', 'contact'];
+
+      if (targetId) {
+        if (!VALID_SECTIONS.includes(targetId)) {
+          // If hash points to an unknown section/page like #projects122, redirect to 404
+          router.replace('/_not-found');
+          return;
+        }
+
+        if (targetId !== 'hero') {
+          const scrollToElement = () => {
+            const el = document.getElementById(targetId!);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+            }
+          };
+          setTimeout(scrollToElement, 150);
+          setTimeout(scrollToElement, 450);
+        }
       } else {
         if ('scrollRestoration' in window.history) {
           window.history.scrollRestoration = 'manual';
@@ -78,7 +87,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
         window.scrollTo(0, 0);
       }
     }
-  }, []);
+  }, [router]);
 
   // Client-side fetch on mount to get instant live updates from the database API
   useEffect(() => {

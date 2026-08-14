@@ -114,36 +114,40 @@ export default function Header() {
 
   return (
     <header 
-      className={`site-header transition-all duration-300 ${scrolled ? 'bg-[#0A0A0C]/95 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-2.5' : 'bg-[#0A0A0C]/80 backdrop-blur-md border-b border-white/[0.04] py-3.5'}`} 
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-[#0A0A0C]/95 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.8)]' 
+          : 'bg-[#0A0A0C]/80 backdrop-blur-md border-b border-white/[0.04]'
+      }`} 
       id="navbar" 
       role="banner"
     >
-      <div className="header-container max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
 
         {/* Brand logo & Text */}
         {isHomePage ? (
           <button
             type="button"
-            className="brand-logo-link cursor-pointer flex items-center gap-2.5 sm:gap-3 text-start group"
+            className="flex items-center gap-3 text-start group cursor-pointer"
             onClick={() => handleScrollTo('hero')}
             aria-label="E-MEP Electromechanical Works Home"
           >
-            <div className="header-logo-badge bg-white p-1 sm:p-1.5 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
-              <Image src="/logo/logo.png" alt="E-MEP Logo" width={32} height={32} className="brand-logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+            <div className="w-9 h-9 bg-white rounded-lg p-1 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+              <Image src="/logo/logo.png" alt="E-MEP Logo" width={28} height={28} style={{ width: '28px', height: '28px', objectFit: 'contain' }} priority />
             </div>
-            <div className="brand-text flex flex-col min-w-0">
-              <span className="brand-name font-black text-base sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-tight">E-MEP</span>
-              <span className="brand-sub text-[9px] sm:text-[10px] font-semibold text-[#94A3B8] tracking-widest uppercase hidden xs:inline">Electromechanical</span>
+            <div className="flex flex-col">
+              <span className="font-black text-base sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">E-MEP</span>
+              <span className="text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">Electromechanical</span>
             </div>
           </button>
         ) : (
-          <Link href="/" className="brand-logo-link flex items-center gap-2.5 sm:gap-3 group" aria-label="E-MEP Electromechanical Works Home">
-            <div className="header-logo-badge bg-white p-1 sm:p-1.5 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
-              <Image src="/logo/logo.png" alt="E-MEP Logo" width={32} height={32} className="brand-logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+          <Link href="/" className="flex items-center gap-3 group" aria-label="E-MEP Electromechanical Works Home">
+            <div className="w-9 h-9 bg-white rounded-lg p-1 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+              <Image src="/logo/logo.png" alt="E-MEP Logo" width={28} height={28} style={{ width: '28px', height: '28px', objectFit: 'contain' }} priority />
             </div>
-            <div className="brand-text flex flex-col min-w-0">
-              <span className="brand-name font-black text-base sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-tight">E-MEP</span>
-              <span className="brand-sub text-[9px] sm:text-[10px] font-semibold text-[#94A3B8] tracking-widest uppercase hidden xs:inline">Electromechanical</span>
+            <div className="flex flex-col">
+              <span className="font-black text-base sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">E-MEP</span>
+              <span className="text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">Electromechanical</span>
             </div>
           </Link>
         )}
@@ -161,7 +165,7 @@ export default function Header() {
                 <li key={item.id}>
                   <button
                     type="button"
-                    className={`nav-link px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
                       isActive 
                         ? 'text-white bg-white/[0.08] shadow-sm border border-white/[0.1] text-[#FF1E27]' 
                         : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
@@ -178,11 +182,11 @@ export default function Header() {
         </nav>
 
         {/* Header Actions */}
-        <div className="header-actions flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* Language Switcher */}
           <button
             id="langToggleBtn"
-            className="lang-btn inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm min-h-[38px]"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-9"
             onClick={toggleLanguage}
             aria-label={`Switch to ${isAr ? 'English' : 'العربية'}`}
             type="button"
@@ -191,11 +195,11 @@ export default function Header() {
             <span id="langText">{isAr ? 'EN' : 'العربية'}</span>
           </button>
 
-          {/* Contact Quick CTA */}
+          {/* Contact Quick CTA (Desktop) */}
           <button
             type="button"
             onClick={() => handleScrollTo('contact')}
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:scale-105 transition-all cursor-pointer min-h-[38px]"
+            className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:scale-105 transition-all cursor-pointer h-9"
           >
             <span>{t('nav_contact')}</span>
             <i className="fa-solid fa-arrow-right text-[10px] rtl:rotate-180"></i>
@@ -203,7 +207,9 @@ export default function Header() {
 
           {/* Mobile Menu Toggle button */}
           <button
-            className={`md:hidden flex items-center justify-center w-10 h-10 rounded-xl border border-white/[0.1] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer ${mobileMenuOpen ? 'border-[#FF1E27]/50 bg-[#FF1E27]/10 text-[#FF1E27]' : ''}`}
+            className={`md:hidden flex items-center justify-center w-9 h-9 rounded-lg border border-white/[0.12] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer ${
+              mobileMenuOpen ? 'border-[#FF1E27]/50 bg-[#FF1E27]/15 text-[#FF1E27]' : ''
+            }`}
             id="mobileMenuBtn"
             onClick={toggleMobileMenu}
             aria-expanded={mobileMenuOpen}
@@ -211,7 +217,7 @@ export default function Header() {
             aria-label="Toggle menu"
             type="button"
           >
-            <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-base`}></i>
+            <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-sm`}></i>
           </button>
         </div>
       </div>
@@ -220,9 +226,9 @@ export default function Header() {
       {mobileMenuOpen && (
         <div 
           id="mobileNavDrawer"
-          className="md:hidden fixed inset-x-0 top-full bg-[#0A0A0C]/98 backdrop-blur-2xl border-b border-white/[0.1] shadow-[0_30px_60px_rgba(0,0,0,0.95)] z-[100] animate-fadeIn"
+          className="md:hidden border-t border-white/[0.08] bg-[#0A0A0C]/98 backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.95)] animate-fadeIn"
         >
-          <div className="max-w-7xl mx-auto px-4 py-6 space-y-3">
+          <div className="px-4 py-5 space-y-3">
             <ul className="space-y-1.5">
               {navItems.map((item) => {
                 const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
@@ -230,7 +236,7 @@ export default function Header() {
                   <li key={item.id}>
                     <button
                       type="button"
-                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-bold transition-all ${
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all ${
                         isActive 
                           ? 'bg-[#FF1E27]/15 border border-[#FF1E27]/30 text-[#FF1E27]' 
                           : 'text-[#CBD5E1] hover:bg-white/[0.05] hover:text-white'
@@ -238,7 +244,7 @@ export default function Header() {
                       onClick={() => handleScrollTo(item.id, item.href)}
                     >
                       <span>{t(item.i18nKey)}</span>
-                      <i className={`fa-solid fa-chevron-right text-xs opacity-50 rtl:rotate-180 ${isActive ? 'text-[#FF1E27] opacity-100' : ''}`}></i>
+                      <i className={`fa-solid fa-chevron-right text-[10px] opacity-50 rtl:rotate-180 ${isActive ? 'text-[#FF1E27] opacity-100' : ''}`}></i>
                     </button>
                   </li>
                 );
@@ -246,11 +252,11 @@ export default function Header() {
             </ul>
 
             {/* In-drawer Contact CTA button */}
-            <div className="pt-3 border-t border-white/[0.08]">
+            <div className="pt-2 border-t border-white/[0.08]">
               <button
                 type="button"
                 onClick={() => handleScrollTo('contact')}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold text-sm shadow-lg shadow-[#FF1E27]/25 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold text-xs shadow-lg shadow-[#FF1E27]/25 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
               >
                 <i className="fa-solid fa-paper-plane text-xs"></i>
                 <span>{t('nav_contact')}</span>
