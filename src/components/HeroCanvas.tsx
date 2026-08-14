@@ -21,8 +21,11 @@ export default function HeroCanvas() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
 
     const images: HTMLImageElement[] = new Array(TOTAL_FRAMES);
     let isSubscribed = true;
@@ -32,8 +35,27 @@ export default function HeroCanvas() {
       const safeIndex = Math.max(0, Math.min(TOTAL_FRAMES - 1, Math.round(index)));
       const img = images[safeIndex];
 
-      if (!img || !img.complete || img.naturalWidth === 0) return;
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        // Fallback to closest loaded frame
+        for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
+          const prev = images[Math.max(0, safeIndex - offset)];
+          if (prev && prev.complete && prev.naturalWidth > 0) {
+            drawImg(prev);
+            return;
+          }
+          const next = images[Math.min(TOTAL_FRAMES - 1, safeIndex + offset)];
+          if (next && next.complete && next.naturalWidth > 0) {
+            drawImg(next);
+            return;
+          }
+        }
+        return;
+      }
 
+      drawImg(img);
+    };
+
+    const drawImg = (img: HTMLImageElement) => {
       const cw = canvas.width;
       const ch = canvas.height;
       const iw = img.naturalWidth;
@@ -45,52 +67,33 @@ export default function HeroCanvas() {
       const nx = (cw - nw) / 2;
       const ny = (ch - nh) / 2;
 
-      ctx.clearRect(0, 0, cw, ch);
       ctx.drawImage(img, nx, ny, nw, nh);
     };
 
-    // 1. Load First Frame IMMEDIATELY for Instant FCP & LCP (< 100ms)
-    const firstImg = new Image();
-    firstImg.src = getFramePath(0);
-    firstImg.onload = () => {
-      images[0] = firstImg;
-      if (isSubscribed) {
-        renderFrame(0);
-      }
-    };
-
-    // 2. Defer background frame preloading until browser is idle (zero impact on Lighthouse score)
-    const deferPreload = () => {
-      if (!isSubscribed) return;
-      
-      const preloadRemaining = () => {
-        for (let i = 1; i < TOTAL_FRAMES; i++) {
-          if (!isSubscribed) break;
-          const img = new Image();
-          img.src = getFramePath(i);
-          images[i] = img;
+    // 1. Immediate parallel preloading of all 35 lightweight WebP frames
+    for (let i = 0; i < TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = getFramePath(i);
+      img.onload = () => {
+        if (!isSubscribed) return;
+        if (i === 0 && stateRef.current.currentFrameIndex === 0) {
+          renderFrame(0);
         }
       };
+      images[i] = img;
+    }
 
-      if ('requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(preloadRemaining, { timeout: 2000 });
-      } else {
-        setTimeout(preloadRemaining, 600);
-      }
-    };
-
-    deferPreload();
     imagesRef.current = images;
 
-    // 3. Responsive Canvas Sizing
+    // 2. Responsive Canvas Sizing with DPR cap for 60fps performance
     const resizeCanvas = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
 
       const rect = parent.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
 
       renderFrame(stateRef.current.currentFrameIndex);
     };
@@ -98,16 +101,18 @@ export default function HeroCanvas() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas, { passive: true });
 
-    // 4. Smooth On-Demand Render Loop
+    // 3. Ultra-smooth On-Demand Render Loop
     let animId = 0;
     const animate = () => {
       if (!isSubscribed) return;
       const diff = stateRef.current.targetFrameIndex - stateRef.current.currentFrameIndex;
-      if (Math.abs(diff) > 0.01) {
-        stateRef.current.currentFrameIndex += diff * 0.18;
+      if (Math.abs(diff) > 0.02) {
+        stateRef.current.currentFrameIndex += diff * 0.25;
         renderFrame(stateRef.current.currentFrameIndex);
         animId = requestAnimationFrame(animate);
       } else {
+        stateRef.current.currentFrameIndex = stateRef.current.targetFrameIndex;
+        renderFrame(stateRef.current.currentFrameIndex);
         stateRef.current.isAnimating = false;
       }
     };
@@ -120,7 +125,7 @@ export default function HeroCanvas() {
       }
     };
 
-    // 5. Scroll Progress Listener
+    // 4. Scroll Progress Listener for Mobile & Desktop
     const handleScroll = () => {
       const track = document.getElementById('heroTrack');
       if (!track) return;
@@ -132,7 +137,7 @@ export default function HeroCanvas() {
       if (totalScrollableDistance > 0) {
         const scrolledDistance = -rect.top;
         const progress = Math.max(0, Math.min(1, scrolledDistance / totalScrollableDistance));
-        const nextTarget = Math.min(TOTAL_FRAMES - 1, Math.floor(progress * TOTAL_FRAMES));
+        const nextTarget = Math.min(TOTAL_FRAMES - 1, Math.round(progress * (TOTAL_FRAMES - 1)));
 
         if (nextTarget !== stateRef.current.targetFrameIndex) {
           stateRef.current.targetFrameIndex = nextTarget;
@@ -142,8 +147,9 @@ export default function HeroCanvas() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
 
-    // 6. Reset Event Listener
+    // 5. Reset Event Listener
     const handleReset = () => {
       stateRef.current.targetFrameIndex = 0;
       stateRef.current.currentFrameIndex = 0;

@@ -1,9 +1,7 @@
-/* Pinned Scroll-Lock Hero Section Styling */
-
-/* Tall scroll track (350vh) allowing full 185-frame scroll sequence */
+/* Smooth scroll track allowing seamless 35-frame sequence */
 .hero-track {
   position: relative;
-  height: 350vh;
+  height: 220vh;
   background: var(--clr-bg-main);
 }
 
@@ -120,24 +118,24 @@
 
 @media (max-width: 768px) {
   .hero-track {
-    height: 120vh;
+    height: 180vh;
   }
   .hero-centered-logo-overlay {
-    gap: 1rem;
+    gap: 1.25rem;
     padding: 0 1rem;
   }
   .hero-logo-white-glass {
-    padding: 0.6rem 1.2rem;
-    border-radius: 14px;
+    padding: 0.65rem 1.35rem;
+    border-radius: 16px;
   }
   .hero-pure-logo {
-    max-width: 110px;
-    width: 32vw;
+    max-width: 120px;
+    width: 34vw;
     height: auto !important;
   }
   .hero-cta-btn {
-    padding: 0.75rem 1.6rem;
-    font-size: 0.85rem;
+    padding: 0.8rem 1.75rem;
+    font-size: 0.88rem;
     min-height: 44px;
   }
 }
