@@ -4,7 +4,8 @@
   --font-sans: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
 }
 
-/* Import E-MEP Legacy Custom CSS Modules */
+/* Import E-MEP Legacy Custom CSS Modules & FontAwesome */
+@import "../../public/fontawesome/all.min.css";
 @import "../styles/variables.css";
 @import "../styles/hero.css";
 @import "../styles/sections.css";

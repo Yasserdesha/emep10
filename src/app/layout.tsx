@@ -36,6 +36,15 @@ export const metadata: Metadata = {
     shortcut: '/logo/logo.png',
     apple: '/logo/logo.png',
   },
+  formatDetection: {
+    telephone: false,
+    date: false,
+    email: false,
+    address: false,
+  },
+  other: {
+    'preconnect': 'https://dpptnkehkzolqrifbagx.supabase.co',
+  },
 };
 
 export default function RootLayout({
@@ -50,23 +59,6 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${cairo.variable} ${outfit.variable}`}
     >
-      <head>
-        {/* Preconnect & DNS-prefetch for Supabase Storage CDN */}
-        <link rel="preconnect" href="https://dpptnkehkzolqrifbagx.supabase.co" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://dpptnkehkzolqrifbagx.supabase.co" />
-
-        {/* iOS & Safari format detection meta tag to prevent hydration mismatches */}
-        <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
-
-        {/* Favicon & Logo for browser tab header */}
-        <link rel="icon" href="/logo/logo.png" type="image/png" sizes="any" />
-        <link rel="shortcut icon" href="/logo/logo.png" />
-        <link rel="apple-touch-icon" href="/logo/logo.png" />
-
-        {/* FontAwesome icons stylesheet */}
-        {/* eslint-disable-next-line @next/next/no-css-tags */}
-        <link rel="stylesheet" href="/fontawesome/all.min.css" />
-      </head>
       <body suppressHydrationWarning className="theme-dark bg-[#0A0A0C] text-[#F8FAFC]">
         <LanguageProvider>
           <ServiceWorkerRegister />
