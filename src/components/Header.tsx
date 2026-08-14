@@ -87,7 +87,7 @@ export default function Header() {
     },
   ];
 
-  // Complete 7 sections in the floating bottom dock for 1-tap instant mobile access
+  // All 7 sections for horizontal swipeable mobile bottom dock
   const allBottomNavItems = [
     { id: 'hero', i18nKey: 'nav_home', icon: 'fa-solid fa-house' },
     { id: 'about', i18nKey: 'nav_about', icon: 'fa-solid fa-building' },
@@ -218,34 +218,35 @@ export default function Header() {
           aria-hidden="true"
         />
 
-        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 h-16 flex items-center justify-between">
+        {/* Compact, Featherlight Header Container */}
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
 
           {/* Brand Logo & Title */}
           {isHomePage ? (
             <button
               type="button"
-              className="flex items-center gap-2 sm:gap-3 text-start group cursor-pointer flex-shrink-0"
+              className="flex items-center gap-2 sm:gap-2.5 text-start group cursor-pointer flex-shrink-0"
               onClick={() => handleScrollTo('hero')}
               aria-label="E-MEP Electromechanical Works Homepage"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-xl p-1 shadow-[0_0_20px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+              <div className="w-7 h-7 sm:w-9 sm:h-9 bg-white rounded-lg p-0.5 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
                 <Image 
                   src="/logo/logo.png" 
                   alt="E-MEP Logo" 
-                  width={28} 
-                  height={28} 
-                  style={{ width: '28px', height: '28px', objectFit: 'contain' }} 
+                  width={24} 
+                  height={24} 
+                  style={{ width: '24px', height: '24px', objectFit: 'contain' }} 
                   priority 
                 />
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
-                  <span className="font-black text-sm sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+                  <span className="font-black text-xs sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
                     E-MEP
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
                 </div>
-                <span className="text-[8px] sm:text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
+                <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
                   Electromechanical
                 </span>
               </div>
@@ -253,27 +254,27 @@ export default function Header() {
           ) : (
             <Link 
               href="/" 
-              className="flex items-center gap-2 sm:gap-3 group flex-shrink-0" 
+              className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0" 
               aria-label="E-MEP Electromechanical Works Homepage"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-xl p-1 shadow-[0_0_20px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+              <div className="w-7 h-7 sm:w-9 sm:h-9 bg-white rounded-lg p-0.5 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
                 <Image 
                   src="/logo/logo.png" 
                   alt="E-MEP Logo" 
-                  width={28} 
-                  height={28} 
-                  style={{ width: '28px', height: '28px', objectFit: 'contain' }} 
+                  width={24} 
+                  height={24} 
+                  style={{ width: '24px', height: '24px', objectFit: 'contain' }} 
                   priority 
                 />
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
-                  <span className="font-black text-sm sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+                  <span className="font-black text-xs sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
                     E-MEP
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
                 </div>
-                <span className="text-[8px] sm:text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
+                <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
                   Electromechanical
                 </span>
               </div>
@@ -310,27 +311,27 @@ export default function Header() {
           </nav>
 
           {/* Header Action Controls */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
             
-            {/* Language Switcher */}
+            {/* Compact Language Switcher */}
             <button
               id="langToggleBtn"
-              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-9 sm:h-10"
+              className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-[11px] sm:text-xs font-bold transition-all cursor-pointer shadow-sm h-8 sm:h-9"
               onClick={toggleLanguage}
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
               type="button"
             >
-              <svg className="w-3.5 h-3.5 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-3 h-3 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span id="langText" className="text-xs">{isAr ? 'EN' : 'العربية'}</span>
+              <span id="langText">{isAr ? 'EN' : 'العربية'}</span>
             </button>
 
             {/* Quick Contact CTA (Desktop >= 1024px) */}
             <button
               type="button"
               onClick={() => handleScrollTo('contact')}
-              className="hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-10"
+              className="hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-9 sm:h-10"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -338,9 +339,9 @@ export default function Header() {
               <span>{t('nav_contact')}</span>
             </button>
 
-            {/* Mobile Icon-Only Hamburger Menu Button (Hidden on Desktop >= 1024px) */}
+            {/* Mobile Icon-Only Hamburger Menu Button (Compact 32x32px / 36x36px) */}
             <button
-              className={`lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] text-white hover:border-[#FF1E27]/50 transition-all cursor-pointer flex-shrink-0 ${
+              className={`lg:hidden flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/[0.12] bg-white/[0.04] text-white hover:border-[#FF1E27]/50 transition-all cursor-pointer flex-shrink-0 ${
                 mobileMenuOpen ? 'border-[#FF1E27] bg-[#FF1E27]/20 text-[#FF1E27]' : ''
               }`}
               id="mobileMenuBtn"
@@ -367,7 +368,7 @@ export default function Header() {
         {mobileMenuOpen && (
           <div 
             id="mobileNavDrawer"
-            className="lg:hidden fixed top-16 inset-x-0 bottom-0 bg-[#0A0A0C]/98 backdrop-blur-3xl z-[100] overflow-y-auto border-t border-white/[0.08] shadow-[0_30px_60px_rgba(0,0,0,0.95)] animate-fadeIn"
+            className="lg:hidden fixed top-14 inset-x-0 bottom-0 bg-[#0A0A0C]/98 backdrop-blur-3xl z-[100] overflow-y-auto border-t border-white/[0.08] shadow-[0_30px_60px_rgba(0,0,0,0.95)] animate-fadeIn"
           >
             <div className="px-4 py-6 space-y-4 max-w-lg mx-auto pb-28">
               {/* Header Drawer Info */}
@@ -449,12 +450,13 @@ export default function Header() {
         )}
       </header>
 
-      {/* Floating Bottom Quick-Action Dock with ALL 7 Sections on Mobile (< 1024px) */}
+      {/* Modern Horizontal Swipeable Bottom Dock with ALL 7 Sections on Mobile (< 1024px) */}
       <nav 
-        className="lg:hidden fixed bottom-2.5 inset-x-2 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-1.5 px-1 flex items-center justify-between shadow-[0_12px_40px_rgba(0,0,0,0.9)] overflow-x-auto no-scrollbar"
+        className="lg:hidden fixed bottom-2.5 inset-x-2 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-1.5 px-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)] overflow-x-auto no-scrollbar"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         aria-label="Mobile Quick Bottom Navigation"
       >
-        <div className="grid grid-cols-7 w-full gap-0.5">
+        <div className="flex items-center gap-1.5 w-max mx-auto">
           {allBottomNavItems.map((item) => {
             const isActive = item.href 
               ? pathname.startsWith('/blog') 
@@ -465,14 +467,14 @@ export default function Header() {
                 key={item.id}
                 type="button"
                 onClick={() => handleScrollTo(item.id, item.href)}
-                className={`flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all cursor-pointer text-center ${
+                className={`flex items-center gap-1.5 py-1.5 px-2.5 rounded-xl transition-all cursor-pointer whitespace-nowrap flex-shrink-0 ${
                   isActive 
-                    ? 'text-[#FF1E27] font-bold' 
-                    : 'text-[#94A3B8] hover:text-white'
+                    ? 'bg-[#FF1E27] text-white shadow-[0_0_12px_rgba(255,30,39,0.45)] font-bold' 
+                    : 'bg-white/[0.03] border border-white/[0.06] text-[#94A3B8] hover:text-white'
                 }`}
               >
-                <i className={`${item.icon} text-sm sm:text-base mb-0.5 ${isActive ? 'text-[#FF1E27] drop-shadow-[0_0_8px_#FF1E27]' : ''}`} aria-hidden="true"></i>
-                <span className="text-[8px] sm:text-[9.5px] leading-tight tracking-tighter truncate w-full block">
+                <i className={`${item.icon} text-xs ${isActive ? 'text-white' : 'text-[#FF1E27]'}`} aria-hidden="true"></i>
+                <span className="text-[10px] sm:text-[11px] font-bold leading-none">
                   {t(item.i18nKey)}
                 </span>
               </button>
