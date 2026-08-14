@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
 
 export default function ContactForm() {
-  const { t, language } = useLanguage();
+  const { t, language, isMounted } = useLanguage();
   const router = useRouter();
+  const isAr = isMounted && language === 'ar';
 
   // Form fields
   const [name, setName] = useState('');
@@ -177,14 +178,14 @@ export default function ContactForm() {
               setName(e.target.value);
               if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
             }}
-            className={`w-full bg-[#1A1A22] border ${errors.name ? 'border-[#FF1E27]' : 'border-white/10'} rounded-md p-3 text-white focus:border-[#D31019] outline-none transition-colors`}
-            placeholder={language === 'ar' ? 'مثال: محمد أحمد / شركة المقاولات' : 'e.g. John Doe / Contracting Co.'}
+            className={`w-full bg-[#1A1A22] border ${errors.name ? 'border-[#FF1E27]' : 'border-white/10'} rounded-xl p-3.5 text-base text-white focus:border-[#D31019] outline-none transition-colors min-h-[48px]`}
+            placeholder={isAr ? 'مثال: محمد أحمد / شركة المقاولات' : 'e.g. John Doe / Contracting Co.'}
             required
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? 'userName-error' : undefined}
           />
           {errors.name && (
-            <span id="userName-error" className="text-xs text-[#FF1E27] mt-1 block font-medium">
+            <span id="userName-error" className="text-xs text-[#FF1E27] mt-1.5 block font-medium">
               {errors.name}
             </span>
           )}
@@ -203,14 +204,14 @@ export default function ContactForm() {
               setEmail(e.target.value);
               if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
             }}
-            className={`w-full bg-[#1A1A22] border ${errors.email ? 'border-[#FF1E27]' : 'border-white/10'} rounded-md p-3 text-white focus:border-[#D31019] outline-none transition-colors`}
+            className={`w-full bg-[#1A1A22] border ${errors.email ? 'border-[#FF1E27]' : 'border-white/10'} rounded-xl p-3.5 text-base text-white focus:border-[#D31019] outline-none transition-colors min-h-[48px]`}
             placeholder="name@company.com"
             required
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? 'userEmail-error' : undefined}
           />
           {errors.email && (
-            <span id="userEmail-error" className="text-xs text-[#FF1E27] mt-1 block font-medium">
+            <span id="userEmail-error" className="text-xs text-[#FF1E27] mt-1.5 block font-medium">
               {errors.email}
             </span>
           )}
@@ -226,28 +227,28 @@ export default function ContactForm() {
               id="serviceType"
               value={service}
               onChange={(e) => setService(e.target.value)}
-              className="w-full bg-[#1A1A22] border border-white/10 rounded-md p-3 text-white focus:border-[#D31019] outline-none transition-colors appearance-none cursor-pointer"
+              className="w-full bg-[#1A1A22] border border-white/10 rounded-xl p-3.5 text-base text-white focus:border-[#D31019] outline-none transition-colors appearance-none cursor-pointer min-h-[48px]"
             >
               <option value="All MEP Scope">
-                {language === 'ar' ? 'كامل نطاق أعمال الكهروميكانيك MEP' : 'Full MEP Turnkey Scope'}
+                {isAr ? 'كامل نطاق أعمال الكهروميكانيك MEP' : 'Full MEP Turnkey Scope'}
               </option>
               <option value="HVAC Systems">
-                {language === 'ar' ? 'أنظمة الميكانيكا والتكييف HVAC' : 'Mechanical & HVAC Systems'}
+                {isAr ? 'أنظمة الميكانيكا والتكييف HVAC' : 'Mechanical & HVAC Systems'}
               </option>
               <option value="Electrical Systems">
-                {language === 'ar' ? 'الأنظمة الكهربائية والقدرة' : 'Electrical & Power Systems'}
+                {isAr ? 'الأنظمة الكهربائية والقدرة' : 'Electrical & Power Systems'}
               </option>
               <option value="Plumbing & Piping">
-                {language === 'ar' ? 'شبكات السباكة والبنية التحتية' : 'Plumbing & Infrastructure'}
+                {isAr ? 'شبكات السباكة والبنية التحتية' : 'Plumbing & Infrastructure'}
               </option>
               <option value="Firefighting Systems">
-                {language === 'ar' ? 'أنظمة مكافحة الحريق والسلامة' : 'Firefighting & Life Safety'}
+                {isAr ? 'أنظمة مكافحة الحريق والسلامة' : 'Firefighting & Life Safety'}
               </option>
               <option value="BIM 3D Modeling">
-                {language === 'ar' ? 'نمذجة 3D واللوحات التنفيذية BIM' : 'BIM & Shop Drawings'}
+                {isAr ? 'نمذجة 3D واللوحات التنفيذية BIM' : 'BIM & Shop Drawings'}
               </option>
             </select>
-            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-white/50 rtl:left-3 rtl:right-auto">
+            <div className="absolute inset-y-0 right-3.5 flex items-center pointer-events-none text-white/50 rtl:left-3.5 rtl:right-auto">
               <i className="fa-solid fa-chevron-down text-xs"></i>
             </div>
           </div>
@@ -265,14 +266,14 @@ export default function ContactForm() {
               setMessage(e.target.value);
               if (errors.message) setErrors((prev) => ({ ...prev, message: '' }));
             }}
-            className={`w-full flex-1 min-h-[140px] bg-[#1A1A22] border ${errors.message ? 'border-[#FF1E27]' : 'border-white/10'} rounded-md p-3 text-white focus:border-[#D31019] outline-none transition-colors resize-none`}
-            placeholder={language === 'ar' ? 'صف نطاق مشروعك، موقعه، ومتطلباتك...' : 'Describe your project scope, location, and requirements...'}
+            className={`w-full flex-1 min-h-[130px] bg-[#1A1A22] border ${errors.message ? 'border-[#FF1E27]' : 'border-white/10'} rounded-xl p-3.5 text-base text-white focus:border-[#D31019] outline-none transition-colors resize-none`}
+            placeholder={isAr ? 'صف نطاق مشروعك، موقعه، ومتطلباتك...' : 'Describe your project scope, location, and requirements...'}
             required
             aria-invalid={!!errors.message}
             aria-describedby={errors.message ? 'userMessage-error' : undefined}
           />
           {errors.message && (
-            <span id="userMessage-error" className="text-xs text-[#FF1E27] mt-1 block font-medium">
+            <span id="userMessage-error" className="text-xs text-[#FF1E27] mt-1.5 block font-medium">
               {errors.message}
             </span>
           )}
@@ -281,7 +282,7 @@ export default function ContactForm() {
         {/* Math Captcha Protection */}
         <div className="form-group mb-6">
           <label htmlFor="captchaAnswer" className="block text-sm font-semibold mb-2" suppressHydrationWarning>
-            {language === 'ar' 
+            {isAr 
               ? `التحقق الأمني: كم ناتج ${num1} + ${num2}؟` 
               : `Security Check: What is ${num1} + ${num2}?`}{' '}
             <span className="text-[#FF1E27]">*</span>
@@ -294,14 +295,14 @@ export default function ContactForm() {
               setCaptchaAnswer(e.target.value);
               if (errors.captcha) setErrors((prev) => ({ ...prev, captcha: '' }));
             }}
-            className={`w-full bg-[#1A1A22] border ${errors.captcha ? 'border-[#FF1E27]' : 'border-white/10'} rounded-md p-3 text-white focus:border-[#D31019] outline-none transition-colors`}
-            placeholder={language === 'ar' ? 'أدخل الإجابة هنا' : 'Enter answer here'}
+            className={`w-full bg-[#1A1A22] border ${errors.captcha ? 'border-[#FF1E27]' : 'border-white/10'} rounded-xl p-3.5 text-base text-white focus:border-[#D31019] outline-none transition-colors min-h-[48px]`}
+            placeholder={isAr ? 'أدخل الإجابة هنا' : 'Enter answer here'}
             required
             aria-invalid={!!errors.captcha}
             aria-describedby={errors.captcha ? 'captcha-error' : undefined}
           />
           {errors.captcha && (
-            <span id="captcha-error" className="text-xs text-[#FF1E27] mt-1 block font-medium">
+            <span id="captcha-error" className="text-xs text-[#FF1E27] mt-1.5 block font-medium">
               {errors.captcha}
             </span>
           )}
@@ -309,16 +310,16 @@ export default function ContactForm() {
 
         {/* General Error Message */}
         {submitError && (
-          <div className="mb-4 bg-[#FF1E27]/10 border border-[#FF1E27]/30 text-[#FF1E27] p-3 rounded text-sm font-semibold">
+          <div className="mb-4 bg-[#FF1E27]/10 border border-[#FF1E27]/30 text-[#FF1E27] p-3 rounded-xl text-sm font-semibold">
             <i className="fa-solid fa-triangle-exclamation mr-2 rtl:ml-2"></i> {submitError}
           </div>
         )}
 
         {/* Action Row */}
-        <div className="flex gap-4 flex-col sm:flex-row mt-6">
+        <div className="flex gap-3 flex-col sm:flex-row mt-6">
           <button
             type="button"
-            className="btn btn-primary flex-1 py-3 text-center flex items-center justify-center gap-2"
+            className="btn btn-primary flex-1 py-3.5 text-center flex items-center justify-center gap-2 rounded-xl min-h-[48px] font-bold text-sm"
             disabled={isSubmitting}
             onClick={() => handleSubmit('email')}
           >
@@ -332,14 +333,14 @@ export default function ContactForm() {
           
           <button
             type="button"
-            className="btn btn-whatsapp flex-1 py-3 text-center flex items-center justify-center gap-2"
+            className="btn btn-whatsapp flex-1 py-3.5 text-center flex items-center justify-center gap-2 rounded-xl min-h-[48px] font-bold text-sm"
             disabled={isSubmitting}
             onClick={() => handleSubmit('whatsapp')}
           >
             {isSubmitting ? (
               <i className="fa-solid fa-spinner animate-spin"></i>
             ) : (
-              <i className="fa-brands fa-whatsapp"></i>
+              <i className="fa-brands fa-whatsapp text-base"></i>
             )}
             <span>{t('btn_send_wa')}</span>
           </button>

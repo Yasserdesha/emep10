@@ -124,45 +124,44 @@ export default function Header() {
         {isHomePage ? (
           <button
             type="button"
-            className="brand-logo-link cursor-pointer flex items-center gap-3 text-start group"
+            className="brand-logo-link cursor-pointer flex items-center gap-2.5 sm:gap-3 text-start group"
             onClick={() => handleScrollTo('hero')}
             aria-label="E-MEP Electromechanical Works Home"
           >
-            <div className="header-logo-badge bg-white p-1.5 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300">
-              <Image src="/logo/logo.png" alt="E-MEP Logo" width={36} height={36} className="brand-logo" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
+            <div className="header-logo-badge bg-white p-1 sm:p-1.5 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
+              <Image src="/logo/logo.png" alt="E-MEP Logo" width={32} height={32} className="brand-logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
             </div>
-            <div className="brand-text flex flex-col">
-              <span className="brand-name font-black text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors">E-MEP</span>
-              <span className="brand-sub text-[10px] font-semibold text-[#94A3B8] tracking-widest uppercase">Electromechanical</span>
+            <div className="brand-text flex flex-col min-w-0">
+              <span className="brand-name font-black text-base sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-tight">E-MEP</span>
+              <span className="brand-sub text-[9px] sm:text-[10px] font-semibold text-[#94A3B8] tracking-widest uppercase hidden xs:inline">Electromechanical</span>
             </div>
           </button>
         ) : (
-          <Link href="/" className="brand-logo-link flex items-center gap-3 group" aria-label="E-MEP Electromechanical Works Home">
-            <div className="header-logo-badge bg-white p-1.5 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300">
-              <Image src="/logo/logo.png" alt="E-MEP Logo" width={36} height={36} className="brand-logo" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
+          <Link href="/" className="brand-logo-link flex items-center gap-2.5 sm:gap-3 group" aria-label="E-MEP Electromechanical Works Home">
+            <div className="header-logo-badge bg-white p-1 sm:p-1.5 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
+              <Image src="/logo/logo.png" alt="E-MEP Logo" width={32} height={32} className="brand-logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
             </div>
-            <div className="brand-text flex flex-col">
-              <span className="brand-name font-black text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors">E-MEP</span>
-              <span className="brand-sub text-[10px] font-semibold text-[#94A3B8] tracking-widest uppercase">Electromechanical</span>
+            <div className="brand-text flex flex-col min-w-0">
+              <span className="brand-name font-black text-base sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-tight">E-MEP</span>
+              <span className="brand-sub text-[9px] sm:text-[10px] font-semibold text-[#94A3B8] tracking-widest uppercase hidden xs:inline">Electromechanical</span>
             </div>
           </Link>
         )}
 
-        {/* Main Navigation */}
+        {/* Desktop Navigation */}
         <nav
-          className={`main-nav ${mobileMenuOpen ? 'open' : ''}`}
-          id="mainNav"
+          className="hidden md:flex items-center"
           role="navigation"
           aria-label="Main Navigation"
         >
-          <ul className="flex items-center gap-1 md:gap-2">
+          <ul className="flex items-center gap-1 lg:gap-2">
             {navItems.map((item) => {
               const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
               return (
                 <li key={item.id}>
                   <button
                     type="button"
-                    className={`nav-link px-3.5 py-2 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
+                    className={`nav-link px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
                       isActive 
                         ? 'text-white bg-white/[0.08] shadow-sm border border-white/[0.1] text-[#FF1E27]' 
                         : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
@@ -179,24 +178,24 @@ export default function Header() {
         </nav>
 
         {/* Header Actions */}
-        <div className="header-actions flex items-center gap-3">
+        <div className="header-actions flex items-center gap-2 sm:gap-3">
           {/* Language Switcher */}
           <button
             id="langToggleBtn"
-            className="lang-btn inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm"
+            className="lang-btn inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm min-h-[38px]"
             onClick={toggleLanguage}
             aria-label={`Switch to ${isAr ? 'English' : 'العربية'}`}
             type="button"
           >
             <i className="fa-solid fa-globe text-[#FF1E27]" aria-hidden="true"></i>
-            <span id="langText">{isAr ? 'English' : 'العربية'}</span>
+            <span id="langText">{isAr ? 'EN' : 'العربية'}</span>
           </button>
 
           {/* Contact Quick CTA */}
           <button
             type="button"
             onClick={() => handleScrollTo('contact')}
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:scale-105 transition-all cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:scale-105 transition-all cursor-pointer min-h-[38px]"
           >
             <span>{t('nav_contact')}</span>
             <i className="fa-solid fa-arrow-right text-[10px] rtl:rotate-180"></i>
@@ -204,18 +203,62 @@ export default function Header() {
 
           {/* Mobile Menu Toggle button */}
           <button
-            className={`mobile-menu-toggle md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/[0.05] transition-colors ${mobileMenuOpen ? 'active' : ''}`}
+            className={`md:hidden flex items-center justify-center w-10 h-10 rounded-xl border border-white/[0.1] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer ${mobileMenuOpen ? 'border-[#FF1E27]/50 bg-[#FF1E27]/10 text-[#FF1E27]' : ''}`}
             id="mobileMenuBtn"
             onClick={toggleMobileMenu}
             aria-expanded={mobileMenuOpen}
-            aria-controls="mainNav"
+            aria-controls="mobileNavDrawer"
             aria-label="Toggle menu"
             type="button"
           >
-            <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-lg`}></i>
+            <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-base`}></i>
           </button>
         </div>
       </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div 
+          id="mobileNavDrawer"
+          className="md:hidden fixed inset-x-0 top-full bg-[#0A0A0C]/98 backdrop-blur-2xl border-b border-white/[0.1] shadow-[0_30px_60px_rgba(0,0,0,0.95)] z-[100] animate-fadeIn"
+        >
+          <div className="max-w-7xl mx-auto px-4 py-6 space-y-3">
+            <ul className="space-y-1.5">
+              {navItems.map((item) => {
+                const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-bold transition-all ${
+                        isActive 
+                          ? 'bg-[#FF1E27]/15 border border-[#FF1E27]/30 text-[#FF1E27]' 
+                          : 'text-[#CBD5E1] hover:bg-white/[0.05] hover:text-white'
+                      }`}
+                      onClick={() => handleScrollTo(item.id, item.href)}
+                    >
+                      <span>{t(item.i18nKey)}</span>
+                      <i className={`fa-solid fa-chevron-right text-xs opacity-50 rtl:rotate-180 ${isActive ? 'text-[#FF1E27] opacity-100' : ''}`}></i>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {/* In-drawer Contact CTA button */}
+            <div className="pt-3 border-t border-white/[0.08]">
+              <button
+                type="button"
+                onClick={() => handleScrollTo('contact')}
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white font-bold text-sm shadow-lg shadow-[#FF1E27]/25 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <i className="fa-solid fa-paper-plane text-xs"></i>
+                <span>{t('nav_contact')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
