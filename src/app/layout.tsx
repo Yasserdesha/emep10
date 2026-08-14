@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Cairo, Outfit } from "next/font/google";
+import { Inter, Cairo } from "next/font/google";
 import { LanguageProvider } from "@/components/LanguageContext";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import "./globals.css";
@@ -18,13 +18,6 @@ const cairo = Cairo({
   display: "swap",
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["600", "700"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "E-MEP Electromechanical Works | Electromechanical Contracting & BIM",
   description: "E-MEP Electromechanical Works specializes in top-tier Mechanical, Electrical, Plumbing, and Firefighting engineering solutions, BIM design, and electromechanical contracting.",
@@ -38,13 +31,14 @@ export const metadata: Metadata = {
   },
   formatDetection: {
     telephone: false,
-    date: false,
-    email: false,
-    address: false,
   },
-  other: {
-    'preconnect': 'https://dpptnkehkzolqrifbagx.supabase.co',
-  },
+};
+
+export const viewport = {
+  themeColor: '#0A0A0C',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -53,16 +47,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      dir="ltr"
-      suppressHydrationWarning
-      className={`${inter.variable} ${cairo.variable} ${outfit.variable}`}
-    >
-      <body suppressHydrationWarning className="theme-dark bg-[#0A0A0C] text-[#F8FAFC]">
+    <html lang="en" dir="ltr" className={`${inter.variable} ${cairo.variable} dark`}>
+      <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
+      </head>
+      <body className="antialiased bg-[#0A0A0C] text-white selection:bg-[#FF1E27] selection:text-white font-sans overflow-x-hidden min-h-screen">
         <LanguageProvider>
-          <ServiceWorkerRegister />
           {children}
+          <ServiceWorkerRegister />
         </LanguageProvider>
       </body>
     </html>

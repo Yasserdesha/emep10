@@ -17,58 +17,26 @@ export default function Header() {
 
   const isAr = isMounted && language === 'ar';
 
-  // All 7 complete sections with standard classic web icons (FontAwesome)
-  const navItems = [
-    { 
-      id: 'hero', 
-      i18nKey: 'nav_home',
-      iconClass: 'fa-solid fa-house'
-    },
-    { 
-      id: 'about', 
-      i18nKey: 'nav_about',
-      iconClass: 'fa-solid fa-building'
-    },
-    { 
-      id: 'services', 
-      i18nKey: 'nav_services',
-      iconClass: 'fa-solid fa-gears'
-    },
-    { 
-      id: 'bim', 
-      i18nKey: 'nav_bim',
-      iconClass: 'fa-solid fa-cube'
-    },
-    { 
-      id: 'projects', 
-      i18nKey: 'nav_projects',
-      iconClass: 'fa-solid fa-layer-group'
-    },
-    { 
-      id: 'blog', 
-      i18nKey: 'nav_blog', 
-      href: '/blog',
-      iconClass: 'fa-solid fa-newspaper'
-    },
-    { 
-      id: 'contact', 
-      i18nKey: 'nav_contact',
-      iconClass: 'fa-solid fa-envelope'
-    },
+  // Core navigation sections for Desktop Header
+  const desktopNavItems = [
+    { id: 'hero', i18nKey: 'nav_home' },
+    { id: 'about', i18nKey: 'nav_about' },
+    { id: 'services', i18nKey: 'nav_services' },
+    { id: 'bim', i18nKey: 'nav_bim' },
+    { id: 'projects', i18nKey: 'nav_projects' },
+    { id: 'contact', i18nKey: 'nav_contact' },
   ];
 
-  // All 7 sections for the Icon-Only mobile bottom bar
-  const allBottomNavItems = [
-    { id: 'hero', i18nKey: 'nav_home', iconClass: 'fa-solid fa-house' },
-    { id: 'about', i18nKey: 'nav_about', iconClass: 'fa-solid fa-building' },
-    { id: 'services', i18nKey: 'nav_services', iconClass: 'fa-solid fa-gears' },
-    { id: 'bim', i18nKey: 'nav_bim', iconClass: 'fa-solid fa-cube' },
-    { id: 'projects', i18nKey: 'nav_projects', iconClass: 'fa-solid fa-layer-group' },
-    { id: 'blog', i18nKey: 'nav_blog', iconClass: 'fa-solid fa-newspaper', href: '/blog' },
-    { id: 'contact', i18nKey: 'nav_contact', iconClass: 'fa-solid fa-envelope' },
+  // Mobile Bottom Dock Quick Items (5 Essential Destinations)
+  const mobileBottomItems = [
+    { id: 'hero', i18nKey: 'nav_home', icon: 'fa-solid fa-house' },
+    { id: 'services', i18nKey: 'nav_services', icon: 'fa-solid fa-gears' },
+    { id: 'bim', i18nKey: 'nav_bim', icon: 'fa-solid fa-cube' },
+    { id: 'projects', i18nKey: 'nav_projects', icon: 'fa-solid fa-layer-group' },
+    { id: 'blog', i18nKey: 'nav_blog', icon: 'fa-solid fa-newspaper', href: '/blog' },
   ];
 
-  // Scroll listener for progress bar, active section, and live URL hash update
+  // ScrollSpy & Progress Tracker
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -80,48 +48,37 @@ export default function Header() {
 
       if (!isHomePage) return;
 
-      const scrollPos = currentScrollY + 200;
-      const heroTrack = document.getElementById('heroTrack');
-      const aboutSec = document.getElementById('about');
-      const servicesSec = document.getElementById('services');
-      const bimSec = document.getElementById('bim');
-      const projectsSec = document.getElementById('projects');
-      const contactSec = document.getElementById('contact');
-
+      const scrollPos = currentScrollY + 250;
       const sections = [
-        { id: 'hero', element: heroTrack },
-        { id: 'about', element: aboutSec },
-        { id: 'services', element: servicesSec },
-        { id: 'bim', element: bimSec },
-        { id: 'projects', element: projectsSec },
-        { id: 'contact', element: contactSec },
+        { id: 'hero', el: document.getElementById('heroTrack') },
+        { id: 'about', el: document.getElementById('about') },
+        { id: 'services', el: document.getElementById('services') },
+        { id: 'bim', el: document.getElementById('bim') },
+        { id: 'projects', el: document.getElementById('projects') },
+        { id: 'contact', el: document.getElementById('contact') },
       ];
 
       for (let i = sections.length - 1; i >= 0; i--) {
-        const { id, element } = sections[i];
-        if (element) {
-          const top = element.offsetTop;
-          if (scrollPos >= top) {
-            setActiveSection(id);
-            if (typeof window !== 'undefined') {
-              const targetHash = id === 'hero' ? '' : `#${id}`;
-              if (window.location.hash !== targetHash && !(id === 'hero' && !window.location.hash)) {
-                window.history.replaceState(null, '', id === 'hero' ? window.location.pathname : `#${id}`);
-              }
+        const { id, el } = sections[i];
+        if (el && scrollPos >= el.offsetTop) {
+          setActiveSection(id);
+          if (typeof window !== 'undefined') {
+            const targetHash = id === 'hero' ? '' : `#${id}`;
+            if (window.location.hash !== targetHash && !(id === 'hero' && !window.location.hash)) {
+              window.history.replaceState(null, '', id === 'hero' ? window.location.pathname : `#${id}`);
             }
-            break;
           }
+          break;
         }
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isHomePage]);
 
-  const handleScrollTo = (id: string, href?: string) => {
+  const handleNavigate = (id: string, href?: string) => {
     if (href) {
       router.push(href);
       return;
@@ -147,9 +104,9 @@ export default function Header() {
       const resetEvent = new CustomEvent('resetHeroCanvas');
       window.dispatchEvent(resetEvent);
     } else {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      const targetElement = document.getElementById(id);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
         window.history.replaceState(null, '', `#${id}`);
       }
     }
@@ -162,101 +119,68 @@ export default function Header() {
 
   return (
     <>
+      {/* ========================================================================= */}
+      {/* 1. TOP HEADER (الموقع بالكامل) */}
+      {/* ========================================================================= */}
       <header 
-        className="fixed top-0 inset-x-0 z-50 bg-[#0A0A0C]/95 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.8)]" 
-        id="navbar" 
+        className="fixed top-0 inset-x-0 z-50 bg-[#0A0A0C]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_25px_rgba(0,0,0,0.7)]"
+        id="navbar"
         role="banner"
       >
-        {/* Scroll Reading Progress Bar */}
+        {/* Red Reading Progress Bar */}
         <div 
-          className="absolute top-0 left-0 h-[2.5px] bg-gradient-to-r from-[#D31019] via-[#FF1E27] to-[#FF4040] shadow-[0_0_10px_#FF1E27] z-50 transition-all duration-100 ease-out"
+          className="absolute top-0 left-0 h-[2.5px] bg-gradient-to-r from-[#D31019] via-[#FF1E27] to-[#FF4040] z-50 transition-all duration-100 ease-out"
           style={{ width: `${scrollProgress}%` }}
           aria-hidden="true"
         />
 
-        {/* Clean Proportionate Header Container */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
-
-          {/* Brand Logo & Title */}
-          {isHomePage ? (
-            <button
-              type="button"
-              className="flex items-center gap-2.5 text-start group cursor-pointer flex-shrink-0"
-              onClick={() => handleScrollTo('hero')}
-              aria-label="E-MEP Electromechanical Works Homepage"
-            >
-              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
-                <Image 
-                  src="/logo/logo.png" 
-                  alt="E-MEP Logo" 
-                  width={26} 
-                  height={26} 
-                  style={{ width: '26px', height: '26px', objectFit: 'contain' }} 
-                  priority 
-                />
-              </div>
-              <div className="flex flex-col flex-shrink-0">
-                <div className="flex items-center gap-1">
-                  <span className="font-black text-sm sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none whitespace-nowrap">
-                    E-MEP
-                  </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27] flex-shrink-0"></span>
-                </div>
-                <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none whitespace-nowrap">
-                  Electromechanical
-                </span>
-              </div>
-            </button>
-          ) : (
-            <Link 
-              href="/" 
-              className="flex items-center gap-2.5 group flex-shrink-0" 
-              aria-label="E-MEP Electromechanical Works Homepage"
-            >
-              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
-                <Image 
-                  src="/logo/logo.png" 
-                  alt="E-MEP Logo" 
-                  width={26} 
-                  height={26} 
-                  style={{ width: '26px', height: '26px', objectFit: 'contain' }} 
-                  priority 
-                />
-              </div>
-              <div className="flex flex-col flex-shrink-0">
-                <div className="flex items-center gap-1">
-                  <span className="font-black text-sm sm:text-base tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none whitespace-nowrap">
-                    E-MEP
-                  </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27] flex-shrink-0"></span>
-                </div>
-                <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none whitespace-nowrap">
-                  Electromechanical
-                </span>
-              </div>
-            </Link>
-          )}
-
-          {/* Desktop Navigation Links (Visible on >= 1024px) */}
-          <nav
-            className="hidden lg:flex items-center flex-shrink-0"
-            role="navigation"
-            aria-label="Main Navigation"
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          
+          {/* Brand Logo & Name */}
+          <button
+            type="button"
+            onClick={() => handleNavigate('hero')}
+            className="flex items-center gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0"
+            aria-label="E-MEP Homepage"
           >
+            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+              <Image 
+                src="/logo/logo.png" 
+                alt="E-MEP Logo" 
+                width={28} 
+                height={28} 
+                style={{ width: '28px', height: '28px', objectFit: 'contain' }} 
+                priority 
+              />
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5">
+                <span className="font-black text-base sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+                  E-MEP
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
+              </div>
+              <span className="text-[8px] sm:text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
+                Electromechanical
+              </span>
+            </div>
+          </button>
+
+          {/* Desktop Navigation Links (>= 1024px) */}
+          <nav className="hidden lg:flex items-center" aria-label="Desktop Navigation">
             <ul className="flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
-              {navItems.map((item) => {
-                const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
+              {desktopNavItems.map((item) => {
+                const isActive = isHomePage && activeSection === item.id;
                 return (
-                  <li key={item.id} className="flex-shrink-0">
+                  <li key={item.id}>
                     <button
                       type="button"
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap flex-shrink-0 ${
+                      onClick={() => handleNavigate(item.id)}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap ${
                         isActive 
                           ? 'text-white bg-[#FF1E27] shadow-[0_0_15px_rgba(255,30,39,0.4)]' 
                           : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.06]'
                       }`}
-                      onClick={() => handleScrollTo(item.id, item.href)}
-                      aria-current={isActive ? 'page' : undefined}
                     >
                       {t(item.i18nKey)}
                     </button>
@@ -266,41 +190,47 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* Header Action Controls */}
+          {/* Right Action Controls: Blog Button + Language Switcher */}
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             
+            {/* Direct Blog Access Button */}
+            <Link
+              href="/blog"
+              className={`inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer h-9 shadow-sm whitespace-nowrap ${
+                pathname.startsWith('/blog')
+                  ? 'bg-[#FF1E27] text-white shadow-[0_0_15px_rgba(255,30,39,0.4)]'
+                  : 'bg-white/[0.06] hover:bg-[#FF1E27]/15 text-white hover:text-[#FF1E27] border border-white/[0.12] hover:border-[#FF1E27]/40'
+              }`}
+              aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
+            >
+              <i className="fa-solid fa-newspaper text-xs text-[#FF1E27]"></i>
+              <span>{isAr ? 'المقالات' : 'Blog'}</span>
+            </Link>
+
             {/* Language Switcher */}
             <button
-              id="langToggleBtn"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-[#FF1E27]/10 hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-8 sm:h-9 whitespace-nowrap flex-shrink-0"
-              onClick={toggleLanguage}
-              aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
               type="button"
+              onClick={toggleLanguage}
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-[#FF1E27]/40 text-white text-xs font-bold transition-all cursor-pointer shadow-sm h-9 whitespace-nowrap"
+              aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>
-              <span id="langText" className="whitespace-nowrap">{isAr ? 'EN' : 'العربية'}</span>
-            </button>
-
-            {/* Quick Contact CTA (Desktop >= 1024px) */}
-            <button
-              type="button"
-              onClick={() => handleScrollTo('contact')}
-              className="hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] text-white text-xs font-bold shadow-[0_0_20px_rgba(211,16,25,0.35)] hover:shadow-[0_0_25px_rgba(255,30,39,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer h-9 sm:h-10 whitespace-nowrap flex-shrink-0"
-            >
-              <i className="fa-solid fa-paper-plane text-xs"></i>
-              <span className="whitespace-nowrap">{t('nav_contact')}</span>
+              <span>{isAr ? 'EN' : 'العربية'}</span>
             </button>
           </div>
+
         </div>
       </header>
 
-      {/* Floating Bottom Quick-Action Dock: ICON-ONLY, ALL 7 SECTIONS in ONE STATIC BAR */}
+      {/* ========================================================================= */}
+      {/* 2. MOBILE BOTTOM NAVIGATION DOCK (شريط التنقل السفلي للهواتف) */}
+      {/* ========================================================================= */}
       <nav 
-        className="lg:hidden fixed bottom-3 inset-x-3 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-2 px-1 shadow-[0_12px_40px_rgba(0,0,0,0.9)]"
-        aria-label="Mobile Quick Bottom Navigation"
+        className="lg:hidden fixed bottom-3 inset-x-3 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-2 px-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)]"
+        aria-label="Mobile Navigation Dock"
       >
-        <div className="grid grid-cols-7 w-full items-center justify-items-center">
-          {allBottomNavItems.map((item) => {
+        <div className="grid grid-cols-5 w-full items-center justify-items-center">
+          {mobileBottomItems.map((item) => {
             const isActive = item.href 
               ? pathname.startsWith('/blog') 
               : (isHomePage && activeSection === item.id);
@@ -309,19 +239,19 @@ export default function Header() {
               <button
                 key={item.id}
                 type="button"
-                onClick={() => handleScrollTo(item.id, item.href)}
+                onClick={() => handleNavigate(item.id, item.href)}
                 aria-label={t(item.i18nKey)}
                 title={t(item.i18nKey)}
-                className={`flex flex-col items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl transition-all cursor-pointer ${
+                className={`flex flex-col items-center justify-center w-12 h-11 rounded-xl transition-all cursor-pointer ${
                   isActive 
-                    ? 'text-[#FF1E27] bg-[#FF1E27]/20 shadow-[0_0_12px_rgba(255,30,39,0.4)] scale-105' 
-                    : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.05]'
+                    ? 'text-[#FF1E27] bg-[#FF1E27]/15 shadow-[0_0_12px_rgba(255,30,39,0.35)] scale-105' 
+                    : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
-                <i className={`${item.iconClass} text-base sm:text-lg`} aria-hidden="true"></i>
-                {isActive && (
-                  <span className="w-1 h-1 rounded-full bg-[#FF1E27] mt-0.5 shadow-[0_0_6px_#FF1E27]"></span>
-                )}
+                <i className={`${item.icon} text-lg mb-0.5 ${isActive ? 'text-[#FF1E27]' : ''}`} aria-hidden="true"></i>
+                <span className="text-[9px] font-bold leading-none tracking-tight">
+                  {t(item.i18nKey)}
+                </span>
               </button>
             );
           })}
