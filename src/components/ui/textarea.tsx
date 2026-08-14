@@ -1,22 +1,18 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import * as React from "react"
 
-export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+import { cn } from "@/lib/utils"
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <textarea
-        className={cn(
-          "flex min-h-[120px] w-full rounded-xl border border-white/12 bg-white/[0.03] px-3.5 py-2.5 text-sm text-[#F8FAFC] shadow-inner backdrop-blur-md transition-all placeholder:text-[#64748B] hover:border-white/22 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:border-[#FF1E27] focus-visible:ring-4 focus-visible:ring-[#FF1E27]/18 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-Textarea.displayName = "Textarea";
+function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+  return (
+    <textarea
+      data-slot="textarea"
+      className={cn(
+        "flex field-sizing-content min-h-16 w-full resize-none rounded-xl border border-input bg-input/30 px-3 py-3 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-export { Textarea };
+export { Textarea }
