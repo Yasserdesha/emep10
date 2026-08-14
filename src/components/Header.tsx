@@ -87,7 +87,7 @@ export default function Header() {
     },
   ];
 
-  // Scroll listener for progress bar and scroll-spy
+  // Scroll listener for progress bar, active section, and live URL hash update
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -122,6 +122,13 @@ export default function Header() {
           const top = element.offsetTop;
           if (scrollPos >= top) {
             setActiveSection(id);
+            // Live update browser URL hash without causing page jump
+            if (typeof window !== 'undefined') {
+              const targetHash = id === 'hero' ? '' : `#${id}`;
+              if (window.location.hash !== targetHash && !(id === 'hero' && !window.location.hash)) {
+                window.history.replaceState(null, '', id === 'hero' ? window.location.pathname : `#${id}`);
+              }
+            }
             break;
           }
         }
@@ -158,12 +165,14 @@ export default function Header() {
 
     if (id === 'hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.history.replaceState(null, '', window.location.pathname);
       const resetEvent = new CustomEvent('resetHeroCanvas');
       window.dispatchEvent(resetEvent);
     } else {
       const element = document.getElementById(id);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
+        window.history.replaceState(null, '', `#${id}`);
       }
     }
   };
@@ -308,7 +317,7 @@ export default function Header() {
 
           {/* Mobile Collapsible Menu Toggle Button */}
           <button
-            className={`lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer ${
+            className={`lg:hidden flex items-center justify-center gap-1.5 px-3 h-9 sm:h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer ${
               mobileMenuOpen ? 'border-[#FF1E27]/60 bg-[#FF1E27]/20 text-[#FF1E27]' : ''
             }`}
             id="mobileMenuBtn"
@@ -327,37 +336,52 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
+            <span className="text-xs font-bold">{isAr ? 'القائمة' : 'Menu'}</span>
           </button>
         </div>
       </div>
 
-      {/* Modern Collapsible Mobile Menu Drawer */}
+      {/* Modern Collapsible Mobile Menu Drawer (Attached Directly Below Header) */}
       {mobileMenuOpen && (
         <div 
           id="mobileNavDrawer"
-          className="lg:hidden border-t border-white/[0.08] bg-[#0A0A0C]/98 backdrop-blur-3xl shadow-[0_30px_60px_rgba(0,0,0,0.95)] animate-fadeIn"
+          className="lg:hidden fixed top-16 inset-x-0 bottom-0 bg-[#0A0A0C]/98 backdrop-blur-3xl z-50 overflow-y-auto border-t border-white/[0.08] shadow-[0_30px_60px_rgba(0,0,0,0.95)] animate-fadeIn"
         >
-          <div className="px-4 py-5 space-y-4 max-w-lg mx-auto">
+          <div className="px-4 py-6 space-y-4 max-w-lg mx-auto pb-24">
+            {/* Header info */}
+            <div className="flex items-center justify-between px-2 pb-2 border-b border-white/[0.06]">
+              <span className="text-xs font-bold text-[#94A3B8] uppercase tracking-wider">
+                {isAr ? 'أقسام الموقع الرئيسية' : 'Website Sections'}
+              </span>
+              <button 
+                type="button" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-xs text-[#FF1E27] font-bold p-1 hover:underline"
+              >
+                {isAr ? 'إغلاق ✕' : 'Close ✕'}
+              </button>
+            </div>
+
             {/* Nav list of all 7 sections */}
-            <ul className="space-y-1.5">
+            <ul className="space-y-2">
               {navItems.map((item) => {
                 const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
                 return (
                   <li key={item.id}>
                     <button
                       type="button"
-                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-sm font-bold transition-all cursor-pointer ${
                         isActive 
-                          ? 'bg-[#FF1E27]/15 border border-[#FF1E27]/30 text-[#FF1E27]' 
-                          : 'text-[#CBD5E1] hover:bg-white/[0.05] hover:text-white'
+                          ? 'bg-[#FF1E27] text-white shadow-[0_0_20px_rgba(255,30,39,0.4)]' 
+                          : 'bg-white/[0.03] border border-white/[0.06] text-[#CBD5E1] hover:bg-white/[0.08] hover:text-white'
                       }`}
                       onClick={() => handleScrollTo(item.id, item.href)}
                     >
                       <div className="flex items-center gap-3">
-                        <span className={isActive ? 'text-[#FF1E27]' : 'text-gray-400'}>{item.icon}</span>
+                        <span className={isActive ? 'text-white' : 'text-[#FF1E27]'}>{item.icon}</span>
                         <span>{t(item.i18nKey)}</span>
                       </div>
-                      <svg className={`w-4 h-4 rtl:rotate-180 transition-transform ${isActive ? 'text-[#FF1E27]' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg className={`w-4 h-4 rtl:rotate-180 transition-transform ${isActive ? 'text-white' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                       </svg>
                     </button>
@@ -367,16 +391,20 @@ export default function Header() {
             </ul>
 
             {/* In-drawer Quick WhatsApp Cards */}
-            <div className="pt-3 border-t border-white/[0.08] space-y-2">
+            <div className="pt-4 border-t border-white/[0.08] space-y-2">
+              <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider block px-2">
+                {isAr ? 'تواصل مباشر مع مهندسي التنفيذ' : 'Direct Engineering Support'}
+              </span>
+
               <a
                 href="https://wa.me/201111079467"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 px-4 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-bold text-xs flex items-center justify-between hover:bg-[#25D366]/20 transition-all min-h-[44px]"
+                className="w-full py-3.5 px-4 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-bold text-xs flex items-center justify-between hover:bg-[#25D366]/25 transition-all min-h-[46px]"
               >
-                <div className="flex items-center gap-2">
-                  <i className="fa-brands fa-whatsapp text-base"></i>
-                  <span>{isAr ? 'واتساب م. أسامة محمد' : 'WhatsApp Eng. Osama Mohamed'}</span>
+                <div className="flex items-center gap-2.5">
+                  <i className="fa-brands fa-whatsapp text-lg"></i>
+                  <span>{isAr ? 'م. أسامة محمد (واتساب)' : 'Eng. Osama Mohamed (WhatsApp)'}</span>
                 </div>
                 <span className="text-[11px] text-[#25D366]/80 font-mono">01111079467</span>
               </a>
@@ -385,11 +413,11 @@ export default function Header() {
                 href="https://wa.me/201030834372"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 px-4 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-bold text-xs flex items-center justify-between hover:bg-[#25D366]/20 transition-all min-h-[44px]"
+                className="w-full py-3.5 px-4 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] font-bold text-xs flex items-center justify-between hover:bg-[#25D366]/25 transition-all min-h-[46px]"
               >
-                <div className="flex items-center gap-2">
-                  <i className="fa-brands fa-whatsapp text-base"></i>
-                  <span>{isAr ? 'واتساب م. علي ربيع' : 'WhatsApp Eng. Ali Rabie'}</span>
+                <div className="flex items-center gap-2.5">
+                  <i className="fa-brands fa-whatsapp text-lg"></i>
+                  <span>{isAr ? 'م. علي ربيع (واتساب)' : 'Eng. Ali Rabie (WhatsApp)'}</span>
                 </div>
                 <span className="text-[11px] text-[#25D366]/80 font-mono">01030834372</span>
               </a>
