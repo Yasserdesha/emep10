@@ -14,6 +14,7 @@ export default function Header() {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const isAr = isMounted && language === 'ar';
 
@@ -86,12 +87,19 @@ export default function Header() {
     },
   ];
 
-  // Scroll-spy listener for active section
+  // Scroll listener for progress bar and scroll-spy
   useEffect(() => {
-    if (!isHomePage) return;
-
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 200;
+      const currentScrollY = window.scrollY;
+      const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalDocHeight > 0) {
+        const progress = Math.min(100, Math.max(0, (currentScrollY / totalDocHeight) * 100));
+        setScrollProgress(progress);
+      }
+
+      if (!isHomePage) return;
+
+      const scrollPos = currentScrollY + 200;
       const heroTrack = document.getElementById('heroTrack');
       const aboutSec = document.getElementById('about');
       const servicesSec = document.getElementById('services');
@@ -167,10 +175,17 @@ export default function Header() {
 
   return (
     <header 
-      className="absolute top-0 inset-x-0 z-40 bg-[#0A0A0C]/90 backdrop-blur-xl border-b border-white/[0.08]" 
+      className="fixed top-0 inset-x-0 z-50 bg-[#0A0A0C]/95 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.8)]" 
       id="navbar" 
       role="banner"
     >
+      {/* Scroll Reading Progress Bar */}
+      <div 
+        className="absolute top-0 left-0 h-[2.5px] bg-gradient-to-r from-[#D31019] via-[#FF1E27] to-[#FF4040] shadow-[0_0_10px_#FF1E27] z-50 transition-all duration-100 ease-out"
+        style={{ width: `${scrollProgress}%` }}
+        aria-hidden="true"
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
 
         {/* Brand Logo & Title */}
@@ -331,7 +346,7 @@ export default function Header() {
                   <li key={item.id}>
                     <button
                       type="button"
-                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-bold transition-all ${
                         isActive 
                           ? 'bg-[#FF1E27]/15 border border-[#FF1E27]/30 text-[#FF1E27]' 
                           : 'text-[#CBD5E1] hover:bg-white/[0.05] hover:text-white'
