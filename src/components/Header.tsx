@@ -24,7 +24,7 @@ export default function Header() {
       id: 'hero', 
       i18nKey: 'nav_home',
       icon: (
-        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
         </svg>
       )
@@ -33,7 +33,7 @@ export default function Header() {
       id: 'about', 
       i18nKey: 'nav_about',
       icon: (
-        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
         </svg>
       )
@@ -42,7 +42,7 @@ export default function Header() {
       id: 'services', 
       i18nKey: 'nav_services',
       icon: (
-        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
@@ -52,7 +52,7 @@ export default function Header() {
       id: 'bim', 
       i18nKey: 'nav_bim',
       icon: (
-        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
         </svg>
       )
@@ -61,7 +61,7 @@ export default function Header() {
       id: 'projects', 
       i18nKey: 'nav_projects',
       icon: (
-        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
         </svg>
       )
@@ -71,7 +71,7 @@ export default function Header() {
       i18nKey: 'nav_blog', 
       href: '/blog',
       icon: (
-        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
         </svg>
       )
@@ -80,7 +80,7 @@ export default function Header() {
       id: 'contact', 
       i18nKey: 'nav_contact',
       icon: (
-        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       )
@@ -306,10 +306,10 @@ export default function Header() {
             <span>{t('nav_contact')}</span>
           </button>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Collapsible Menu Toggle Button */}
           <button
-            className={`lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-white/[0.1] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer ${
-              mobileMenuOpen ? 'border-[#FF1E27]/50 bg-[#FF1E27]/15 text-[#FF1E27]' : ''
+            className={`lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-white/[0.12] bg-white/[0.04] text-gray-200 hover:text-white transition-all cursor-pointer ${
+              mobileMenuOpen ? 'border-[#FF1E27]/60 bg-[#FF1E27]/20 text-[#FF1E27]' : ''
             }`}
             id="mobileMenuBtn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -319,7 +319,7 @@ export default function Header() {
             type="button"
           >
             {mobileMenuOpen ? (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-5 h-5 text-[#FF1E27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
@@ -331,36 +331,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Horizontal Fast-Scroll Navigation Bar (100% visible on all phones) */}
-      <nav 
-        className="lg:hidden border-t border-white/[0.06] bg-[#0A0A0C]/95 backdrop-blur-2xl px-3 py-2 overflow-x-auto"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        aria-label="Mobile Sections Navigation"
-      >
-        <ul className="flex items-center gap-1.5 w-max">
-          {navItems.map((item) => {
-            const isActive = (isHomePage && activeSection === item.id) || (pathname.startsWith('/blog') && item.id === 'blog');
-            return (
-              <li key={item.id} className="flex-shrink-0">
-                <button
-                  type="button"
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap ${
-                    isActive 
-                      ? 'text-white bg-[#FF1E27] shadow-[0_0_12px_rgba(255,30,39,0.4)]' 
-                      : 'text-[#94A3B8] bg-white/[0.04] border border-white/[0.06] hover:text-white'
-                  }`}
-                  onClick={() => handleScrollTo(item.id, item.href)}
-                >
-                  <span className={isActive ? 'text-white' : 'text-gray-400'}>{item.icon}</span>
-                  <span>{t(item.i18nKey)}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      {/* Modern Mobile Navigation Drawer */}
+      {/* Modern Collapsible Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div 
           id="mobileNavDrawer"
@@ -375,7 +346,7 @@ export default function Header() {
                   <li key={item.id}>
                     <button
                       type="button"
-                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                         isActive 
                           ? 'bg-[#FF1E27]/15 border border-[#FF1E27]/30 text-[#FF1E27]' 
                           : 'text-[#CBD5E1] hover:bg-white/[0.05] hover:text-white'

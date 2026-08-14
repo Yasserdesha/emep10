@@ -16,6 +16,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  // Always default to 'en' (English) on every page refresh / visit as requested
   const [language, setLanguageState] = useState<Language>('en');
   const [isMounted, setIsMounted] = useState(false);
 
@@ -27,30 +28,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Read saved language preference from localStorage or default to 'en' for new visitors
   useEffect(() => {
     setIsMounted(true);
-    let langToUse: Language = 'en';
-    try {
-      const stored = localStorage.getItem('emep_lang') as Language | null;
-      if (stored === 'ar' || stored === 'en') {
-        langToUse = stored;
-      }
-    } catch {
-      // Ignore
-    }
-
-    setLanguageState(langToUse);
-    updateHtmlAttributes(langToUse);
+    // On fresh load / refresh, always initiate in English
+    setLanguageState('en');
+    updateHtmlAttributes('en');
   }, [updateHtmlAttributes]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    try {
-      localStorage.setItem('emep_lang', lang);
-    } catch {
-      // Ignore
-    }
     updateHtmlAttributes(lang);
   };
 
@@ -68,8 +54,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const dir = language === 'ar' ? 'rtl' : 'ltr';
 
-  // Server always renders 'en'. Client switches after mount from localStorage.
-  // To prevent hydration mismatch, expose 'en' until client is mounted.
   const contextValue: LanguageContextType = {
     language: isMounted ? language : 'en',
     setLanguage,

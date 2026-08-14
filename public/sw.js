@@ -1,20 +1,19 @@
 // E-MEP High-Performance Service Worker for Instant Caching & Offline Speed
-const CACHE_NAME = 'emep-v2-static';
-const DATA_CACHE_NAME = 'emep-v2-data';
+const CACHE_NAME = 'emep-v3-static';
+const DATA_CACHE_NAME = 'emep-v3-data';
 
 const STATIC_ASSETS = [
-  '/manifest.json',
-  '/favicon.ico',
-  '/icon.png',
   '/logo/logo.png',
-  '/fontawesome/all.min.css',
+  '/icon.png',
 ];
 
-// Install Event: Pre-cache core shell static assets (never cache root HTML to avoid hydration mismatch across deployments)
+// Install Event: Pre-cache core shell static assets safely
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await Promise.allSettled(
+        STATIC_ASSETS.map((asset) => cache.add(asset).catch(() => null))
+      );
     }).then(() => self.skipWaiting())
   );
 });
