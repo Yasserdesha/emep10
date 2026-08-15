@@ -122,10 +122,10 @@ export default function Header() {
   return (
     <>
       {/* ========================================================================= */}
-      {/* 1. TOP HEADER (Fully Contained, Perfectly Responsive) */}
+      {/* 1. TOP HEADER (Solid Dark, High Contrast, Perfectly Fluid) */}
       {/* ========================================================================= */}
       <header 
-        className="fixed top-0 left-0 right-0 w-full z-50 bg-[#0A0A0C]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_25px_rgba(0,0,0,0.7)] box-border"
+        className="fixed top-0 left-0 right-0 w-full z-50 bg-[#0A0A0C]/98 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.85)] box-border"
         id="navbar"
         role="banner"
       >
@@ -168,7 +168,7 @@ export default function Header() {
             </div>
           </button>
 
-          {/* Desktop Navigation Links (Matched to Screenshot 2) */}
+          {/* Desktop Navigation Links (Matched to Design Specs) */}
           <nav className="hidden lg:flex items-center" aria-label="Desktop Navigation">
             <ul className="flex items-center gap-2 p-1.5 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
               {desktopNavItems.map((item) => {
