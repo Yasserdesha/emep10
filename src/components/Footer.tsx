@@ -30,14 +30,14 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
-              {t('footer_desc')}
+              {t('footer_bio')}
             </p>
           </div>
 
           {/* Col 2: Quick Links */}
           <div className="space-y-3">
             <h4 className="text-sm font-bold uppercase tracking-wider text-[#FF1E27]">
-              {t('footer_quick_links')}
+              {t('footer_col_links')}
             </h4>
             <ul className="space-y-2 text-sm text-[#94A3B8]">
               <li><Link href="/#about" className="hover:text-white transition-colors">{t('nav_about')}</Link></li>
@@ -51,21 +51,21 @@ export default function Footer() {
           {/* Col 3: Services */}
           <div className="space-y-3">
             <h4 className="text-sm font-bold uppercase tracking-wider text-[#FF1E27]">
-              {t('footer_services_title')}
+              {t('footer_col_services')}
             </h4>
             <ul className="space-y-2 text-sm text-[#94A3B8]">
-              <li>{t('hvac_title')}</li>
-              <li>{t('fire_title')}</li>
-              <li>{t('plumbing_title')}</li>
-              <li>{t('electrical_title')}</li>
-              <li>{t('bim_title')}</li>
+              <li>{t('feat_hvac_title')}</li>
+              <li>{t('feat_fire_title')}</li>
+              <li>{t('feat_plumb_title')}</li>
+              <li>{t('feat_elec_title')}</li>
+              <li>{t('nav_bim')}</li>
             </ul>
           </div>
 
           {/* Col 4: Contact & Socials */}
           <div className="space-y-3">
             <h4 className="text-sm font-bold uppercase tracking-wider text-[#FF1E27]">
-              {t('footer_contact_title')}
+              {t('footer_col_contact')}
             </h4>
             
             {/* Email */}
