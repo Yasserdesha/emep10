@@ -16,8 +16,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  // Always default to 'en' (English) on every page refresh / visit as requested
-  const [language, setLanguageState] = useState<Language>('en');
+  const [language, setLanguageState] = useState<Language>('ar');
   const [isMounted, setIsMounted] = useState(false);
 
   const updateHtmlAttributes = useCallback((lang: Language) => {
@@ -30,14 +29,27 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setIsMounted(true);
-    // On fresh load / refresh, always initiate in English
-    setLanguageState('en');
-    updateHtmlAttributes('en');
+    let initialLang: Language = 'ar';
+    try {
+      const saved = localStorage.getItem('emep_lang') as Language;
+      if (saved === 'ar' || saved === 'en') {
+        initialLang = saved;
+      }
+    } catch {
+      // ignore
+    }
+    setLanguageState(initialLang);
+    updateHtmlAttributes(initialLang);
   }, [updateHtmlAttributes]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     updateHtmlAttributes(lang);
+    try {
+      localStorage.setItem('emep_lang', lang);
+    } catch {
+      // ignore
+    }
   };
 
   const t = (key: string): string => {
