@@ -164,6 +164,8 @@ p {
 body {
   background-color: var(--background);
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   min-height: 100vh;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;

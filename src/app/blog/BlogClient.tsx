@@ -154,13 +154,20 @@ export default function BlogClient({ articles }: BlogClientProps) {
                 <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
               {searchQuery && (
-                <button
-                  type="button"
+                <SpecularButton
+                  size="sm"
+                  radius={12}
+                  lineColor="#FF1E27"
+                  baseColor="#2a1014"
+                  intensity={1.1}
+                  shineSize={8}
+                  shineFade={25}
+                  thickness={1.0}
                   onClick={() => setSearchQuery('')}
-                  className="btn-outline !py-1 !px-2.5 !min-h-0 !text-xs absolute end-3 cursor-pointer"
+                  className="!py-1 !px-2.5 !min-h-0 !text-xs absolute end-2.5 cursor-pointer text-white"
                 >
-                  {isAr ? 'مسح' : 'Clear'}
-                </button>
+                  <span>{isAr ? 'مسح' : 'Clear'}</span>
+                </SpecularButton>
               )}
             </div>
           </div>
@@ -370,27 +377,43 @@ export default function BlogClient({ articles }: BlogClientProps) {
                         {summary}
                       </p>
 
-                      {/* Card Action Row */}
-                      <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between mt-auto">
-                        <button
-                          type="button"
+                      {/* Card Action Row with SpecularButton */}
+                      <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between mt-auto gap-2">
+                        <SpecularButton
+                          size="sm"
+                          radius={12}
+                          lineColor="#94A3B8"
+                          baseColor="#1e1e28"
+                          intensity={0.9}
+                          shineSize={10}
+                          shineFade={30}
+                          thickness={1.2}
+                          followMouse
+                          autoAnimate
                           onClick={() => setSelectedArticle(art)}
-                          className="btn-outline !py-1.5 !px-3 !min-h-0 !text-xs cursor-pointer inline-flex items-center gap-1.5"
+                          className="px-3.5 py-1.5 text-xs font-semibold text-white/90 cursor-pointer"
                         >
                           <i className="fa-solid fa-expand text-[10px]"></i>
                           <span>{isAr ? 'معاينة' : 'Preview'}</span>
-                        </button>
+                        </SpecularButton>
 
-                        <button
-                          type="button"
+                        <SpecularButton
+                          size="sm"
+                          radius={12}
+                          lineColor="#FF1E27"
+                          baseColor="#521014"
+                          intensity={1.3}
+                          shineSize={12}
+                          shineFade={35}
+                          thickness={1.4}
+                          followMouse
+                          autoAnimate
                           onClick={() => router.push(`/blog/${art.slug}`)}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF1E27] group-hover:text-white group-hover:gap-2.5 transition-all duration-200 cursor-pointer"
+                          className="px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-[#FF1E27]/25 cursor-pointer"
                         >
                           <span>{isAr ? 'قراءة المقال' : 'Read Article'}</span>
-                          <svg className={`w-3.5 h-3.5 ${isAr ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                          </svg>
-                        </button>
+                          <i className={`fa-solid fa-arrow-right text-[10px] ${isAr ? 'rotate-180' : ''}`}></i>
+                        </SpecularButton>
                       </div>
                     </div>
                   </article>
@@ -408,18 +431,28 @@ export default function BlogClient({ articles }: BlogClientProps) {
               <p className="text-sm text-[#64748B] max-w-sm mx-auto">
                 {isAr ? 'جرب البحث بكلمات أخرى أو اختر قسماً هندسياً مختلفاً من الأزرار أعلاه.' : 'Try searching with other keywords or select a different category above.'}
               </p>
-              <button
-                type="button"
+              <SpecularButton
+                size="md"
+                radius={16}
+                lineColor="#FF1E27"
+                baseColor="#521014"
+                intensity={1.3}
+                shineSize={14}
+                shineFade={40}
+                thickness={1.5}
+                followMouse
+                autoAnimate
                 onClick={() => { setSearchQuery(''); setActiveCategory('all'); }}
-                className="btn-primary !px-6 !py-2.5 !text-xs !font-bold cursor-pointer"
+                className="px-7 py-3 text-xs font-bold cursor-pointer shadow-lg shadow-[#FF1E27]/30"
               >
-                {isAr ? 'إعادة ضبط الفلتر' : 'Reset Filters'}
-              </button>
+                <i className="fa-solid fa-rotate-left text-xs"></i>
+                <span>{isAr ? 'إعادة ضبط الفلتر' : 'Reset Filters'}</span>
+              </SpecularButton>
             </div>
           )}
         </section>
 
-        {/* ── Consultation CTA Banner with Solid System Buttons ── */}
+        {/* ── Consultation CTA Banner with SpecularButtons ── */}
         <section className="glass-panel relative rounded-3xl overflow-hidden border border-[#FF1E27]/30 bg-[#111116] shadow-2xl">
           {/* Ambient Glow */}
           <div className="absolute inset-0 pointer-events-none">
@@ -448,26 +481,41 @@ export default function BlogClient({ articles }: BlogClientProps) {
                 : 'The E-MEP team is ready to review drawings and provide initial studies for MEP & BIM systems.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-3.5 justify-center pt-3">
-              <button
-                type="button"
+              <SpecularButton
+                size="lg"
+                radius={20}
+                lineColor="#FF1E27"
+                baseColor="#521014"
+                intensity={1.4}
+                shineSize={16}
+                shineFade={45}
+                thickness={1.6}
+                followMouse
+                autoAnimate
                 onClick={() => router.push('/#contact')}
-                className="btn-primary !px-8 !py-3.5 !text-sm !font-bold cursor-pointer inline-flex items-center justify-center gap-2"
+                className="px-8 py-3.5 text-sm font-bold shadow-xl shadow-[#FF1E27]/40 cursor-pointer"
               >
-                <svg className="w-4 h-4 mr-1 rtl:ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+                <i className="fa-solid fa-envelope text-sm"></i>
                 <span>{isAr ? 'اطلب الاستشارة الآن' : 'Request Consultation'}</span>
-              </button>
+              </SpecularButton>
 
-              <a
-                href="https://wa.me/201030834372?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-whatsapp !px-8 !py-3.5 !text-sm !font-bold cursor-pointer inline-flex items-center justify-center gap-2"
+              <SpecularButton
+                size="lg"
+                radius={20}
+                lineColor="#25D366"
+                baseColor="#0e3820"
+                intensity={1.4}
+                shineSize={16}
+                shineFade={45}
+                thickness={1.6}
+                followMouse
+                autoAnimate
+                onClick={() => window.open('https://wa.me/201030834372?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry.', '_blank')}
+                className="px-8 py-3.5 text-sm font-bold shadow-xl shadow-[#25D366]/30 cursor-pointer"
               >
-                <i className="fa-brands fa-whatsapp text-base mr-1 rtl:ml-1"></i>
+                <i className="fa-brands fa-whatsapp text-base text-[#25D366]"></i>
                 <span>{isAr ? 'تواصل واتساب' : 'WhatsApp Us'}</span>
-              </a>
+              </SpecularButton>
             </div>
           </div>
         </section>
@@ -521,26 +569,44 @@ export default function BlogClient({ articles }: BlogClientProps) {
               </p>
 
               <div className="flex flex-wrap gap-3 pt-4 border-t border-white/10">
-                <button
-                  type="button"
+                <SpecularButton
+                  size="md"
+                  radius={16}
+                  lineColor="#FF1E27"
+                  baseColor="#521014"
+                  intensity={1.3}
+                  shineSize={14}
+                  shineFade={40}
+                  thickness={1.5}
+                  followMouse
+                  autoAnimate
                   onClick={() => {
                     const slug = selectedArticle.slug;
                     setSelectedArticle(null);
                     router.push(`/blog/${slug}`);
                   }}
-                  className="btn-primary !px-7 !py-3 !text-sm !font-bold cursor-pointer inline-flex items-center gap-2"
+                  className="px-7 py-3 text-sm font-bold shadow-lg shadow-[#FF1E27]/30 cursor-pointer"
                 >
                   <span>{isAr ? 'قراءة المقال بالكامل' : 'Read Full Article'}</span>
                   <i className={`fa-solid fa-arrow-right text-xs ${isAr ? 'rotate-180' : ''}`}></i>
-                </button>
+                </SpecularButton>
 
-                <button
-                  type="button"
+                <SpecularButton
+                  size="md"
+                  radius={16}
+                  lineColor="#94A3B8"
+                  baseColor="#1e1e28"
+                  intensity={1.0}
+                  shineSize={12}
+                  shineFade={35}
+                  thickness={1.2}
+                  followMouse
+                  autoAnimate
                   onClick={() => setSelectedArticle(null)}
-                  className="btn-outline !px-6 !py-3 !text-sm !font-bold cursor-pointer"
+                  className="px-6 py-3 text-sm font-bold text-white bg-white/[0.04] cursor-pointer"
                 >
                   <span>{isAr ? 'إغلاق' : 'Close'}</span>
-                </button>
+                </SpecularButton>
               </div>
             </div>
           </div>

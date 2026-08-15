@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SafeImage from '@/components/SafeImage';
 import { useLanguage } from '@/components/LanguageContext';
-import { Button } from '@/components/ui/button';
+import SpecularButton from '@/components/SpecularButton';
 
 interface ArticleItem {
   id: number;
@@ -30,6 +31,7 @@ interface ArticleClientProps {
 
 export default function ArticleClient({ article, relatedArticles }: ArticleClientProps) {
   const { language, isMounted } = useLanguage();
+  const router = useRouter();
   const isAr = isMounted && language === 'ar';
 
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -232,33 +234,41 @@ export default function ArticleClient({ article, relatedArticles }: ArticleClien
               : 'Contact E-MEP engineers directly to review your project requirements and receive expert engineering advice.'}
           </p>
           <div className="pt-3 flex flex-wrap gap-3.5 justify-center">
-            <Button
-              asChild
-              variant="outline"
+            <SpecularButton
               size="lg"
-              className="rounded-full px-6 py-5 font-bold text-xs bg-gradient-to-b from-[#25D366] to-[#128C7E] text-white border-0 hover:from-[#2fe472] hover:to-[#17a594] shadow-xl shadow-[#25D366]/30 hover:shadow-[#25D366]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+              radius={20}
+              lineColor="#25D366"
+              baseColor="#0e3820"
+              intensity={1.4}
+              shineSize={16}
+              shineFade={45}
+              thickness={1.6}
+              followMouse
+              autoAnimate
+              onClick={() => window.open('https://wa.me/201030834372', '_blank')}
+              className="px-7 py-3.5 text-xs font-bold shadow-xl shadow-[#25D366]/30 cursor-pointer"
             >
-              <a
-                href="https://wa.me/201030834372"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <i className="fa-brands fa-whatsapp text-sm mr-2 rtl:ml-2"></i>
-                <span>{isAr ? 'استشارة واتساب فورية' : 'Instant WhatsApp Consultation'}</span>
-              </a>
-            </Button>
+              <i className="fa-brands fa-whatsapp text-base text-[#25D366] mr-1 rtl:ml-1"></i>
+              <span>{isAr ? 'استشارة واتساب فورية' : 'Instant WhatsApp Consultation'}</span>
+            </SpecularButton>
 
-            <Button
-              asChild
-              variant="default"
+            <SpecularButton
               size="lg"
-              className="rounded-full px-6 py-5 font-bold text-xs shadow-xl shadow-[#FF1E27]/30 hover:shadow-[#FF1E27]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+              radius={20}
+              lineColor="#FF1E27"
+              baseColor="#521014"
+              intensity={1.4}
+              shineSize={16}
+              shineFade={45}
+              thickness={1.6}
+              followMouse
+              autoAnimate
+              onClick={() => router.push('/#contact')}
+              className="px-7 py-3.5 text-xs font-bold shadow-xl shadow-[#FF1E27]/40 cursor-pointer"
             >
-              <Link href="/#contact">
-                <i className="fa-solid fa-envelope text-xs mr-2 rtl:ml-2"></i>
-                <span>{isAr ? 'طلب عرض أسعار' : 'Request a Proposal'}</span>
-              </Link>
-            </Button>
+              <i className="fa-solid fa-envelope text-xs mr-1 rtl:ml-1"></i>
+              <span>{isAr ? 'طلب عرض أسعار' : 'Request a Proposal'}</span>
+            </SpecularButton>
           </div>
         </section>
 
