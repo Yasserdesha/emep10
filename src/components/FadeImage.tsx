@@ -18,7 +18,14 @@ export function FadeImage({
 }: FadeImageProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [imgSrc, setImgSrc] = useState<any>(src);
+  const [hasError, setHasError] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setImgSrc(src);
+    setHasError(false);
+  }, [src]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
@@ -48,7 +55,7 @@ export function FadeImage({
     return () => observer.disconnect();
   }, [fadeDelay]);
 
-  if (!src) {
+  if (!imgSrc) {
     return null;
   }
 
@@ -61,12 +68,18 @@ export function FadeImage({
     >
       <Image
         alt={alt}
-        src={src}
+        src={hasError ? '/assets/projects/portfolio-2_page-0004.jpg' : imgSrc}
         {...props}
         className={`${className} transition-all duration-700 ease-out ${
           isVisible && isLoaded ? "opacity-100 scale-100" : "opacity-90 scale-[1.01]"
         }`}
         onLoad={() => setIsLoaded(true)}
+        onError={() => {
+          if (!hasError) {
+            setHasError(true);
+            setImgSrc('/assets/projects/portfolio-2_page-0004.jpg');
+          }
+        }}
       />
     </div>
   );

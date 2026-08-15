@@ -78,18 +78,25 @@ export default function ExpertiseCard({ img, datSrc, titleKey, descKey }: Expert
     setIsPlaying(false);
   }, []);
 
-  // Defer video preload to browser idle time (3s delay) to ensure 0ms main thread impact on load
+  // Preload video as soon as the card enters the viewport so it's ready instantly on hover
   useEffect(() => {
-    let timerId: NodeJS.Timeout;
-    
-    if ('requestIdleCallback' in window) {
-      const idleId = (window as any).requestIdleCallback(() => {
-        prepareVideo();
-      }, { timeout: 4000 });
-      return () => (window as any).cancelIdleCallback(idleId);
+    const el = cardRef.current;
+    if (!el) return;
+
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            prepareVideo();
+            observer.disconnect();
+          }
+        },
+        { rootMargin: '200px' }
+      );
+      observer.observe(el);
+      return () => observer.disconnect();
     } else {
-      timerId = setTimeout(prepareVideo, 3000);
-      return () => clearTimeout(timerId);
+      prepareVideo();
     }
   }, [prepareVideo]);
 

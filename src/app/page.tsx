@@ -26,17 +26,25 @@ async function getInitialData() {
         .order('id', { ascending: true });
 
       if (!error && dbProjects && dbProjects.length > 0) {
-        const formattedProjects = dbProjects.map((row: any) => ({
-          id: Number(row.id),
-          image: row.image,
-          titleEn: row.title_en,
-          titleAr: row.title_ar,
-          category: row.category,
-          catEn: row.cat_en,
-          catAr: row.cat_ar,
-          descEn: row.desc_en,
-          descAr: row.desc_ar,
-        }));
+        const localProjects = (localData.projects || []) as any[];
+        const formattedProjects = dbProjects.map((row: any) => {
+          const localMatch = localProjects.find((p: any) => p.id === Number(row.id));
+          const safeImage = (row.image && !row.image.includes('supabase.co'))
+            ? row.image
+            : (localMatch?.image || `/assets/projects/portfolio-2_page-00${String(Math.min(37, Math.max(4, Number(row.id) + 3))).padStart(2, '0')}.jpg`);
+
+          return {
+            id: Number(row.id),
+            image: safeImage,
+            titleEn: row.title_en || localMatch?.titleEn || '',
+            titleAr: row.title_ar || localMatch?.titleAr || '',
+            category: row.category || localMatch?.category || 'retail',
+            catEn: row.cat_en || localMatch?.catEn || '',
+            catAr: row.cat_ar || localMatch?.catAr || '',
+            descEn: row.desc_en || localMatch?.descEn || '',
+            descAr: row.desc_ar || localMatch?.descAr || '',
+          };
+        });
 
         return {
           projects: formattedProjects,

@@ -60,18 +60,23 @@ function isAuthorized(req: NextRequest): boolean {
   );
 }
 
-// Helper mapper from Supabase snake_case to app camelCase
+// Helper mapper from Supabase snake_case to app camelCase with reliable image fallback
 function mapSupabaseToProjectItem(row: any): ProjectItem {
+  const id = Number(row.id);
+  const safeImage = (row.image && !row.image.includes('supabase.co'))
+    ? row.image
+    : `/assets/projects/portfolio-2_page-00${String(Math.min(37, Math.max(4, id + 3))).padStart(2, '0')}.jpg`;
+
   return {
-    id: Number(row.id),
-    image: row.image,
-    titleEn: row.title_en,
-    titleAr: row.title_ar,
-    category: row.category,
-    catEn: row.cat_en,
-    catAr: row.cat_ar,
-    descEn: row.desc_en,
-    descAr: row.desc_ar,
+    id,
+    image: safeImage,
+    titleEn: row.title_en || '',
+    titleAr: row.title_ar || '',
+    category: row.category || 'retail',
+    catEn: row.cat_en || '',
+    catAr: row.cat_ar || '',
+    descEn: row.desc_en || '',
+    descAr: row.desc_ar || '',
   };
 }
 
