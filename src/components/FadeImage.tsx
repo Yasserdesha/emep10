@@ -13,13 +13,19 @@ export function FadeImage({
   containerClassName = "",
   fadeDelay = 0, 
   alt = "E-MEP",
+  src,
   ...props 
 }: FadeImageProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -30,8 +36,8 @@ export function FadeImage({
         }
       },
       {
-        threshold: 0.1,
-        rootMargin: "50px",
+        threshold: 0.05,
+        rootMargin: "100px",
       }
     );
 
@@ -42,13 +48,23 @@ export function FadeImage({
     return () => observer.disconnect();
   }, [fadeDelay]);
 
+  if (!src) {
+    return null;
+  }
+
+  const isFill = Boolean(props.fill);
+
   return (
-    <div ref={ref} className={`relative h-full w-full overflow-hidden ${containerClassName}`}>
+    <div 
+      ref={ref} 
+      className={`${isFill ? 'relative h-full w-full' : 'relative inline-block'} overflow-hidden ${containerClassName}`}
+    >
       <Image
         alt={alt}
+        src={src}
         {...props}
         className={`${className} transition-all duration-700 ease-out ${
-          isVisible && isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-[1.03]"
+          isVisible && isLoaded ? "opacity-100 scale-100" : "opacity-90 scale-[1.01]"
         }`}
         onLoad={() => setIsLoaded(true)}
       />
