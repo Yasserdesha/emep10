@@ -1,4 +1,10 @@
 {
+  "css.customData": [
+    ".vscode/css-data.json"
+  ],
+  "scss.customData": [
+    ".vscode/css-data.json"
+  ],
   "files.associations": {
     "*.css": "tailwindcss"
   },
@@ -24,7 +30,15 @@
   "css.lint.idSelector": "ignore",
   "css.lint.ieHack": "ignore",
   "css.lint.outline": "ignore",
-  "css.lint.validProperties": [],
+  "css.lint.validProperties": [
+    "scrollbar-width",
+    "scrollbar-color",
+    "backdrop-filter",
+    "-webkit-backdrop-filter",
+    "-webkit-user-select",
+    "-webkit-tap-highlight-color",
+    "-webkit-text-size-adjust"
+  ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.validate.enable": true,
   "javascript.validate.enable": true
