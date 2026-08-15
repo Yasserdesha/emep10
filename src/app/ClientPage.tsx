@@ -19,6 +19,7 @@ const ContactForm = dynamic(() => import('@/components/ContactForm'), {
 });
 
 import ExpertiseCard from '@/components/ExpertiseCard';
+import ElectricBorder from '@/components/ElectricBorder';
 
 interface Project {
   id: number;
@@ -201,16 +202,25 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           </h1>
           <HeroCanvas />
           <div className="hero-centered-logo-overlay">
-            <div className="hero-logo-white-glass">
-              <Image
-                src="/logo/logo.png"
-                alt={isAr ? "شعار شركة E-MEP للأنظمة الكهروميكانيكية" : "E-MEP Electromechanical Works Official Brand Logo"}
-                width={150}
-                height={150}
-                className="hero-pure-logo"
-                style={{ width: '150px', height: '150px', aspectRatio: '1/1' }}
-              />
-            </div>
+            <ElectricBorder
+              color="#FF1E27"
+              speed={1}
+              chaos={0.12}
+              thickness={2}
+              borderRadius={20}
+              className="max-w-fit mx-auto"
+            >
+              <div className="hero-logo-white-glass">
+                <Image
+                  src="/logo/logo.png"
+                  alt={isAr ? "شعار شركة E-MEP للأنظمة الكهروميكانيكية" : "E-MEP Electromechanical Works Official Brand Logo"}
+                  width={150}
+                  height={150}
+                  className="hero-pure-logo"
+                  style={{ width: '150px', height: '150px', aspectRatio: '1/1' }}
+                />
+              </div>
+            </ElectricBorder>
 
             <Button
               type="button"
@@ -229,10 +239,19 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
       {/* Cinematic Kinetic Statement Section (Inspired by Mono Philosophy & Technology Section) */}
       <section className="py-14 sm:py-24 bg-[#050507] border-y border-white/[0.06] relative overflow-hidden flex items-center justify-center">
         <div className="container relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center">
-          <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[#FF1E27]/10 border border-[#FF1E27]/30 text-[#FF1E27] text-xs sm:text-sm font-bold uppercase tracking-widest mb-6 shadow-[0_0_20px_rgba(255,30,39,0.15)] mx-auto">
-            <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse"></span>
-            <span>{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM'}</span>
-          </div>
+          <ElectricBorder
+            color="#FF1E27"
+            speed={1.2}
+            chaos={0.14}
+            thickness={1.5}
+            borderRadius={9999}
+            className="max-w-fit mx-auto mb-6"
+          >
+            <div className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full bg-[#0A0A0C]/90 text-[#FF1E27] text-xs sm:text-sm font-bold uppercase tracking-widest">
+              <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse"></span>
+              <span>{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM'}</span>
+            </div>
+          </ElectricBorder>
           <ScrollRevealText
             text={
               isAr

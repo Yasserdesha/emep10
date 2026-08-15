@@ -1,0 +1,69 @@
+/* Electric Border Cross-Browser Styling */
+.electric-border {
+  --electric-border-color: #FF1E27;
+  position: relative;
+  border-radius: inherit;
+  overflow: visible;
+  isolation: isolate;
+  display: inline-block;
+  width: 100%;
+}
+
+.eb-canvas-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.eb-canvas {
+  display: block;
+}
+
+.eb-content {
+  position: relative;
+  border-radius: inherit;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+
+.eb-layers {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.eb-glow-1,
+.eb-glow-2,
+.eb-background-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.eb-glow-1 {
+  border: 1.5px solid var(--electric-border-color);
+  opacity: 0.55;
+  filter: blur(1.5px);
+}
+
+.eb-glow-2 {
+  border: 2px solid var(--electric-border-color);
+  opacity: 0.35;
+  filter: blur(5px);
+}
+
+.eb-background-glow {
+  z-index: -1;
+  transform: scale(1.04);
+  filter: blur(24px);
+  opacity: 0.25;
+  background: radial-gradient(circle at center, var(--electric-border-color) 0%, rgba(255, 30, 39, 0.2) 45%, transparent 70%);
+}
