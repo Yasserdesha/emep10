@@ -3,7 +3,7 @@
   --electric-border-color: #FF1E27;
   position: relative;
   border-radius: inherit;
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
   display: inline-flex;
   align-items: center;

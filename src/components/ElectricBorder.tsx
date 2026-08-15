@@ -169,20 +169,18 @@ export const ElectricBorder: React.FC<ElectricBorderProps> = ({
     if (!ctx) return;
 
     // Configuration
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-    const octaves = isMobile ? 4 : 8;
+    const octaves = 8;
     const lacunarity = 1.6;
     const gain = 0.7;
     const amplitude = chaos;
-    const frequency = isMobile ? 6 : 10;
+    const frequency = 10;
     const baseFlatness = 0;
-    const displacement = isMobile ? 8 : 24;
-    const borderOffset = isMobile ? 8 : 24;
+    const displacement = 40;
+    const borderOffset = 40;
 
     const updateSize = () => {
       const rect = container.getBoundingClientRect();
-      const maxAllowedWidth = typeof window !== 'undefined' ? window.innerWidth - 16 : 320;
-      const width = Math.min(rect.width + borderOffset * 2, maxAllowedWidth);
+      const width = rect.width + borderOffset * 2;
       const height = rect.height + borderOffset * 2;
 
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
