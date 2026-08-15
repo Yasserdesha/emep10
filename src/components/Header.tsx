@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
+import StarBorder from './StarBorder';
 
 export default function Header() {
   const { language, setLanguage, t, isMounted } = useLanguage();
@@ -168,21 +169,24 @@ export default function Header() {
             </div>
           </button>
 
-          {/* Desktop Navigation Links (Matched to Design Specs) */}
+          {/* Desktop Navigation Links with StarBorder */}
           <nav className="hidden lg:flex items-center" aria-label="Desktop Navigation">
-            <ul className="flex items-center gap-2 p-1.5 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
+            <ul className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
               {desktopNavItems.map((item) => {
                 const isActive = isHomePage && activeSection === item.id;
                 return (
                   <li key={item.id}>
-                    <button
-                      type="button"
+                    <StarBorder
+                      as="button"
+                      color="#FF1E27"
+                      speed="4s"
+                      isActive={isActive}
                       onClick={() => handleNavigate(item.id)}
-                      className={`nav-tab-btn ${isActive ? 'active' : ''}`}
-                      aria-label={t(item.i18nKey)}
+                      ariaLabel={t(item.i18nKey)}
+                      className="text-xs"
                     >
-                      {t(item.i18nKey)}
-                    </button>
+                      <span>{t(item.i18nKey)}</span>
+                    </StarBorder>
                   </li>
                 );
               })}
@@ -193,25 +197,24 @@ export default function Header() {
           <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
             
             {/* Direct Blog Access Button */}
-            <button
-              type="button"
+            <StarBorder
+              as="button"
+              color="#FF1E27"
+              speed="3.5s"
+              isActive={pathname.startsWith('/blog')}
               onClick={() => router.push('/blog')}
-              className={`h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-lg sm:rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
-                pathname.startsWith('/blog')
-                  ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border-white/25 border-t-white/40 shadow-[0_2px_12px_rgba(211,16,25,0.45)]'
-                  : '!text-white/90 !bg-white/[0.06] hover:!bg-white/[0.12] border-white/10 hover:border-white/20'
-              }`}
-              aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
+              ariaLabel={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
+              className="text-xs"
             >
               <i className="fa-solid fa-newspaper text-xs text-[#FF1E27]"></i>
-              <span className="text-xs font-bold">{isAr ? 'المقالات' : 'Blog'}</span>
-            </button>
+              <span className="font-bold">{isAr ? 'المقالات' : 'Blog'}</span>
+            </StarBorder>
 
             {/* Language Switcher */}
             <button
               type="button"
               onClick={toggleLanguage}
-              className="h-8 sm:h-9 px-2 sm:px-3 rounded-lg sm:rounded-xl text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
+              className="h-8 sm:h-9 px-2 sm:px-3 rounded-xl text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>

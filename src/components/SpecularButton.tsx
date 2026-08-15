@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import './SpecularButton.css';
+import StarBorder from './StarBorder';
 
 export interface SpecularButtonProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export interface SpecularButtonProps {
   shineSize?: number;
   shineFade?: number;
   thickness?: number;
-  speed?: number;
+  speed?: number | string;
   followMouse?: boolean;
   proximity?: number;
   autoAnimate?: boolean;
@@ -28,52 +28,40 @@ export interface SpecularButtonProps {
   style?: React.CSSProperties;
   id?: string;
   ariaLabel?: string;
+  isActive?: boolean;
 }
 
 const SpecularButton: React.FC<SpecularButtonProps> = ({
   children,
-  size = 'lg',
-  radius = 24,
-  tint = '#ffffff',
-  tintOpacity = 0,
-  blur = 0,
-  textColor = '#ffffff',
   lineColor = '#FF1E27',
-  baseColor = '#3a0c0e',
-  intensity = 1.2,
-  shineSize = 12,
-  shineFade = 40,
-  thickness = 1.5,
-  speed = 0.45,
-  followMouse = true,
-  proximity = 250,
-  autoAnimate = true,
+  speed = '4s',
   disabled = false,
   onClick,
   className = '',
   type = 'button',
   style = {},
   id,
-  ariaLabel
+  ariaLabel,
+  isActive = false,
 }) => {
+  const speedStr = typeof speed === 'number' ? `${speed}s` : speed;
+
   return (
-    <button
+    <StarBorder
+      as="button"
       id={id}
       type={type}
       disabled={disabled}
       onClick={onClick}
-      aria-label={ariaLabel}
-      className={`specular-button specular-button--${size} ${className}`}
-      style={{
-        '--sb-radius': `${radius}px`,
-        '--sb-text-color': textColor,
-        ...style
-      } as React.CSSProperties}
+      ariaLabel={ariaLabel}
+      color={lineColor}
+      speed={speedStr}
+      isActive={isActive}
+      className={className}
+      style={style}
     >
-      <span className="specular-button__content">
-        {children}
-      </span>
-    </button>
+      {children}
+    </StarBorder>
   );
 };
 

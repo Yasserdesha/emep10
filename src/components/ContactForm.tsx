@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
 import { Button } from '@/components/ui/button';
-import SpecularButton from '@/components/SpecularButton';
+import StarBorder from '@/components/StarBorder';
 
 export default function ContactForm() {
   const { t, language, isMounted } = useLanguage();
@@ -317,21 +317,13 @@ export default function ContactForm() {
           </div>
         )}
 
-        {/* Action Row with Shadcn Buttons */}
+        {/* Action Row with StarBorder Buttons */}
         <div className="flex gap-3 flex-col sm:flex-row mt-6">
-          <SpecularButton
-            size="lg"
-            radius={24}
-            lineColor="#FF1E27"
-            baseColor="#521014"
-            intensity={1.3}
-            shineSize={15}
-            shineFade={45}
-            thickness={1.5}
-            speed={0.4}
-            followMouse
-            autoAnimate
-            className="flex-1 py-4 text-center min-h-[50px] font-bold text-sm shadow-xl shadow-[#FF1E27]/30 cursor-pointer"
+          <StarBorder
+            as="button"
+            color="#FF1E27"
+            speed="4s"
+            className="flex-1 py-1 text-center font-bold text-sm cursor-pointer"
             disabled={isSubmitting}
             onClick={() => handleSubmit('email')}
           >
@@ -341,31 +333,23 @@ export default function ContactForm() {
               <i className="fa-solid fa-paper-plane"></i>
             )}
             <span>{t('btn_send_email')}</span>
-          </SpecularButton>
+          </StarBorder>
           
-          <SpecularButton
-            size="lg"
-            radius={24}
-            lineColor="#25D366"
-            baseColor="#0e4a24"
-            intensity={1.3}
-            shineSize={15}
-            shineFade={45}
-            thickness={1.5}
-            speed={0.4}
-            followMouse
-            autoAnimate
-            className="flex-1 py-4 text-center min-h-[50px] font-bold text-sm bg-gradient-to-b from-[#25D366]/20 to-[#128C7E]/40 text-white shadow-xl shadow-[#25D366]/30 cursor-pointer"
+          <StarBorder
+            as="button"
+            color="#25D366"
+            speed="4s"
+            className="flex-1 py-1 text-center font-bold text-sm cursor-pointer"
             disabled={isSubmitting}
             onClick={() => handleSubmit('whatsapp')}
           >
             {isSubmitting ? (
               <i className="fa-solid fa-spinner animate-spin"></i>
             ) : (
-              <i className="fa-brands fa-whatsapp text-base"></i>
+              <i className="fa-brands fa-whatsapp text-base text-[#25D366]"></i>
             )}
             <span>{t('btn_send_wa')}</span>
-          </SpecularButton>
+          </StarBorder>
         </div>
       </form>
     </div>

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/components/LanguageContext";
 import { Button } from "@/components/ui/button";
-import SpecularButton from "@/components/SpecularButton";
+import StarBorder from "@/components/StarBorder";
 
 interface Discipline {
   id: "hvac" | "elec" | "plumb" | "fire";
@@ -172,35 +172,23 @@ export function AboutSection() {
               </h3>
             </div>
 
-            {/* Switcher Buttons with SpecularButton */}
+            {/* Switcher Buttons with StarBorder */}
             <div className="flex flex-wrap gap-2.5">
               {DISCIPLINES.map((disc) => {
                 const isActive = disc.id === activeDiscipline;
                 return (
-                  <SpecularButton
+                  <StarBorder
                     key={disc.id}
-                    type="button"
-                    size="sm"
-                    radius={16}
-                    lineColor={isActive ? "#FF1E27" : "#64748B"}
-                    baseColor={isActive ? "#521014" : "#1a1a24"}
-                    intensity={isActive ? 1.3 : 0.8}
-                    shineSize={12}
-                    shineFade={35}
-                    thickness={1.5}
-                    speed={0.4}
-                    followMouse
-                    autoAnimate
+                    as="button"
+                    color={isActive ? "#FF1E27" : "rgba(255, 30, 39, 0.4)"}
+                    speed="4s"
+                    isActive={isActive}
                     onClick={() => setActiveDiscipline(disc.id)}
-                    className={`font-bold text-xs sm:text-sm transition-all duration-300 cursor-pointer ${
-                      isActive
-                        ? "shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]"
-                        : "bg-white/[0.03] text-[#94A3B8]"
-                    }`}
+                    className="font-bold text-xs sm:text-sm cursor-pointer"
                   >
                     <i className={`fa-solid ${disc.icon}`} aria-hidden="true"></i>
                     <span>{t(disc.titleKey)}</span>
-                  </SpecularButton>
+                  </StarBorder>
                 );
               })}
             </div>

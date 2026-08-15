@@ -299,7 +299,7 @@ a.btn-whatsapp:hover {
 
 .mobile-bottom-dock {
   position: fixed !important;
-  bottom: max(0.5rem, env(safe-area-inset-bottom, 0.5rem)) !important;
+  bottom: max(1.25rem, calc(env(safe-area-inset-bottom, 0px) + 0.85rem)) !important;
   left: 0.65rem !important;
   right: 0.65rem !important;
   width: auto !important;

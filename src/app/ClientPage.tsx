@@ -20,6 +20,7 @@ const ContactForm = dynamic(() => import('@/components/ContactForm'), {
 
 import ExpertiseCard from '@/components/ExpertiseCard';
 import ElectricBorder from '@/components/ElectricBorder';
+import StarBorder from '@/components/StarBorder';
 import SpecularButton from '@/components/SpecularButton';
 
 interface Project {
@@ -224,24 +225,16 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               </div>
             </ElectricBorder>
 
-            <SpecularButton
-              size="lg"
-              radius={24}
-              lineColor="#FF1E27"
-              baseColor="#521014"
-              intensity={1.3}
-              shineSize={15}
-              shineFade={45}
-              thickness={1.5}
-              speed={0.4}
-              followMouse
-              autoAnimate
+            <StarBorder
+              as="button"
+              color="#FF1E27"
+              speed="4s"
               onClick={handleScrollToContact}
-              className="shadow-2xl shadow-[#FF1E27]/40 px-5 sm:px-8 py-3.5 sm:py-5 text-sm sm:text-base font-bold cursor-pointer max-w-[90vw]"
+              className="cursor-pointer max-w-[90vw]"
             >
               <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
               <span>{t('hero_btn_contact')}</span>
-            </SpecularButton>
+            </StarBorder>
           </div>
         </section>
       </div>
@@ -820,26 +813,19 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 {isAr ? selectedProject.descAr : selectedProject.descEn}
               </p>
               <div className="project-modal-actions">
-                <SpecularButton
-                  size="lg"
-                  radius={24}
-                  lineColor="#FF1E27"
-                  baseColor="#521014"
-                  intensity={1.2}
-                  shineSize={14}
-                  shineFade={40}
-                  thickness={1.5}
-                  followMouse
-                  autoAnimate
+                <StarBorder
+                  as="button"
+                  color="#FF1E27"
+                  speed="4s"
                   onClick={() => {
                     setSelectedProject(null);
                     handleScrollToContact();
                   }}
-                  className="shadow-lg shadow-[#FF1E27]/30 px-6 font-bold cursor-pointer"
+                  className="px-6 font-bold cursor-pointer"
                 >
                   <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
                   <span>{isAr ? 'اطلب مشروع مشابه' : 'Request Similar Project'}</span>
-                </SpecularButton>
+                </StarBorder>
               </div>
             </div>
           </div>
