@@ -128,7 +128,10 @@ input[type="submit"] {
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   cursor: pointer;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);

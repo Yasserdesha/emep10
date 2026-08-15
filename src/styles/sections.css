@@ -269,7 +269,10 @@ html[dir="rtl"] .bim-badge-overlay { right: auto; left: 1rem; }
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   transition: all var(--transition-fast);
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
 }
@@ -749,7 +752,10 @@ html[dir="rtl"] .project-modal-close { right: auto; left: 1rem; }
   gap: 1rem !important;
   border-radius: var(--radius-md) !important;
   cursor: pointer;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   width: 100%;
   transition: all 0.25s ease;
@@ -933,7 +939,10 @@ select:focus {
   opacity: 0;
   transition: opacity 0.35s ease, transform 0.35s ease;
   pointer-events: none;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   z-index: 2;
 }
@@ -1035,7 +1044,10 @@ select:focus {
   text-decoration: none;
   width: fit-content;
   cursor: pointer;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
