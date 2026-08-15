@@ -110,7 +110,9 @@ button, input, select, textarea { font: inherit; color: inherit; background: non
 /* SHADCN-INSPIRED BUTTON DESIGN SYSTEM (E-MEP BRAND IDENTITY) */
 /* ========================================================================= */
 button,
-.btn {
+.btn,
+input[type="button"],
+input[type="submit"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -128,14 +130,16 @@ button,
   cursor: pointer;
   user-select: none;
   touch-action: manipulation;
-  transition: all var(--transition-fast);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   letter-spacing: 0.2px;
 }
 
 button:active,
-.btn:active {
-  transform: scale(0.98);
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active {
+  transform: scale(0.97) translateY(1px);
 }
 
 button:focus-visible,
@@ -168,9 +172,9 @@ a.btn-primary:hover {
 .btn-outline,
 button.btn-outline,
 .btn-secondary {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--clr-text-main);
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--clr-text-main) !important;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -181,7 +185,26 @@ button.btn-outline:hover,
 .btn-secondary:hover {
   border-color: rgba(255, 255, 255, 0.25) !important;
   background: rgba(255, 255, 255, 0.08) !important;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* WhatsApp Button (Shadcn Green Gradient) */
+.btn-whatsapp,
+button.btn-whatsapp,
+a.btn-whatsapp {
+  background: linear-gradient(180deg, #28D86B 0%, #1FA855 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(37, 211, 102, 0.4) !important;
+}
+
+.btn-whatsapp:hover,
+button.btn-whatsapp:hover,
+a.btn-whatsapp:hover {
+  background: linear-gradient(180deg, #2FE472 0%, #22B55C 100%) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(37, 211, 102, 0.55) !important;
+  transform: translateY(-1px);
 }

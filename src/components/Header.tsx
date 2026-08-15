@@ -207,15 +207,16 @@ export default function Header() {
               <span>{isAr ? 'المقالات' : 'Blog'}</span>
             </Link>
 
-            {/* Language Switcher (Shadcn Outline Variant) */}
+            {/* Language Switcher (Shadcn Outline Variant - Icon only on mobile, text on desktop) */}
             <button
               type="button"
               onClick={toggleLanguage}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm h-9 whitespace-nowrap touch-manipulation active:scale-[0.98] backdrop-blur-md"
+              className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm h-9 whitespace-nowrap touch-manipulation active:scale-[0.98] backdrop-blur-md"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
+              title={isAr ? 'Switch to English' : 'التحويل للعربية'}
             >
-              <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>
-              <span>{isAr ? 'EN' : 'العربية'}</span>
+              <i className="fa-solid fa-globe text-[#FF1E27] text-sm"></i>
+              <span className="hidden sm:inline font-bold">{isAr ? 'EN' : 'العربية'}</span>
             </button>
           </div>
 
