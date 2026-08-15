@@ -7,6 +7,8 @@ import HeroCanvas from '@/components/HeroCanvas';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import ScrollRevealText from '@/components/ScrollRevealText';
+import FadeImage from '@/components/FadeImage';
 
 const ContactForm = dynamic(() => import('@/components/ContactForm'), {
   loading: () => <div className="h-64 flex items-center justify-center text-[#94A3B8]">Loading contact form...</div>,
@@ -229,6 +231,24 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
         </section>
       </div>
 
+      {/* Cinematic Kinetic Statement Section (Inspired by Mono Philosophy & Technology Section) */}
+      <section className="py-14 sm:py-20 bg-[#050507] border-y border-white/[0.06] relative overflow-hidden">
+        <div className="container relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FF1E27]/10 border border-[#FF1E27]/30 text-[#FF1E27] text-xs font-bold uppercase tracking-widest mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse"></span>
+            <span>{isAr ? 'الريادة الهندسية والتحول الرقمي' : 'Engineering Excellence & Digital BIM'}</span>
+          </div>
+          <ScrollRevealText 
+            text={
+              isAr 
+                ? "نبتكر معايير هندسية متقدمة في تنفيذ مقاولات الكهروميكانيك ونمذجة الـ BIM بأعلى درجات الدقة والاحترافية عبر كبرى المشروعات الإنشائية."
+                : "Pioneering high-precision electromechanical engineering and advanced BIM modeling with uncompromised quality standards across major developments."
+            }
+            className="max-w-4xl mx-auto"
+          />
+        </div>
+      </section>
+
       {/* About Section */}
       <section className="about-section section-padding relative overflow-hidden" id="about" aria-labelledby="about-title-heading">
         {/* Floating Trust & Performance Metrics Strip */}
@@ -424,18 +444,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               </div>
 
               <div className="bim-visual">
-                <div className="bim-frame-preview">
-                  <Image 
+                <div className="bim-frame-preview group">
+                  <FadeImage 
                     src="/Animated background images/compressed/frame-035.webp" 
                     alt={isAr ? "مخطط كهروميكانيكي ثلاثي الأبعاد BIM Revit" : "BIM Revit Electromechanical 3D Engineering Model"} 
                     width={600}
                     height={400}
-                    loading="lazy"
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="bim-image" 
+                    className="bim-image group-hover:scale-105 transition-transform duration-700 ease-out" 
                   />
                   <div className="bim-badge-overlay">
-                    <i className="fa-solid fa-vr-cardboard" aria-hidden="true"></i>
+                    <i className="fa-solid fa-vr-cardboard text-[#FF1E27]" aria-hidden="true"></i>
                     <span>Revit 3D Integrated</span>
                   </div>
                 </div>
@@ -469,6 +488,9 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             >
               <i className="fa-solid fa-border-all" aria-hidden="true"></i>
               <span>{t('filter_all')}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 font-mono font-bold">
+                {projectsList.length}
+              </span>
             </button>
             <button
               type="button"
@@ -478,6 +500,9 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             >
               <i className="fa-solid fa-bag-shopping" aria-hidden="true"></i>
               <span>{t('filter_retail')}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 font-mono font-bold">
+                {projectsList.filter(p => p.category === 'retail').length}
+              </span>
             </button>
             <button
               type="button"
@@ -487,6 +512,9 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             >
               <i className="fa-solid fa-utensils" aria-hidden="true"></i>
               <span>{t('filter_dining')}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 font-mono font-bold">
+                {projectsList.filter(p => p.category === 'dining').length}
+              </span>
             </button>
             <button
               type="button"
@@ -496,6 +524,9 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             >
               <i className="fa-solid fa-car" aria-hidden="true"></i>
               <span>{t('filter_showrooms')}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 font-mono font-bold">
+                {projectsList.filter(p => p.category === 'showrooms').length}
+              </span>
             </button>
           </div>
 
@@ -518,18 +549,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           {/* Projects Grid */}
           <div className="projects-grid" id="projectsContainer">
             {visibleProjects.map((p) => (
-              <div className="project-card glass-panel" key={p.id}>
+              <div className="project-card glass-panel group" key={p.id}>
                 <div 
                   className="project-img-wrapper" 
                   onClick={() => setSelectedProject(p)}
                 >
-                  <Image 
+                  <FadeImage 
                     src={p.image} 
                     alt={isAr ? p.titleAr : p.titleEn} 
                     fill
-                    loading="lazy"
                     sizes="(max-width: 480px) 440px, (max-width: 768px) 600px, (max-width: 1200px) 480px, 360px"
-                    style={{ objectFit: 'cover' }}
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                   <span className="project-category">{isAr ? p.catAr : p.catEn}</span>
                   <div className="project-hover-overlay">
