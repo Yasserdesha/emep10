@@ -2,19 +2,18 @@
 /* Smooth scroll track allowing seamless 35-frame sequence */
 .hero-track {
   position: relative;
-  height: 250vh;
-  background: var(--clr-bg-main);
-  max-width: 100vw;
-  overflow-x: clip;
+  height: 280vh;
+  background: #0A0A0C;
+  width: 100%;
 }
 
 /* Sticky Viewport Container - Pins the Canvas in View with 100dvh for iOS */
 .hero-sticky {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
-  max-width: 100vw;
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
@@ -28,11 +27,9 @@
 /* High Performance Canvas */
 .canvas-container {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  max-width: 100vw;
   overflow: hidden;
   z-index: 1;
 }
@@ -46,11 +43,10 @@
 
 .canvas-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, rgba(10, 10, 12, 0.45) 0%, rgba(10, 10, 12, 0.1) 40%, rgba(10, 10, 12, 0.3) 85%, #0A0A0C 100%);
+  background: linear-gradient(180deg, rgba(10, 10, 12, 0.4) 0%, rgba(10, 10, 12, 0.05) 50%, rgba(10, 10, 12, 0.35) 100%);
   pointer-events: none;
 }
 

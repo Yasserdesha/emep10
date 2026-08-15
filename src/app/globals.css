@@ -126,9 +126,6 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 4.5rem;
   background-color: #0A0A0C;
-  overflow-x: clip;
-  overflow-x: hidden;
-  max-width: 100vw;
   width: 100%;
 }
 
@@ -164,13 +161,9 @@ p {
   overflow-wrap: break-word;
 }
 
-/* Zero Horizontal Overflow & Strict Multi-Screen Viewport Containment */
 body {
   background-color: var(--background);
-  overflow-x: clip;
-  overflow-x: hidden;
   width: 100%;
-  max-width: 100vw;
   min-height: 100vh;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
@@ -178,9 +171,8 @@ body {
   position: relative;
 }
 
-section, header, footer, main {
-  max-width: 100vw;
-  overflow-x: clip;
+section:not(.hero-sticky), header, footer, main {
+  max-width: 100%;
   box-sizing: border-box;
 }
 
