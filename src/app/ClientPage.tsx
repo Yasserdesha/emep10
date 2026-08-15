@@ -298,7 +298,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             <div className="about-image-column">
               <div className="brand-showcase-box glass-panel white-logo-bg shadow-2xl rounded-3xl p-8 md:p-12 relative overflow-hidden group hover:border-[#FF1E27]/40 hover:shadow-[0_0_50px_rgba(255,30,39,0.25)] transition-all duration-500">
                 <div className="absolute -top-24 -left-24 w-48 h-48 bg-[#FF1E27]/15 rounded-full blur-3xl group-hover:bg-[#FF1E27]/25 transition-all" />
-                <FadeImage 
+                <Image 
                   src="/logo/logo.png" 
                   alt={isAr ? "علامة الجودة الكهروميكانيكية E-MEP" : "E-MEP High Quality Standard MEP"} 
                   width={220}
@@ -318,8 +318,10 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               </div>
               
               <ScrollRevealText 
+                as="h2"
+                id="about-title-heading"
                 text={t('about_title')}
-                className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-5 text-white leading-tight"
+                className="section-title text-2xl sm:text-3xl md:text-4xl font-extrabold mb-5 text-white leading-tight"
               />
 
               <p 
