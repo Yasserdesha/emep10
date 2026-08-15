@@ -119,14 +119,13 @@ export default function ExpertiseCard({ img, datSrc, titleKey, descKey }: Expert
       role="region"
       aria-label={t(titleKey)}
     >
-      <div className="expertise-media">
+      <div className="expertise-media absolute inset-0 w-full h-full overflow-hidden">
         <Image 
           src={img} 
           alt={isAr ? `صورة توضيحية لخدمة ${t(titleKey)}` : `${t(titleKey)} illustrative service visual`} 
-          width={400}
-          height={300}
-          style={{ objectFit: 'cover', width: '100%', height: '100%', aspectRatio: '4/3' }}
-          className="expertise-img" 
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className={`expertise-img object-cover object-center w-full h-full transition-transform duration-700 ${isPlaying ? 'scale-105 opacity-0' : 'scale-100 opacity-100'}`}
         />
 
         {videoUrl && (
@@ -136,11 +135,11 @@ export default function ExpertiseCard({ img, datSrc, titleKey, descKey }: Expert
             loop
             muted
             playsInline
-            className={`expertise-video ${isPlaying ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500 absolute inset-0 w-full h-full object-cover`}
+            className={`expertise-video object-cover object-center absolute inset-0 w-full h-full transition-opacity duration-500 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
           />
         )}
 
-        <div className="expertise-overlay"></div>
+        <div className="expertise-overlay pointer-events-none absolute inset-0"></div>
       </div>
       <div className="expertise-content">
         <div className="expertise-badge badge-live">

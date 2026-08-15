@@ -891,14 +891,15 @@ select:focus {
 
 .expertise-card {
   position: relative;
-  border-radius: 16px;
+  border-radius: 20px;
   background: #090a0c;
   border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  min-height: 380px;
+  aspect-ratio: 16 / 10;
+  min-height: 320px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
   cursor: pointer;
 }
@@ -912,56 +913,50 @@ select:focus {
 
 .expertise-media {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
   overflow: hidden;
 }
 
-.expertise-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  transition: opacity 0.35s ease, transform 0.35s ease;
-  z-index: 1;
-}
-
-.expertise-canvas {
+.expertise-img,
+.expertise-video {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  opacity: 0;
-  transition: opacity 0.35s ease, transform 0.35s ease;
-  pointer-events: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  z-index: 2;
 }
 
-.expertise-card:hover .expertise-img,
-.expertise-card.is-playing .expertise-img,
-.expertise-card:hover .expertise-canvas,
-.expertise-card.is-playing .expertise-canvas {
-  transform: scale(1.03);
-  opacity: 1;
+.expertise-img {
+  z-index: 1;
+  transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.expertise-video {
+  z-index: 2;
+  transition: opacity 0.4s ease;
 }
 
 .expertise-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(9, 10, 12, 0.95) 0%, rgba(9, 10, 12, 0.55) 45%, rgba(9, 10, 12, 0.25) 100%);
+  background: linear-gradient(to top, rgba(9, 10, 12, 0.95) 0%, rgba(9, 10, 12, 0.55) 45%, rgba(9, 10, 12, 0.2) 100%);
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
+}
+
+.expertise-content {
+  position: relative;
+  z-index: 4;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  text-align: start;
 }
 
 .expertise-content {
@@ -1060,8 +1055,8 @@ select:focus {
 /* RESPONSIVE DESIGN & MULTI-DEVICE COMPATIBILITY */
 @media (min-width: 1400px) {
   .container { max-width: 1360px; }
-  .expertise-card { min-height: 420px; }
-  .expertise-content { min-height: 420px; padding: 2.25rem; }
+  .expertise-card { min-height: 360px; }
+  .expertise-content { padding: 2.25rem; }
 }
 
 @media (max-width: 1024px) {
@@ -1092,8 +1087,8 @@ select:focus {
   
   .pillar-card { padding: 1.5rem 1.25rem; text-align: start; }
   
-  .expertise-card { min-height: 290px; }
-  .expertise-content { min-height: 290px; padding: 1.25rem 1rem; text-align: start; }
+  .expertise-card { aspect-ratio: 16 / 10; min-height: 270px; }
+  .expertise-content { padding: 1.25rem 1rem; text-align: start; }
   .expertise-title { font-size: 1.2rem; margin-top: 0.5rem; margin-bottom: 0.35rem; line-height: 1.3; }
   .expertise-desc { font-size: 0.85rem; line-height: 1.5; }
 }
@@ -1111,8 +1106,8 @@ select:focus {
   .brand-showcase-box { padding: 1.5rem 1rem; border-radius: 20px; }
   .about-logo-hero { max-width: 140px; }
   
-  .expertise-card { min-height: 270px; border-radius: 16px; }
-  .expertise-content { min-height: 270px; padding: 1rem 0.85rem; }
+  .expertise-card { aspect-ratio: 16 / 10; min-height: 240px; border-radius: 16px; }
+  .expertise-content { padding: 1rem 0.85rem; }
   .expertise-title { font-size: 1.1rem; }
   
   .projects-filter-bar {
