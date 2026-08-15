@@ -20,6 +20,7 @@ const ContactForm = dynamic(() => import('@/components/ContactForm'), {
 
 import ExpertiseCard from '@/components/ExpertiseCard';
 import ElectricBorder from '@/components/ElectricBorder';
+import SpecularButton from '@/components/SpecularButton';
 
 interface Project {
   id: number;
@@ -222,16 +223,24 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               </div>
             </ElectricBorder>
 
-            <Button
-              type="button"
-              variant="default"
+            <SpecularButton
               size="lg"
-              className="hero-cta-btn rounded-full px-8 py-6 text-base font-bold shadow-2xl shadow-[#FF1E27]/40 hover:shadow-[#FF1E27]/65 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+              radius={24}
+              lineColor="#FF1E27"
+              baseColor="#521014"
+              intensity={1.3}
+              shineSize={15}
+              shineFade={45}
+              thickness={1.5}
+              speed={0.4}
+              followMouse
+              autoAnimate
               onClick={handleScrollToContact}
+              className="shadow-2xl shadow-[#FF1E27]/40 px-8 py-5 text-base font-bold cursor-pointer"
             >
               <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
               <span>{t('hero_btn_contact')}</span>
-            </Button>
+            </SpecularButton>
           </div>
         </section>
       </div>
@@ -514,11 +523,18 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           {/* Show More / Show Less Toggle Button with Shadcn styling */}
           {filteredProjects.length > 3 && (
             <div className="flex justify-center mt-12" id="projectsLoadMoreWrap">
-              <Button
-                type="button"
-                variant="default"
+              <SpecularButton
                 size="lg"
-                className="rounded-full px-8 py-6 text-base font-bold shadow-xl shadow-[#FF1E27]/25 hover:shadow-[#FF1E27]/45 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+                radius={24}
+                lineColor="#FF1E27"
+                baseColor="#521014"
+                intensity={1.2}
+                shineSize={14}
+                shineFade={40}
+                thickness={1.5}
+                speed={0.4}
+                followMouse
+                autoAnimate
                 id="loadMoreProjectsBtn"
                 onClick={() => {
                   setIsExpanded(!isExpanded);
@@ -529,6 +545,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                     }
                   }
                 }}
+                className="px-8 py-5 text-base font-bold shadow-xl shadow-[#FF1E27]/25 cursor-pointer"
               >
                 <i className={`fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'}`} aria-hidden="true"></i>
                 <span id="loadMoreBtnText">
@@ -536,7 +553,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                     ? t('btn_show_less')
                     : `${t('btn_show_more')} (+${remainingCount})`}
                 </span>
-              </Button>
+              </SpecularButton>
             </div>
           )}
         </div>
@@ -766,19 +783,26 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 {isAr ? selectedProject.descAr : selectedProject.descEn}
               </p>
               <div className="project-modal-actions">
-                <Button
-                  type="button"
-                  variant="default"
+                <SpecularButton
                   size="lg"
+                  radius={24}
+                  lineColor="#FF1E27"
+                  baseColor="#521014"
+                  intensity={1.2}
+                  shineSize={14}
+                  shineFade={40}
+                  thickness={1.5}
+                  followMouse
+                  autoAnimate
                   onClick={() => {
                     setSelectedProject(null);
                     handleScrollToContact();
                   }}
-                  className="rounded-full shadow-lg shadow-[#FF1E27]/30 px-6 font-bold cursor-pointer"
+                  className="shadow-lg shadow-[#FF1E27]/30 px-6 font-bold cursor-pointer"
                 >
                   <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
                   <span>{isAr ? 'اطلب مشروع مشابه' : 'Request Similar Project'}</span>
-                </Button>
+                </SpecularButton>
               </div>
             </div>
           </div>

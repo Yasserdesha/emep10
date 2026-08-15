@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
 import { Button } from '@/components/ui/button';
+import SpecularButton from '@/components/SpecularButton';
 
 export default function ContactForm() {
   const { t, language, isMounted } = useLanguage();
@@ -318,11 +319,19 @@ export default function ContactForm() {
 
         {/* Action Row with Shadcn Buttons */}
         <div className="flex gap-3 flex-col sm:flex-row mt-6">
-          <Button
-            type="button"
-            variant="default"
+          <SpecularButton
             size="lg"
-            className="flex-1 py-4 text-center flex items-center justify-center gap-2 rounded-full min-h-[50px] font-bold text-sm shadow-xl shadow-[#FF1E27]/30 hover:shadow-[#FF1E27]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+            radius={24}
+            lineColor="#FF1E27"
+            baseColor="#521014"
+            intensity={1.3}
+            shineSize={15}
+            shineFade={45}
+            thickness={1.5}
+            speed={0.4}
+            followMouse
+            autoAnimate
+            className="flex-1 py-4 text-center min-h-[50px] font-bold text-sm shadow-xl shadow-[#FF1E27]/30 cursor-pointer"
             disabled={isSubmitting}
             onClick={() => handleSubmit('email')}
           >
@@ -332,13 +341,21 @@ export default function ContactForm() {
               <i className="fa-solid fa-paper-plane"></i>
             )}
             <span>{t('btn_send_email')}</span>
-          </Button>
+          </SpecularButton>
           
-          <Button
-            type="button"
-            variant="outline"
+          <SpecularButton
             size="lg"
-            className="flex-1 py-4 text-center flex items-center justify-center gap-2 rounded-full min-h-[50px] font-bold text-sm bg-gradient-to-b from-[#25D366] to-[#128C7E] text-white border-0 hover:from-[#2fe472] hover:to-[#17a594] shadow-xl shadow-[#25D366]/30 hover:shadow-[#25D366]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+            radius={24}
+            lineColor="#25D366"
+            baseColor="#0e4a24"
+            intensity={1.3}
+            shineSize={15}
+            shineFade={45}
+            thickness={1.5}
+            speed={0.4}
+            followMouse
+            autoAnimate
+            className="flex-1 py-4 text-center min-h-[50px] font-bold text-sm bg-gradient-to-b from-[#25D366]/20 to-[#128C7E]/40 text-white shadow-xl shadow-[#25D366]/30 cursor-pointer"
             disabled={isSubmitting}
             onClick={() => handleSubmit('whatsapp')}
           >
@@ -348,7 +365,7 @@ export default function ContactForm() {
               <i className="fa-brands fa-whatsapp text-base"></i>
             )}
             <span>{t('btn_send_wa')}</span>
-          </Button>
+          </SpecularButton>
         </div>
       </form>
     </div>
