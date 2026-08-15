@@ -5,8 +5,10 @@
   border-radius: inherit;
   overflow: visible;
   isolation: isolate;
-  display: inline-block;
-  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .eb-canvas-container {

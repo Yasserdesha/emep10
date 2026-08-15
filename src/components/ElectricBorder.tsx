@@ -220,6 +220,8 @@ export const ElectricBorder: React.FC<ElectricBorderProps> = ({
       ctx.lineWidth = thickness;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 10;
 
       const scale = displacement;
       const left = borderOffset;
