@@ -8,6 +8,7 @@ interface SafeImageProps {
   className?: string;
   fallbackSrc?: string;
   priority?: boolean;
+  onClick?: () => void;
 }
 
 const DEFAULT_FALLBACK = 'https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/proj_1786597773542_article_bim_revit_mep_1786596972626.png';
@@ -17,6 +18,7 @@ export default function SafeImage({
   alt,
   className = '',
   fallbackSrc = DEFAULT_FALLBACK,
+  onClick,
 }: SafeImageProps) {
   const [imgSrc, setImgSrc] = useState(src || fallbackSrc);
   const [hasError, setHasError] = useState(false);
@@ -26,6 +28,7 @@ export default function SafeImage({
       src={hasError ? fallbackSrc : imgSrc}
       alt={alt}
       className={className}
+      onClick={onClick}
       onError={() => {
         if (!hasError) {
           setHasError(true);
