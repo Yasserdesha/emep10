@@ -2,10 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
-import SpecularButton from './SpecularButton';
 
 export default function Header() {
   const { language, setLanguage, t, isMounted } = useLanguage();
@@ -127,7 +125,7 @@ export default function Header() {
       {/* 1. TOP HEADER (Shadcn Architecture with E-MEP Brand Identity) */}
       {/* ========================================================================= */}
       <header 
-        className="fixed top-0 inset-x-0 z-50 bg-[#0A0A0C]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_25px_rgba(0,0,0,0.7)]"
+        className="fixed top-0 left-0 right-0 w-full z-50 bg-[#0A0A0C]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_25px_rgba(0,0,0,0.7)] box-border"
         id="navbar"
         role="banner"
       >
@@ -138,7 +136,7 @@ export default function Header() {
           aria-hidden="true"
         />
 
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+        <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between box-border">
           
           {/* Brand Logo & Name */}
           <button
@@ -170,7 +168,7 @@ export default function Header() {
             </div>
           </button>
 
-          {/* Desktop Navigation Links (Shadcn Glassmorphic 3D Nav Pills) */}
+          {/* Desktop Navigation Links (Styled Identical to Site Buttons) */}
           <nav className="hidden lg:flex items-center" aria-label="Desktop Navigation">
             <ul className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
               {desktopNavItems.map((item) => {
@@ -180,10 +178,10 @@ export default function Header() {
                     <button
                       type="button"
                       onClick={() => handleNavigate(item.id)}
-                      className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap touch-manipulation select-none outline-none focus:outline-none ${
+                      className={`h-9 px-4 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap touch-manipulation select-none outline-none focus:outline-none flex items-center justify-center gap-1.5 ${
                         isActive 
-                          ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border border-white/20 border-t-white/35 shadow-[0_2px_12px_rgba(211,16,25,0.5)] scale-[1.02]' 
-                          : '!text-[#94A3B8] hover:!text-white hover:!bg-white/[0.08] active:!bg-white/[0.12]'
+                          ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border border-white/25 border-t-white/40 shadow-[0_3px_14px_rgba(211,16,25,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] scale-[1.03]' 
+                          : '!text-[#CBD5E1] !bg-[#FF1E27]/[0.08] hover:!bg-[#FF1E27]/[0.18] hover:!text-white border border-white/[0.08] hover:border-[#FF1E27]/30 shadow-sm active:scale-[0.98]'
                       }`}
                       aria-label={t(item.i18nKey)}
                     >
@@ -204,7 +202,7 @@ export default function Header() {
               onClick={() => router.push('/blog')}
               className={`h-8 sm:h-9 px-3 sm:px-3.5 rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
                 pathname.startsWith('/blog')
-                  ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border-white/25 shadow-[0_2px_12px_rgba(211,16,25,0.45)]'
+                  ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border-white/25 border-t-white/40 shadow-[0_2px_12px_rgba(211,16,25,0.45)]'
                   : '!text-white/90 !bg-white/[0.06] hover:!bg-white/[0.12] border-white/10 hover:border-white/20'
               }`}
               aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
@@ -229,11 +227,15 @@ export default function Header() {
       </header>
 
       {/* ========================================================================= */}
-      {/* 2. MOBILE BOTTOM NAVIGATION DOCK (Shadcn Mobile Glass Surface) */}
+      {/* 2. MOBILE BOTTOM NAVIGATION DOCK (100% Centered & Responsive) */}
       {/* ========================================================================= */}
       <nav 
-        className="lg:hidden fixed inset-x-2 sm:inset-x-6 z-40 max-w-md mx-auto bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-1.5 px-1 shadow-[0_12px_40px_rgba(0,0,0,0.9)] select-none"
+        className="lg:hidden fixed z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-1.5 px-1 shadow-[0_12px_40px_rgba(0,0,0,0.9)] select-none box-border"
         style={{
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 'calc(100% - 1.25rem)',
+          maxWidth: '430px',
           bottom: 'max(0.5rem, env(safe-area-inset-bottom, 0.5rem))'
         }}
         aria-label="Mobile Navigation Dock"
@@ -251,7 +253,7 @@ export default function Header() {
                 title={t(item.i18nKey)}
                 className={`flex flex-col items-center justify-center w-full max-w-[56px] h-11 rounded-xl transition-all cursor-pointer touch-manipulation select-none outline-none focus:outline-none active:scale-[0.95] ${
                   isActive 
-                    ? '!text-white !bg-gradient-to-b from-[#FF2B33]/25 to-[#D31019]/35 border border-[#FF1E27]/50 shadow-[0_0_16px_rgba(255,30,39,0.4)] font-bold' 
+                    ? '!text-white !bg-gradient-to-b from-[#FF2B33]/30 to-[#D31019]/40 border border-[#FF1E27]/60 shadow-[0_0_16px_rgba(255,30,39,0.45)] font-bold' 
                     : '!text-[#94A3B8] hover:!text-white hover:!bg-white/[0.06] active:!bg-white/[0.1]'
                 }`}
               >
