@@ -178,11 +178,7 @@ export default function Header() {
                     <button
                       type="button"
                       onClick={() => handleNavigate(item.id)}
-                      className={`h-9 px-4 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap touch-manipulation select-none outline-none focus:outline-none flex items-center justify-center gap-1.5 ${
-                        isActive 
-                          ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border border-white/25 border-t-white/40 shadow-[0_3px_14px_rgba(211,16,25,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] scale-[1.03]' 
-                          : '!text-[#CBD5E1] !bg-[#FF1E27]/[0.08] hover:!bg-[#FF1E27]/[0.18] hover:!text-white border border-white/[0.08] hover:border-[#FF1E27]/30 shadow-sm active:scale-[0.98]'
-                      }`}
+                      className={`header-nav-btn ${isActive ? 'active' : ''}`}
                       aria-label={t(item.i18nKey)}
                     >
                       {t(item.i18nKey)}
@@ -200,7 +196,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => router.push('/blog')}
-              className={`h-8 sm:h-9 px-3 sm:px-3.5 rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
+              className={`h-9 px-3.5 rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
                 pathname.startsWith('/blog')
                   ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border-white/25 border-t-white/40 shadow-[0_2px_12px_rgba(211,16,25,0.45)]'
                   : '!text-white/90 !bg-white/[0.06] hover:!bg-white/[0.12] border-white/10 hover:border-white/20'
@@ -208,18 +204,18 @@ export default function Header() {
               aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
             >
               <i className="fa-solid fa-newspaper text-xs text-[#FF1E27]"></i>
-              <span className="text-[11px] sm:text-xs font-bold">{isAr ? 'المقالات' : 'Blog'}</span>
+              <span className="text-xs font-bold">{isAr ? 'المقالات' : 'Blog'}</span>
             </button>
 
             {/* Language Switcher */}
             <button
               type="button"
               onClick={toggleLanguage}
-              className="h-8 sm:h-9 px-2.5 sm:px-3 rounded-xl text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
+              className="h-9 px-3 rounded-xl text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-xs sm:text-sm"></i>
-              <span className="font-bold text-[11px] sm:text-xs">{isAr ? 'EN' : 'عربي'}</span>
+              <span className="font-bold text-xs">{isAr ? 'EN' : 'عربي'}</span>
             </button>
           </div>
 
@@ -230,14 +226,7 @@ export default function Header() {
       {/* 2. MOBILE BOTTOM NAVIGATION DOCK (100% Centered & Responsive) */}
       {/* ========================================================================= */}
       <nav 
-        className="lg:hidden fixed z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-1.5 px-1 shadow-[0_12px_40px_rgba(0,0,0,0.9)] select-none box-border"
-        style={{
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'calc(100% - 1.25rem)',
-          maxWidth: '430px',
-          bottom: 'max(0.5rem, env(safe-area-inset-bottom, 0.5rem))'
-        }}
+        className="lg:hidden mobile-bottom-dock"
         aria-label="Mobile Navigation Dock"
       >
         <div className="grid grid-cols-5 w-full items-center justify-items-center gap-0.5">
@@ -251,11 +240,7 @@ export default function Header() {
                 onClick={() => handleNavigate(item.id)}
                 aria-label={t(item.i18nKey)}
                 title={t(item.i18nKey)}
-                className={`flex flex-col items-center justify-center w-full max-w-[56px] h-11 rounded-xl transition-all cursor-pointer touch-manipulation select-none outline-none focus:outline-none active:scale-[0.95] ${
-                  isActive 
-                    ? '!text-white !bg-gradient-to-b from-[#FF2B33]/30 to-[#D31019]/40 border border-[#FF1E27]/60 shadow-[0_0_16px_rgba(255,30,39,0.45)] font-bold' 
-                    : '!text-[#94A3B8] hover:!text-white hover:!bg-white/[0.06] active:!bg-white/[0.1]'
-                }`}
+                className={`mobile-dock-btn ${isActive ? 'active' : ''}`}
               >
                 <i className={`${item.icon} text-base sm:text-lg mb-0.5 ${isActive ? '!text-[#FF1E27]' : ''}`} aria-hidden="true"></i>
                 <span className="text-[8.5px] sm:text-[9.5px] font-bold leading-none tracking-tight whitespace-nowrap">

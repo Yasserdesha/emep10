@@ -252,3 +252,94 @@ a.btn-whatsapp:hover {
   background: rgba(255, 30, 39, 0.9);
 }
 
+/* ========================================================================= */
+/* HEADER NAVIGATION & MOBILE DOCK DEDICATED STYLING */
+/* ========================================================================= */
+.header-nav-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 38px !important;
+  padding: 0 1.15rem !important;
+  border-radius: 12px !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: #CBD5E1 !important;
+  background: rgba(255, 30, 39, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: manipulation !important;
+}
+
+.header-nav-btn:hover {
+  color: #FFFFFF !important;
+  background: rgba(255, 30, 39, 0.2) !important;
+  border-color: rgba(255, 30, 39, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(211, 16, 25, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-1px) !important;
+}
+
+.header-nav-btn.active {
+  color: #FFFFFF !important;
+  background: linear-gradient(180deg, #FF2B33 0%, #D31019 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 3px 15px rgba(211, 16, 25, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-1px) !important;
+}
+
+.mobile-bottom-dock {
+  position: fixed !important;
+  bottom: max(0.65rem, env(safe-area-inset-bottom, 0.65rem)) !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 1.5rem) !important;
+  max-width: 420px !important;
+  background: rgba(13, 13, 18, 0.95) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 18px !important;
+  padding: 0.35rem 0.25rem !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(211, 16, 25, 0.15) !important;
+  z-index: 9999 !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+.mobile-dock-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 56px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  touch-action: manipulation !important;
+  user-select: none !important;
+  color: #94A3B8 !important;
+  border: 1px solid transparent !important;
+}
+
+.mobile-dock-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.mobile-dock-btn.active {
+  color: #FFFFFF !important;
+  background: linear-gradient(180deg, rgba(255, 43, 51, 0.35) 0%, rgba(211, 16, 25, 0.45) 100%) !important;
+  border: 1px solid rgba(255, 30, 39, 0.6) !important;
+  box-shadow: 0 0 16px rgba(255, 30, 39, 0.45) !important;
+  font-weight: 700 !important;
+}
+
+
