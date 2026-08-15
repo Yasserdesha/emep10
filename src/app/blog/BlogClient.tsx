@@ -154,20 +154,13 @@ export default function BlogClient({ articles }: BlogClientProps) {
                 <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
               {searchQuery && (
-                <SpecularButton
-                  size="sm"
-                  radius={12}
-                  lineColor="#FF1E27"
-                  baseColor="#2a1014"
-                  intensity={1.1}
-                  shineSize={8}
-                  shineFade={25}
-                  thickness={1.0}
+                <button
+                  type="button"
                   onClick={() => setSearchQuery('')}
-                  className="!py-1 !px-2.5 !min-h-0 !text-xs absolute end-2.5 cursor-pointer text-white"
+                  className="absolute end-3 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-[#FF1E27] text-white text-xs font-semibold transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
                 >
-                  <span>{isAr ? 'مسح' : 'Clear'}</span>
-                </SpecularButton>
+                  {isAr ? 'مسح' : 'Clear'}
+                </button>
               )}
             </div>
           </div>
@@ -377,43 +370,25 @@ export default function BlogClient({ articles }: BlogClientProps) {
                         {summary}
                       </p>
 
-                      {/* Card Action Row with SpecularButton */}
+                      {/* Card Action Row */}
                       <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between mt-auto gap-2">
-                        <SpecularButton
-                          size="sm"
-                          radius={12}
-                          lineColor="#94A3B8"
-                          baseColor="#1e1e28"
-                          intensity={0.9}
-                          shineSize={10}
-                          shineFade={30}
-                          thickness={1.2}
-                          followMouse
-                          autoAnimate
+                        <button
+                          type="button"
                           onClick={() => setSelectedArticle(art)}
-                          className="px-3.5 py-1.5 text-xs font-semibold text-white/90 cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] hover:border-white/20 text-xs font-semibold text-white transition-all duration-200 cursor-pointer active:scale-95"
                         >
-                          <i className="fa-solid fa-expand text-[10px]"></i>
+                          <i className="fa-solid fa-expand text-[11px] text-[#94A3B8]"></i>
                           <span>{isAr ? 'معاينة' : 'Preview'}</span>
-                        </SpecularButton>
+                        </button>
 
-                        <SpecularButton
-                          size="sm"
-                          radius={12}
-                          lineColor="#FF1E27"
-                          baseColor="#521014"
-                          intensity={1.3}
-                          shineSize={12}
-                          shineFade={35}
-                          thickness={1.4}
-                          followMouse
-                          autoAnimate
+                        <button
+                          type="button"
                           onClick={() => router.push(`/blog/${art.slug}`)}
-                          className="px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-[#FF1E27]/25 cursor-pointer"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF1E27] to-[#D31019] hover:from-[#ff3840] hover:to-[#e0151f] text-white text-xs font-bold shadow-lg shadow-[#FF1E27]/25 hover:shadow-[#FF1E27]/40 transition-all duration-200 cursor-pointer active:scale-95 group/btn"
                         >
                           <span>{isAr ? 'قراءة المقال' : 'Read Article'}</span>
-                          <i className={`fa-solid fa-arrow-right text-[10px] ${isAr ? 'rotate-180' : ''}`}></i>
-                        </SpecularButton>
+                          <i className={`fa-solid fa-arrow-right text-[11px] ${isAr ? 'rotate-180 group-hover/btn:-translate-x-1' : 'group-hover/btn:translate-x-1'} transition-transform`}></i>
+                        </button>
                       </div>
                     </div>
                   </article>
