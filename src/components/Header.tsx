@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
+import SpecularButton from './SpecularButton';
 
 export default function Header() {
   const { language, setLanguage, t, isMounted } = useLanguage();
@@ -136,7 +137,7 @@ export default function Header() {
           aria-hidden="true"
         />
 
-        <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between box-border">
+        <div className="w-full max-w-7xl mx-auto px-2.5 sm:px-6 h-14 sm:h-16 flex items-center justify-between box-border">
           
           {/* Brand Logo & Name */}
           <button
@@ -145,7 +146,7 @@ export default function Header() {
             className="flex items-center gap-1.5 sm:gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0 touch-manipulation active:scale-[0.98] transition-transform"
             aria-label="E-MEP Homepage"
           >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg sm:rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+            <div className="w-7 h-7 sm:w-10 sm:h-10 bg-white rounded-lg sm:rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
               <Image 
                 src="/logo/logo.png" 
                 alt="E-MEP Logo" 
@@ -157,7 +158,7 @@ export default function Header() {
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1 sm:gap-1.5">
-                <span className="font-black text-sm sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+                <span className="font-black text-xs sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
                   E-MEP
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
@@ -168,21 +169,35 @@ export default function Header() {
             </div>
           </button>
 
-          {/* Desktop Navigation Links (Styled Identical to Site Buttons) */}
+          {/* Desktop Navigation Links (Styled with SpecularButton - Identical to Hero Button) */}
           <nav className="hidden lg:flex items-center" aria-label="Desktop Navigation">
             <ul className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
               {desktopNavItems.map((item) => {
                 const isActive = isHomePage && activeSection === item.id;
                 return (
                   <li key={item.id}>
-                    <button
-                      type="button"
+                    <SpecularButton
+                      size="sm"
+                      radius={12}
+                      lineColor="#FF1E27"
+                      baseColor={isActive ? "#7A1015" : "#141419"}
+                      intensity={isActive ? 1.4 : 0.85}
+                      shineSize={14}
+                      shineFade={40}
+                      thickness={1.4}
+                      speed={0.4}
+                      followMouse
+                      autoAnimate={isActive}
                       onClick={() => handleNavigate(item.id)}
-                      className={`header-nav-btn ${isActive ? 'active' : ''}`}
-                      aria-label={t(item.i18nKey)}
+                      className={`h-9 px-3.5 text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap select-none ${
+                        isActive 
+                          ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border border-white/25 border-t-white/40 shadow-[0_3px_14px_rgba(211,16,25,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] scale-[1.02]' 
+                          : '!text-[#CBD5E1] hover:!text-white'
+                      }`}
+                      ariaLabel={t(item.i18nKey)}
                     >
-                      {t(item.i18nKey)}
-                    </button>
+                      <span>{t(item.i18nKey)}</span>
+                    </SpecularButton>
                   </li>
                 );
               })}
@@ -190,31 +205,31 @@ export default function Header() {
           </nav>
 
           {/* Right Action Controls: Blog + Language Switcher */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2.5 flex-shrink-0">
             
             {/* Direct Blog Access Button */}
             <button
               type="button"
               onClick={() => router.push('/blog')}
-              className={`h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
+              className={`h-8 sm:h-9 px-2 sm:px-3.5 rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1 sm:gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
                 pathname.startsWith('/blog')
                   ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border-white/25 border-t-white/40 shadow-[0_2px_12px_rgba(211,16,25,0.45)]'
                   : '!text-white/90 !bg-white/[0.06] hover:!bg-white/[0.12] border-white/10 hover:border-white/20'
               }`}
               aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
             >
-              <i className="fa-solid fa-newspaper text-xs text-[#FF1E27]"></i>
-              <span className="text-[11px] sm:text-xs font-bold">{isAr ? 'المقالات' : 'Blog'}</span>
+              <i className="fa-solid fa-newspaper text-[10px] sm:text-xs text-[#FF1E27]"></i>
+              <span className="text-[10px] sm:text-xs font-bold">{isAr ? 'المقالات' : 'Blog'}</span>
             </button>
 
             {/* Language Switcher */}
             <button
               type="button"
               onClick={toggleLanguage}
-              className="h-8 sm:h-9 px-2 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
+              className="h-8 sm:h-9 px-1.5 sm:px-3 rounded-xl text-[10px] sm:text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
-              <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>
+              <i className="fa-solid fa-globe text-[#FF1E27] text-[10px] sm:text-xs"></i>
               <span className="font-bold">{isAr ? 'EN' : 'عربي'}</span>
             </button>
           </div>
