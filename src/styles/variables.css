@@ -320,7 +320,7 @@ a.btn-whatsapp:hover {
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
-  max-width: 56px !important;
+  min-width: 0 !important;
   height: 44px !important;
   border-radius: 12px !important;
   transition: all 0.2s ease !important;
@@ -329,6 +329,8 @@ a.btn-whatsapp:hover {
   user-select: none !important;
   color: #94A3B8 !important;
   border: 1px solid transparent !important;
+  padding: 2px 1px !important;
+  box-sizing: border-box !important;
 }
 
 .mobile-dock-btn:active {
