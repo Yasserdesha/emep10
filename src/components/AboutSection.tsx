@@ -74,39 +74,39 @@ export function AboutSection() {
 
       {/* Floating Trust & Performance Metrics Strip (Interactive Bento Stats) */}
       <div className="container mb-16 relative z-20">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-          <div className="group p-5 sm:p-6 rounded-2xl bg-[#121217]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
-            <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-5">
+          <div className="group p-3.5 sm:p-6 rounded-2xl bg-[#121217]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
+            <div className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
               2019+
             </div>
-            <div className="text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-2 group-hover:text-white transition-colors">
+            <div className="text-[10px] sm:text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-1.5 sm:mt-2 group-hover:text-white transition-colors">
               {isAr ? "سنة التأسيس والخبرة" : "Founded Year"}
             </div>
           </div>
 
-          <div className="group p-5 sm:p-6 rounded-2xl bg-[#121217]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
-            <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
+          <div className="group p-3.5 sm:p-6 rounded-2xl bg-[#121217]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
+            <div className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
               100+
             </div>
-            <div className="text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-2 group-hover:text-white transition-colors">
+            <div className="text-[10px] sm:text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-1.5 sm:mt-2 group-hover:text-white transition-colors">
               {isAr ? "مشروع هندسي مكتمل" : "Completed Projects"}
             </div>
           </div>
 
-          <div className="group p-5 sm:p-6 rounded-2xl bg-[#121217]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
-            <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
+          <div className="group p-3.5 sm:p-6 rounded-2xl bg-[#121217]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
+            <div className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
               LOD 500
             </div>
-            <div className="text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-2 group-hover:text-white transition-colors">
+            <div className="text-[10px] sm:text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-1.5 sm:mt-2 group-hover:text-white transition-colors">
               {isAr ? "دقة نمذجة الـ BIM" : "BIM Precision"}
             </div>
           </div>
 
-          <div className="group p-5 sm:p-6 rounded-2xl bg-[#121217]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
-            <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
+          <div className="group p-3.5 sm:p-6 rounded-2xl bg-[#121217]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
+            <div className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
               100%
             </div>
-            <div className="text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-2 group-hover:text-white transition-colors">
+            <div className="text-[10px] sm:text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-1.5 sm:mt-2 group-hover:text-white transition-colors">
               {isAr ? "مطابقة للأكواد الهندسية" : "Code Compliance"}
             </div>
           </div>
