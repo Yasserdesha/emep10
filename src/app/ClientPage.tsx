@@ -613,82 +613,85 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
 
               <div className="contact-channels">
                 {/* Email */}
-                <a href="mailto:Info@emep-egy.com" className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300">
+                <button 
+                  type="button"
+                  onClick={() => window.location.href = 'mailto:Info@emep-egy.com'}
+                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300 w-full text-start cursor-pointer"
+                >
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-envelope" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_email_label')}</span>
                     <span className="channel-value">Info@emep-egy.com</span>
                   </div>
-                </a>
+                </button>
 
                 {/* WhatsApp Line 1 */}
-                <a
-                  href="https://wa.me/201111079467?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="channel-card glass-panel hover:border-[#25D366]/50 hover:shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all duration-300"
+                <button
+                  type="button"
+                  onClick={() => window.open('https://wa.me/201111079467?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry.', '_blank', 'noopener,noreferrer')}
+                  className="channel-card glass-panel hover:border-[#25D366]/50 hover:shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all duration-300 w-full text-start cursor-pointer"
                 >
                   <div className="channel-icon whatsapp-glow flex-shrink-0"><i className="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_whatsapp_label1')}</span>
                     <span className="channel-value">{t('channel_whatsapp_val1')}</span>
                   </div>
-                </a>
+                </button>
 
                 {/* WhatsApp Line 2 */}
-                <a
-                  href="https://wa.me/201030834372?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry."
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => window.open('https://wa.me/201030834372?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry.', '_blank', 'noopener,noreferrer')}
                   id="whatsapp-link"
                   data-testid="whatsapp-link"
                   data-phone="01030834372"
-                  className="channel-card glass-panel hover:border-[#25D366]/50 hover:shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all duration-300"
+                  className="channel-card glass-panel hover:border-[#25D366]/50 hover:shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all duration-300 w-full text-start cursor-pointer"
                 >
                   <div className="channel-icon whatsapp-glow flex-shrink-0"><i className="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_whatsapp_label2')}</span>
                     <span className="channel-value">{t('channel_whatsapp_val2')}</span>
                   </div>
-                </a>
+                </button>
 
                 {/* Phone Line 1 */}
-                <a
-                  href="tel:+201111079467"
-                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300"
+                <button
+                  type="button"
+                  onClick={() => window.location.href = 'tel:+201111079467'}
+                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300 w-full text-start cursor-pointer"
                 >
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-phone" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_phone_label1')}</span>
                     <span className="channel-value">{t('channel_phone_val1')}</span>
                   </div>
-                </a>
+                </button>
 
                 {/* Phone Line 2 */}
-                <a
-                  href="tel:+201030834372"
-                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300"
+                <button
+                  type="button"
+                  onClick={() => window.location.href = 'tel:+201030834372'}
+                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300 w-full text-start cursor-pointer"
                 >
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-phone" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_phone_label2')}</span>
                     <span className="channel-value">{t('channel_phone_val2')}</span>
                   </div>
-                </a>
+                </button>
 
                 {/* Headquarters Address */}
-                <a
-                  href="https://maps.app.goo.gl/3kx4MnDFTmaykXjCA?g_st=ac"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300"
+                <button
+                  type="button"
+                  onClick={() => window.open('https://maps.app.goo.gl/3kx4MnDFTmaykXjCA?g_st=ac', '_blank', 'noopener,noreferrer')}
+                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300 w-full text-start cursor-pointer"
                 >
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-location-dot" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_address_label')}</span>
                     <span className="channel-value text-xs sm:text-sm font-bold">{t('channel_address_val')}</span>
                   </div>
-                </a>
+                </button>
               </div>
 
               {/* Social Media Channels Grid - Modern Solid Brand Buttons */}
@@ -699,10 +702,9 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {/* Facebook Button */}
-                  <a
-                    href="https://www.facebook.com/profile.php?id=100087241140432"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => window.open('https://www.facebook.com/profile.php?id=100087241140432', '_blank', 'noopener,noreferrer')}
                     className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-[#1A77F2] hover:bg-[#166fe5] border border-[#005fd8] shadow-[0_4px_20px_rgba(26,119,242,0.35)] hover:shadow-[0_6px_25px_rgba(26,119,242,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
                     aria-label="Facebook Page"
                   >
@@ -710,13 +712,12 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                       <path fill="white" d="M8 12h5V8c0-6 4-7 11-6v5c-4 0-5 0-5 3v2h5l-1 6h-4v12h-6V18H8z" />
                     </svg>
                     <span>Facebook</span>
-                  </a>
+                  </button>
 
                   {/* LinkedIn Button */}
-                  <a
-                    href="https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => window.open('https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422', '_blank', 'noopener,noreferrer')}
                     className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-[#0967C2] hover:bg-[#0855a0] border border-[#0059b3] shadow-[0_4px_20px_rgba(9,103,194,0.35)] hover:shadow-[0_6px_25px_rgba(9,103,194,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
                     aria-label="LinkedIn Profile"
                   >
@@ -724,13 +725,12 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                       <path fill="white" d="M26.111,3H5.889c-1.595,0-2.889,1.293-2.889,2.889V26.111c0,1.595,1.293,2.889,2.889,2.889H26.111c1.595,0,2.889-1.293,2.889-2.889V5.889c0-1.595-1.293-2.889-2.889-2.889ZM10.861,25.389h-3.877V12.87h3.877v12.519Zm-1.957-14.158c-1.267,0-2.293-1.034-2.293-2.31s1.026-2.31,2.293-2.31,2.292,1.034,2.292,2.31-1.026,2.31-2.292,2.31Zm16.485,14.158h-3.858v-6.571c0-1.802-.685-2.809-2.111-2.809-1.551,0-2.362,1.048-2.362,2.809v6.571h-3.718V12.87h3.718v1.686s1.118-2.069,3.775-2.069,4.556,1.621,4.556,4.975v7.926Z" fillRule="evenodd" />
                     </svg>
                     <span>LinkedIn</span>
-                  </a>
+                  </button>
 
                   {/* Instagram Button */}
-                  <a
-                    href="https://www.instagram.com/e__mep/"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => window.open('https://www.instagram.com/e__mep/', '_blank', 'noopener,noreferrer')}
                     className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-95 border border-[#DD2A7B]/50 shadow-[0_4px_20px_rgba(221,42,123,0.35)] hover:shadow-[0_6px_25px_rgba(221,42,123,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
                     aria-label="Instagram Account"
                   >
@@ -740,7 +740,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                       <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
                     </svg>
                     <span>Instagram</span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
