@@ -141,26 +141,6 @@ export default function AdminPage() {
     }
   }, [statusMessage]);
 
-  // Check auth session on mount
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        const res = await fetch('/api/admin/verify');
-        const data = await res.json();
-        if (data.authenticated) {
-          setIsAuthenticated(true);
-          fetchProjects();
-          fetchArticles();
-        }
-      } catch (err) {
-        console.error('Session verify error:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    checkAuth();
-  }, []);
-
   const fetchProjects = async () => {
     try {
       const res = await fetch('/api/projects');
@@ -180,6 +160,26 @@ export default function AdminPage() {
       console.error('Fetch articles error:', err);
     }
   };
+
+  // Check auth session on mount
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/admin/verify');
+        const data = await res.json();
+        if (data.authenticated) {
+          setIsAuthenticated(true);
+          fetchProjects();
+          fetchArticles();
+        }
+      } catch (err) {
+        console.error('Session verify error:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    checkAuth();
+  }, []);
 
   // Login submit handler
   const handleLogin = async (e: React.FormEvent) => {
