@@ -9,6 +9,7 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
   display: "swap",
+  preload: false,
 });
 
 const cairo = Cairo({
@@ -16,6 +17,7 @@ const cairo = Cairo({
   subsets: ["arabic"],
   weight: ["400", "600", "700"],
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
