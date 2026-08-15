@@ -1,0 +1,110 @@
+/* StarBorder Styles Provided by Design Specification */
+.star-border-container {
+  display: inline-flex;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.star-border-container:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.star-border-container:active {
+  transform: scale(0.97) translateY(0);
+}
+
+.border-gradient-bottom {
+  position: absolute;
+  width: 300%;
+  height: 50%;
+  opacity: 0.85;
+  bottom: -12px;
+  right: -250%;
+  border-radius: 50%;
+  animation: star-movement-bottom linear infinite alternate;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.border-gradient-top {
+  position: absolute;
+  opacity: 0.85;
+  width: 300%;
+  height: 50%;
+  top: -12px;
+  left: -250%;
+  border-radius: 50%;
+  animation: star-movement-top linear infinite alternate;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.inner-content {
+  position: relative;
+  border: 1px solid rgba(255, 30, 39, 0.45);
+  background: #0A0A0C;
+  color: white;
+  font-size: clamp(0.82rem, 1.8vw, 0.95rem);
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 22px;
+  border-radius: 20px;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.star-border-container:hover .inner-content {
+  background: #151114;
+  border-color: #FF1E27;
+  box-shadow: 0 0 20px rgba(255, 30, 39, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.star-border-active .inner-content {
+  background: linear-gradient(180deg, #FF2B33 0%, #D31019 100%) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+@keyframes star-movement-bottom {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0%);
+    opacity: 0;
+  }
+}
+
+@keyframes star-movement-top {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0%);
+    opacity: 0;
+  }
+}
