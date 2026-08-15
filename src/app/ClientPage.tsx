@@ -634,47 +634,60 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 </a>
               </div>
 
-              {/* Social Media Channels Grid */}
-              <div className="mt-6 pt-4 border-t border-white/10">
-                <h3 className="text-xs font-bold text-[#94A3B8] mb-3 uppercase tracking-wider">
-                  {t('social_heading')}
+              {/* Social Media Channels Grid - Modern Luxury Glass Badges */}
+              <div className="mt-8 pt-6 border-t border-white/[0.08]">
+                <h3 className="text-xs font-bold text-[#94A3B8] mb-4 uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27]"></span>
+                  <span>{t('social_heading')}</span>
                 </h3>
-                <div className="flex items-center gap-3 flex-wrap">
-                  <button
-                    type="button"
-                    onClick={() => window.open("https://www.facebook.com/profile.php?id=100087241140432", "_blank", "noopener,noreferrer")}
-                    className="glass-panel hover:bg-[#1877F2]/20 hover:border-[#1877F2]/50 text-[#F8FAFC] hover:text-[#1877F2] p-3 rounded-xl flex items-center gap-2.5 text-xs font-bold transition-all duration-300 shadow-md group focus:ring-2 focus:ring-[#1877F2] outline-none cursor-pointer border-0"
-                    aria-label="Facebook Page"
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <a
+                    href="https://www.facebook.com/profile.php?id=100087241140432"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="glass-panel group p-3.5 rounded-2xl flex items-center gap-3 border border-white/[0.08] hover:border-[#1877F2]/60 hover:bg-[#1877F2]/10 hover:shadow-[0_0_25px_rgba(24,119,242,0.3)] transition-all duration-300 cursor-pointer"
+                    aria-label="Facebook Official Page"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-[#1877F2]/10 group-hover:bg-[#1877F2] text-[#1877F2] group-hover:text-white flex items-center justify-center text-sm transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-[#1877F2]/15 text-[#1877F2] group-hover:bg-[#1877F2] group-hover:text-white flex items-center justify-center text-base transition-all duration-300 shadow-sm flex-shrink-0">
                       <i className="fa-brands fa-facebook-f"></i>
                     </div>
-                    <span>Facebook</span>
-                  </button>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-xs font-bold text-white group-hover:text-[#1877F2] transition-colors truncate">Facebook</span>
+                      <span className="text-[10px] text-[#94A3B8] truncate">@e_mep_official</span>
+                    </div>
+                  </a>
 
-                  <button
-                    type="button"
-                    onClick={() => window.open("https://www.instagram.com/e__mep/", "_blank", "noopener,noreferrer")}
-                    className="glass-panel hover:bg-[#E4405F]/20 hover:border-[#E4405F]/50 text-[#F8FAFC] hover:text-[#E4405F] p-3 rounded-xl flex items-center gap-2.5 text-xs font-bold transition-all duration-300 shadow-md group focus:ring-2 focus:ring-[#E4405F] outline-none cursor-pointer border-0"
-                    aria-label="Instagram Account"
+                  <a
+                    href="https://www.instagram.com/e__mep/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="glass-panel group p-3.5 rounded-2xl flex items-center gap-3 border border-white/[0.08] hover:border-[#E4405F]/60 hover:bg-[#E4405F]/10 hover:shadow-[0_0_25px_rgba(228,64,95,0.3)] transition-all duration-300 cursor-pointer"
+                    aria-label="Instagram Official Account"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-[#E4405F]/10 group-hover:bg-gradient-to-tr group-hover:from-[#F58529] group-hover:via-[#DD2A7B] group-hover:to-[#8134AF] text-[#E4405F] group-hover:text-white flex items-center justify-center text-sm transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-[#E4405F]/15 text-[#E4405F] group-hover:bg-gradient-to-tr group-hover:from-[#F58529] group-hover:via-[#DD2A7B] group-hover:to-[#8134AF] group-hover:text-white flex items-center justify-center text-base transition-all duration-300 shadow-sm flex-shrink-0">
                       <i className="fa-brands fa-instagram"></i>
                     </div>
-                    <span>Instagram</span>
-                  </button>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-xs font-bold text-white group-hover:text-[#E4405F] transition-colors truncate">Instagram</span>
+                      <span className="text-[10px] text-[#94A3B8] truncate">@e__mep</span>
+                    </div>
+                  </a>
 
-                  <button
-                    type="button"
-                    onClick={() => window.open("https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422", "_blank", "noopener,noreferrer")}
-                    className="glass-panel hover:bg-[#0A66C2]/20 hover:border-[#0A66C2]/50 text-[#F8FAFC] hover:text-[#0A66C2] p-3 rounded-xl flex items-center gap-2.5 text-xs font-bold transition-all duration-300 shadow-md group group focus:ring-2 focus:ring-[#0A66C2] outline-none cursor-pointer border-0"
-                    aria-label="LinkedIn Profile"
+                  <a
+                    href="https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="glass-panel group p-3.5 rounded-2xl flex items-center gap-3 border border-white/[0.08] hover:border-[#0A66C2]/60 hover:bg-[#0A66C2]/10 hover:shadow-[0_0_25px_rgba(10,102,194,0.3)] transition-all duration-300 cursor-pointer"
+                    aria-label="LinkedIn Official Profile"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-[#0A66C2]/10 group-hover:bg-[#0A66C2] text-[#0A66C2] group-hover:text-white flex items-center justify-center text-sm transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-[#0A66C2]/15 text-[#0A66C2] group-hover:bg-[#0A66C2] group-hover:text-white flex items-center justify-center text-base transition-all duration-300 shadow-sm flex-shrink-0">
                       <i className="fa-brands fa-linkedin-in"></i>
                     </div>
-                    <span>LinkedIn</span>
-                  </button>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-xs font-bold text-white group-hover:text-[#0A66C2] transition-colors truncate">LinkedIn</span>
+                      <span className="text-[10px] text-[#94A3B8] truncate">E-MEP Works</span>
+                    </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -800,42 +813,66 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               </a>
               
               <div className="footer-social-row flex items-center gap-2.5 mt-4">
-                <button
-                  type="button"
-                  onClick={() => window.open('https://www.facebook.com/profile.php?id=100087241140432', '_blank', 'noopener,noreferrer')}
-                  className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-[#1877F2] hover:bg-[#1877F2] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 cursor-pointer"
+                <a
+                  href="https://www.facebook.com/profile.php?id=100087241140432"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-white/[0.04] border border-white/10 hover:border-[#1877F2] hover:bg-[#1877F2] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 shadow-md cursor-pointer hover:scale-110 active:scale-95"
                   aria-label="Facebook Page"
                 >
                   <i className="fa-brands fa-facebook-f"></i>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => window.open('https://www.instagram.com/e__mep/', '_blank', 'noopener,noreferrer')}
-                  className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-[#E4405F] hover:bg-gradient-to-tr hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 cursor-pointer"
+                </a>
+                <a
+                  href="https://www.instagram.com/e__mep/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-white/[0.04] border border-white/10 hover:border-[#E4405F] hover:bg-gradient-to-tr hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 shadow-md cursor-pointer hover:scale-110 active:scale-95"
                   aria-label="Instagram Account"
                 >
                   <i className="fa-brands fa-instagram"></i>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => window.open('https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422', '_blank', 'noopener,noreferrer')}
-                  className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-[#0A66C2] hover:bg-[#0A66C2] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 cursor-pointer"
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-white/[0.04] border border-white/10 hover:border-[#0A66C2] hover:bg-[#0A66C2] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 shadow-md cursor-pointer hover:scale-110 active:scale-95"
                   aria-label="LinkedIn Profile"
                 >
                   <i className="fa-brands fa-linkedin-in"></i>
-                </button>
+                </a>
               </div>
             </div>
           </div>
 
-          <div className="footer-bottom text-center">
-            <p suppressHydrationWarning>&copy; {new Date().getFullYear()} E-MEP Electromechanical Works. All rights reserved.</p>
-            <div style={{ marginTop: '0.5rem' }}>
+          <div className="footer-bottom text-center pt-8 border-t border-white/[0.08] flex flex-col items-center gap-3">
+            <p suppressHydrationWarning className="text-xs text-[#94A3B8]">
+              &copy; {new Date().getFullYear()} E-MEP Electromechanical Works. All rights reserved.
+            </p>
+            
+            {/* Design & Development Copyright Attribution by YASSER MAHMOUD */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-md shadow-sm hover:border-[#1877F2]/50 hover:shadow-[0_0_20px_rgba(24,119,242,0.25)] transition-all duration-300">
+              <span className="text-xs text-[#94A3B8]">
+                {isAr ? 'تصميم وتطوير الموقع:' : 'Designed & Developed by:'}
+              </span>
+              <a
+                href="https://www.facebook.com/1035966674"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-extrabold text-white hover:text-[#1877F2] transition-colors"
+                title="Yasser Mahmoud on Facebook"
+              >
+                <i className="fa-brands fa-facebook text-[#1877F2] text-sm"></i>
+                <span className="tracking-wider">YASSER MAHMOUD</span>
+                <i className="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i>
+              </a>
+            </div>
+
+            <div style={{ marginTop: '0.25rem' }}>
               <button 
                 type="button"
                 onClick={() => router.push('/accessibility')} 
-                className="footer-nav-item cursor-pointer bg-transparent border-0 text-inherit" 
-                style={{ fontSize: '0.8rem', opacity: 0.7 }}
+                className="footer-nav-item cursor-pointer bg-transparent border-0 text-[#94A3B8] hover:text-white transition-colors" 
+                style={{ fontSize: '0.8rem', opacity: 0.8 }}
               >
                 {isAr ? 'إمكانية الوصول' : 'Accessibility Statement'}
               </button>

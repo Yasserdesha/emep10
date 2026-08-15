@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/LanguageContext';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface InquiryData {
   name: string;
@@ -130,12 +131,15 @@ export default function ThankYouPage() {
         </div>
 
         {inquiry && (
-          <button
+          <Button
+            type="button"
+            variant="default"
+            size="lg"
             onClick={handleManualAction}
-            className={`w-full py-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 text-white shadow-lg transition-all hover:-translate-y-0.5 cursor-pointer ${
+            className={`w-full py-4 rounded-full font-bold text-xs flex items-center justify-center gap-2 text-white shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
               inquiry.method === 'whatsapp' 
-                ? 'bg-[#25D366] hover:bg-[#20ba5a] shadow-[#25D366]/25' 
-                : 'bg-gradient-to-r from-[#FF1E27] to-[#D31019] shadow-[#FF1E27]/25'
+                ? 'bg-gradient-to-b from-[#25D366] to-[#128C7E] border-0 hover:from-[#2fe472] hover:to-[#17a594] shadow-[#25D366]/30' 
+                : 'shadow-[#FF1E27]/30'
             }`}
           >
             {inquiry.method === 'whatsapp' ? (
@@ -148,22 +152,26 @@ export default function ThankYouPage() {
                 ? (isAr ? 'إرسال عبر الواتساب الآن' : 'Send via WhatsApp Now')
                 : (isAr ? 'إرسال عبر الإيميل الآن' : 'Send via Email Now')}
             </span>
-          </button>
+          </Button>
         )}
 
-        <div className="pt-4 border-t border-white/[0.06] space-y-2">
+        <div className="pt-4 border-t border-white/[0.06] space-y-3">
           <p className="text-[11px] text-[#64748B] font-mono">
             {isAr 
               ? `سيتم إرجاعك تلقائياً للرئيسية خلال ${redirectCount} ثوانٍ...`
               : `Returning to homepage in ${redirectCount}s...`}
           </p>
-          <Link 
-            href="/" 
-            className="text-xs font-bold text-[#94A3B8] hover:text-[#FF1E27] inline-flex items-center gap-1.5 transition-colors"
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="rounded-full px-5 py-2 text-xs font-bold text-[#94A3B8] hover:text-white border-white/10 hover:border-white/25 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <i className="fa-solid fa-arrow-left rtl:rotate-180 text-[10px]"></i>
-            <span>{isAr ? 'الرجوع للرئيسية فوراً' : 'Return to Home immediately'}</span>
-          </Link>
+            <Link href="/">
+              <i className="fa-solid fa-arrow-left rtl:rotate-180 text-[10px]"></i>
+              <span>{isAr ? 'الرجوع للرئيسية فوراً' : 'Return to Home immediately'}</span>
+            </Link>
+          </Button>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@
 import React from 'react';
 import { useLanguage } from '@/components/LanguageContext';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function AccessibilityPage() {
   const { language, isMounted } = useLanguage();
@@ -14,15 +15,22 @@ export default function AccessibilityPage() {
         
         {/* Navigation back */}
         <div>
-          <Link 
-            href="/" 
-            className="inline-flex items-center gap-2 text-xs font-bold text-[#94A3B8] hover:text-[#FF1E27] transition-colors group"
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="rounded-full px-4 py-2 border-white/10 hover:border-white/25 text-[#94A3B8] hover:text-white transition-colors"
           >
-            <svg className={`w-4 h-4 group-hover:-translate-x-1 transition-transform ${isAr ? 'rotate-180 group-hover:translate-x-1 group-hover:-translate-x-0' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-            <span>{isAr ? 'العودة للصفحة الرئيسية' : 'Back to Homepage'}</span>
-          </Link>
+            <Link 
+              href="/" 
+              className="inline-flex items-center gap-2 text-xs font-bold"
+            >
+              <svg className={`w-4 h-4 ${isAr ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>{isAr ? 'العودة للصفحة الرئيسية' : 'Back to Homepage'}</span>
+            </Link>
+          </Button>
         </div>
 
         {/* Accessibility Statement Card */}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import SafeImage from '@/components/SafeImage';
 import { useLanguage } from '@/components/LanguageContext';
+import { Button } from '@/components/ui/button';
 
 interface ArticleItem {
   id: number;
@@ -289,31 +290,38 @@ export default function BlogClient({ articles }: BlogClientProps) {
                 : 'The E-MEP team is ready to review your drawings and provide initial engineering studies for MEP & BIM systems.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-              <Link
-                href="/#contact"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#FF1E27] hover:bg-[#D31019]
-                           text-white font-bold text-sm rounded-xl shadow-lg shadow-[#FF1E27]/20
-                           hover:shadow-[#FF1E27]/30 transition-all duration-200 hover:-translate-y-0.5"
+              <Button
+                asChild
+                variant="default"
+                size="lg"
+                className="rounded-full px-8 py-6 font-bold text-sm shadow-xl shadow-[#FF1E27]/30 hover:shadow-[#FF1E27]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                {isAr ? 'اطلب الاستشارة' : 'Request Consultation'}
-              </Link>
-              <a
-                href="https://wa.me/201030834372"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/[0.05] hover:bg-white/[0.09]
-                           border border-white/[0.1] hover:border-white/20 text-white font-bold text-sm rounded-xl
-                           transition-all duration-200 hover:-translate-y-0.5"
+                <Link href="/#contact">
+                  <svg className="w-4 h-4 mr-2 rtl:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span>{isAr ? 'اطلب الاستشارة' : 'Request Consultation'}</span>
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="rounded-full px-8 py-6 font-bold text-sm bg-gradient-to-b from-[#25D366] to-[#128C7E] text-white border-0 hover:from-[#2fe472] hover:to-[#17a594] shadow-xl shadow-[#25D366]/30 hover:shadow-[#25D366]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
               >
-                <svg className="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                  <path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.948-1.42A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" />
-                </svg>
-                {isAr ? 'واتساب' : 'WhatsApp'}
-              </a>
+                <a
+                  href="https://wa.me/201030834372"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg className="w-4 h-4 mr-2 rtl:ml-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                    <path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.948-1.42A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" />
+                  </svg>
+                  <span>{isAr ? 'واتساب' : 'WhatsApp'}</span>
+                </a>
+              </Button>
             </div>
           </div>
         </section>

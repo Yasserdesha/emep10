@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/components/LanguageContext";
+import { Button } from "@/components/ui/button";
 
 interface Discipline {
   id: "hvac" | "elec" | "plumb" | "fire";
@@ -170,24 +171,26 @@ export function AboutSection() {
               </h3>
             </div>
 
-            {/* Switcher Buttons */}
-            <div className="flex flex-wrap gap-2">
+            {/* Switcher Buttons with Shadcn Buttons */}
+            <div className="flex flex-wrap gap-2.5">
               {DISCIPLINES.map((disc) => {
                 const isActive = disc.id === activeDiscipline;
                 return (
-                  <button
+                  <Button
                     key={disc.id}
                     type="button"
+                    variant={isActive ? "default" : "outline"}
+                    size="sm"
                     onClick={() => setActiveDiscipline(disc.id)}
-                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 cursor-pointer ${
+                    className={`rounded-full px-4 py-2 font-bold text-xs sm:text-sm transition-all duration-300 cursor-pointer ${
                       isActive
-                        ? "bg-[#FF1E27] text-white shadow-[0_0_20px_rgba(255,30,39,0.4)] scale-[1.02]"
-                        : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08] border border-white/[0.06]"
+                        ? "shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]"
+                        : "border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
                     }`}
                   >
                     <i className={`fa-solid ${disc.icon}`} aria-hidden="true"></i>
                     <span>{t(disc.titleKey)}</span>
-                  </button>
+                  </Button>
                 );
               })}
             </div>

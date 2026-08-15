@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
+import { Button } from '@/components/ui/button';
 
 export default function ContactForm() {
   const { t, language, isMounted } = useLanguage();
@@ -315,11 +316,13 @@ export default function ContactForm() {
           </div>
         )}
 
-        {/* Action Row */}
+        {/* Action Row with Shadcn Buttons */}
         <div className="flex gap-3 flex-col sm:flex-row mt-6">
-          <button
+          <Button
             type="button"
-            className="btn btn-primary flex-1 py-3.5 text-center flex items-center justify-center gap-2 rounded-xl min-h-[48px] font-bold text-sm"
+            variant="default"
+            size="lg"
+            className="flex-1 py-4 text-center flex items-center justify-center gap-2 rounded-full min-h-[50px] font-bold text-sm shadow-xl shadow-[#FF1E27]/30 hover:shadow-[#FF1E27]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
             disabled={isSubmitting}
             onClick={() => handleSubmit('email')}
           >
@@ -329,11 +332,13 @@ export default function ContactForm() {
               <i className="fa-solid fa-paper-plane"></i>
             )}
             <span>{t('btn_send_email')}</span>
-          </button>
+          </Button>
           
-          <button
+          <Button
             type="button"
-            className="btn btn-whatsapp flex-1 py-3.5 text-center flex items-center justify-center gap-2 rounded-xl min-h-[48px] font-bold text-sm"
+            variant="outline"
+            size="lg"
+            className="flex-1 py-4 text-center flex items-center justify-center gap-2 rounded-full min-h-[50px] font-bold text-sm bg-gradient-to-b from-[#25D366] to-[#128C7E] text-white border-0 hover:from-[#2fe472] hover:to-[#17a594] shadow-xl shadow-[#25D366]/30 hover:shadow-[#25D366]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
             disabled={isSubmitting}
             onClick={() => handleSubmit('whatsapp')}
           >
@@ -343,7 +348,7 @@ export default function ContactForm() {
               <i className="fa-brands fa-whatsapp text-base"></i>
             )}
             <span>{t('btn_send_wa')}</span>
-          </button>
+          </Button>
         </div>
       </form>
     </div>
