@@ -63,8 +63,7 @@
   width: 100%;
   max-width: min(92vw, 600px);
   margin: 0 auto;
-  box-sizing: border-box;
-  padding: 0 1rem;
+  padding: 4.5rem 1rem 1rem 1rem;
 }
 
 .hero-logo-white-glass {

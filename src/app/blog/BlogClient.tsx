@@ -435,9 +435,9 @@ export default function BlogClient({ articles }: BlogClientProps) {
           </div>
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#FF1E27]/80 to-transparent" />
 
-          <div className="relative z-10 p-10 md:p-14 text-center space-y-5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#FF1E27]/10 border border-[#FF1E27]/25 rounded-full shadow-[0_0_20px_rgba(255,30,39,0.15)]">
-              <svg className="w-3.5 h-3.5 text-[#FF1E27]" fill="currentColor" viewBox="0 0 20 20">
+          <div className="relative z-10 p-8 sm:p-10 md:p-14 text-center space-y-5 flex flex-col items-center justify-center max-w-3xl mx-auto">
+            <div className="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 bg-[#FF1E27]/10 border border-[#FF1E27]/25 rounded-full shadow-[0_0_20px_rgba(255,30,39,0.15)] mx-auto">
+              <svg className="w-3.5 h-3.5 text-[#FF1E27] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
               </svg>
               <span className="text-xs font-bold text-[#FF1E27] uppercase tracking-widest">

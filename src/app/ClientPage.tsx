@@ -259,16 +259,16 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           >
             <div className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-[#0A0A0C]/90 text-[#FF1E27] text-xs sm:text-sm font-bold uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse flex-shrink-0"></span>
-              <span className="whitespace-nowrap">{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM'}</span>
+              <span className="whitespace-nowrap">{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM Modeling'}</span>
             </div>
           </ElectricBorder>
           <ScrollRevealText
             text={
               isAr
-                ? "الريادة في الهندسة الكهروميكانيكية فائقة الدقة ونمذجة الـ BIM المتقدمة بأعلى معايير الجودة عبر كبرى المشروعات التطويرية."
-                : "Pioneering high-precision electromechanical engineering and advanced BIM modeling with uncompromised quality standards across major developments."
+                ? "مرحباً بكم في E-MEP: نبتكر أعلى معايير الريادة في الهندسة الكهروميكانيكية فائقة الدقة ونمذجة الـ BIM المتقدمة لتحقيق التميز والجودة عبر كبرى المشروعات التطويرية."
+                : "Welcome to E-MEP: Pioneering high-precision electromechanical engineering and advanced digital BIM modeling to deliver uncompromising quality across premier development projects."
             }
-            className="text-xl sm:text-2xl md:text-3xl lg:text-[2.5rem] font-black max-w-4xl mx-auto leading-relaxed md:leading-snug text-center tracking-tight"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-[2.35rem] font-black max-w-4xl mx-auto leading-relaxed md:leading-snug text-center tracking-tight"
           />
         </div>
       </section>

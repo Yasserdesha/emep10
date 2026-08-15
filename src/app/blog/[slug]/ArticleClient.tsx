@@ -217,10 +217,10 @@ export default function ArticleClient({ article, relatedArticles }: ArticleClien
         </div>
 
         {/* Technical Support Banner */}
-        <section className="relative rounded-3xl overflow-hidden border border-[#FF1E27]/30 bg-gradient-to-br from-[#1A1114] via-[#111116] to-[#13131A] p-8 sm:p-10 text-center space-y-4 shadow-2xl">
+        <section className="relative rounded-3xl overflow-hidden border border-[#FF1E27]/30 bg-gradient-to-br from-[#1A1114] via-[#111116] to-[#13131A] p-8 sm:p-10 text-center space-y-4 shadow-2xl flex flex-col items-center justify-center max-w-3xl mx-auto">
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#FF1E27]/80 to-transparent" />
           
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FF1E27]/10 border border-[#FF1E27]/25 rounded-full text-xs font-bold text-[#FF1E27]">
+          <div className="inline-flex items-center justify-center gap-2 px-3 py-1 bg-[#FF1E27]/10 border border-[#FF1E27]/25 rounded-full text-xs font-bold text-[#FF1E27] mx-auto">
             <i className="fa-solid fa-headset text-xs"></i>
             <span>{isAr ? 'استشارة فنية متخصصة' : 'Specialized Engineering Consultation'}</span>
           </div>

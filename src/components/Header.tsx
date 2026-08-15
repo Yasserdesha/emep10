@@ -170,24 +170,34 @@ export default function Header() {
             </div>
           </button>
 
-          {/* Desktop Navigation Links (Shadcn Pill Design) */}
+          {/* Desktop Navigation Links (SpecularButton 3D Rim Light) */}
           <nav className="hidden lg:flex items-center" aria-label="Desktop Navigation">
-            <ul className="flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06] shadow-inner">
+            <ul className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-md">
               {desktopNavItems.map((item) => {
                 const isActive = isHomePage && activeSection === item.id;
                 return (
                   <li key={item.id}>
-                    <button
-                      type="button"
+                    <SpecularButton
+                      size="sm"
+                      radius={12}
+                      lineColor={isActive ? "#FF1E27" : "#64748B"}
+                      baseColor={isActive ? "#521014" : "#14141c"}
+                      intensity={isActive ? 1.3 : 0.7}
+                      shineSize={10}
+                      shineFade={30}
+                      thickness={1.2}
+                      followMouse
+                      autoAnimate
                       onClick={() => handleNavigate(item.id)}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap touch-manipulation active:scale-[0.98] ${
-                        isActive 
-                          ? 'text-white bg-gradient-to-b from-[#FF2B33] to-[#D31019] border border-white/20 border-t-white/35 shadow-[0_2px_10px_rgba(211,16,25,0.45)] font-bold' 
-                          : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.06]'
+                      className={`h-8 px-3 text-xs font-semibold cursor-pointer transition-all duration-200 ${
+                        isActive
+                          ? "text-white shadow-[0_0_15px_rgba(255,30,39,0.35)]"
+                          : "text-[#94A3B8] hover:text-white"
                       }`}
+                      ariaLabel={t(item.i18nKey)}
                     >
-                      {t(item.i18nKey)}
-                    </button>
+                      <span>{t(item.i18nKey)}</span>
+                    </SpecularButton>
                   </li>
                 );
               })}
