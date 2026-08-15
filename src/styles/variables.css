@@ -25,16 +25,6 @@
   --font-en: 'Inter', system-ui, -apple-system, sans-serif;
   --font-ar: 'Cairo', system-ui, sans-serif;
   
-  --btn-padding: clamp(0.65rem, 2vw, 0.75rem) clamp(1.25rem, 3vw, 1.5rem);
-  --btn-radius: 8px;
-  --btn-bg: #FF1E27;
-  --btn-bg-hover: #D31019;
-  --btn-text: #FFFFFF;
-  --btn-font-weight: 600;
-  --btn-transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  --btn-shadow: 0 4px 14px rgba(211, 16, 25, 0.45);
-  --btn-shadow-hover: 0 6px 20px rgba(255, 30, 39, 0.6);
-  
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -119,63 +109,51 @@ button, input, select, textarea { font: inherit; color: inherit; background: non
 }
 
 /* ========================================================================= */
-/* UNIFIED BUTTON SYSTEM (.btn-u, .btn, button, input[type="submit"]) */
+/* SHADCN-INSPIRED BUTTON DESIGN SYSTEM (E-MEP BRAND IDENTITY) */
 /* ========================================================================= */
-.btn-u,
 .btn,
-.button,
-button:not(.specular-button):not(.mobile-dock-btn):not(.nav-tab-btn),
-input[type="submit"] {
+.btn-primary,
+.btn-outline,
+.btn-secondary,
+.btn-whatsapp {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: var(--btn-padding);
-  border-radius: var(--btn-radius);
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  font-weight: var(--btn-font-weight);
-  font-size: clamp(0.8125rem, 1.5vw, 0.875rem);
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
   line-height: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: var(--btn-shadow);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
   cursor: pointer;
-  white-space: nowrap;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
-  transition: transform var(--btn-transition), box-shadow var(--btn-transition), background-color var(--btn-transition);
-  min-width: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  letter-spacing: 0.2px;
   box-sizing: border-box;
 }
 
-.btn-u:hover,
-.btn:hover,
-.button:hover,
-button:not(.specular-button):not(.mobile-dock-btn):not(.nav-tab-btn):hover,
-input[type="submit"]:hover {
-  background: var(--btn-bg-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--btn-shadow-hover);
-}
-
-.btn-u:focus-visible,
-.btn:focus-visible,
-.button:focus-visible,
-button:not(.specular-button):not(.mobile-dock-btn):not(.nav-tab-btn):focus-visible,
-input[type="submit"]:focus-visible {
-  outline: 2px solid #FFFFFF;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px var(--btn-bg);
-}
-
-.btn-u:active,
+button:active,
 .btn:active,
-.button:active,
-button:not(.specular-button):not(.mobile-dock-btn):not(.nav-tab-btn):active,
+input[type="button"]:active,
 input[type="submit"]:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transform: scale(0.97) translateY(1px);
+}
+
+button:focus-visible,
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #0A0A0C, 0 0 0 4px #FF1E27;
 }
 
 /* Primary Button (Shadcn Red Gradient with Subtle Top Highlight) */
