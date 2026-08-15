@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/components/LanguageContext";
 import { Button } from "@/components/ui/button";
+import SpecularButton from "@/components/SpecularButton";
 
 interface Discipline {
   id: "hvac" | "elec" | "plumb" | "fire";
@@ -171,26 +172,35 @@ export function AboutSection() {
               </h3>
             </div>
 
-            {/* Switcher Buttons with Shadcn Buttons */}
+            {/* Switcher Buttons with SpecularButton */}
             <div className="flex flex-wrap gap-2.5">
               {DISCIPLINES.map((disc) => {
                 const isActive = disc.id === activeDiscipline;
                 return (
-                  <Button
+                  <SpecularButton
                     key={disc.id}
                     type="button"
-                    variant={isActive ? "default" : "outline"}
                     size="sm"
+                    radius={16}
+                    lineColor={isActive ? "#FF1E27" : "#64748B"}
+                    baseColor={isActive ? "#521014" : "#1a1a24"}
+                    intensity={isActive ? 1.3 : 0.8}
+                    shineSize={12}
+                    shineFade={35}
+                    thickness={1.5}
+                    speed={0.4}
+                    followMouse
+                    autoAnimate
                     onClick={() => setActiveDiscipline(disc.id)}
-                    className={`rounded-full px-4 py-2 font-bold text-xs sm:text-sm transition-all duration-300 cursor-pointer ${
+                    className={`font-bold text-xs sm:text-sm transition-all duration-300 cursor-pointer ${
                       isActive
                         ? "shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]"
-                        : "border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
+                        : "bg-white/[0.03] text-[#94A3B8]"
                     }`}
                   >
                     <i className={`fa-solid ${disc.icon}`} aria-hidden="true"></i>
                     <span>{t(disc.titleKey)}</span>
-                  </Button>
+                  </SpecularButton>
                 );
               })}
             </div>

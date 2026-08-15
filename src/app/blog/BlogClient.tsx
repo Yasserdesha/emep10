@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SafeImage from '@/components/SafeImage';
 import { useLanguage } from '@/components/LanguageContext';
+import SpecularButton from '@/components/SpecularButton';
 
 interface ArticleItem {
   id: number;
@@ -165,19 +166,32 @@ export default function BlogClient({ articles }: BlogClientProps) {
           </div>
 
           {/* Category Filter Bar (Centered) */}
-          <div className="projects-filter-bar !mb-0 !gap-2.5 pt-2 flex flex-wrap items-center justify-center mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2 mx-auto">
             {categories.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
-                <button
+                <SpecularButton
                   key={cat.id}
-                  type="button"
+                  size="sm"
+                  radius={16}
+                  lineColor={isActive ? "#FF1E27" : "#64748B"}
+                  baseColor={isActive ? "#521014" : "#14141c"}
+                  intensity={isActive ? 1.3 : 0.8}
+                  shineSize={12}
+                  shineFade={35}
+                  thickness={1.5}
+                  followMouse
+                  autoAnimate
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`project-filter-btn ${isActive ? 'active' : ''}`}
+                  className={`font-semibold text-xs transition-all duration-300 cursor-pointer ${
+                    isActive
+                      ? "shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]"
+                      : "text-[#94A3B8]"
+                  }`}
                 >
                   <i className={`${cat.icon} text-xs`}></i>
                   <span>{isAr ? cat.labelAr : cat.labelEn}</span>
-                </button>
+                </SpecularButton>
               );
             })}
           </div>
@@ -241,25 +255,43 @@ export default function BlogClient({ articles }: BlogClientProps) {
                   {featuredSummary}
                 </p>
 
-                {/* Action Buttons using System Classes */}
+                {/* Action Buttons using SpecularButton */}
                 <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <button
-                    type="button"
+                  <SpecularButton
+                    size="md"
+                    radius={16}
+                    lineColor="#FF1E27"
+                    baseColor="#521014"
+                    intensity={1.3}
+                    shineSize={14}
+                    shineFade={40}
+                    thickness={1.5}
+                    followMouse
+                    autoAnimate
                     onClick={() => router.push(`/blog/${featuredArticle.slug}`)}
-                    className="btn-primary !px-7 !py-3 !text-sm !font-bold cursor-pointer inline-flex items-center gap-2"
+                    className="px-7 py-3 text-sm font-bold shadow-lg shadow-[#FF1E27]/30 cursor-pointer"
                   >
                     <span>{isAr ? 'قراءة الدراسة كاملة' : 'Read Full Study'}</span>
                     <i className={`fa-solid fa-arrow-right text-xs ${isAr ? 'rotate-180' : ''}`}></i>
-                  </button>
+                  </SpecularButton>
 
-                  <button
-                    type="button"
+                  <SpecularButton
+                    size="md"
+                    radius={16}
+                    lineColor="#94A3B8"
+                    baseColor="#1e1e28"
+                    intensity={1.0}
+                    shineSize={12}
+                    shineFade={35}
+                    thickness={1.2}
+                    followMouse
+                    autoAnimate
                     onClick={() => setSelectedArticle(featuredArticle)}
-                    className="btn-outline !px-5 !py-3 !text-sm !font-bold cursor-pointer inline-flex items-center gap-2"
+                    className="px-5 py-3 text-sm font-bold bg-white/[0.04] text-white cursor-pointer"
                   >
                     <i className="fa-solid fa-eye text-xs"></i>
                     <span>{isAr ? 'معاينة سريعة' : 'Quick Preview'}</span>
-                  </button>
+                  </SpecularButton>
                 </div>
               </div>
             </div>

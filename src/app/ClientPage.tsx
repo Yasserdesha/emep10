@@ -367,83 +367,119 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             </p>
           </div>
 
-          {/* Filter Bar with Shadcn Buttons */}
+          {/* Filter Bar with SpecularButton Architecture */}
           <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mb-10 max-w-4xl mx-auto">
-            <Button
-              type="button"
-              variant={selectedFilter === 'all' ? 'default' : 'outline'}
-              size="lg"
-              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'all'
-                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
-                : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
-                }`}
+            <SpecularButton
+              size="md"
+              radius={24}
+              lineColor={selectedFilter === 'all' ? '#FF1E27' : '#64748B'}
+              baseColor={selectedFilter === 'all' ? '#521014' : '#14141c'}
+              intensity={selectedFilter === 'all' ? 1.3 : 0.8}
+              shineSize={12}
+              shineFade={35}
+              thickness={1.5}
+              followMouse
+              autoAnimate
+              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
+                selectedFilter === 'all'
+                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                  : 'text-[#94A3B8]'
+              }`}
               onClick={() => { setSelectedFilter('all'); setIsExpanded(false); }}
-              aria-label={isAr ? "عرض جميع المشاريع" : "Filter by all projects"}
+              ariaLabel={isAr ? "عرض جميع المشاريع" : "Filter by all projects"}
             >
               <i className="fa-solid fa-border-all" aria-hidden="true"></i>
               <span>{t('filter_all')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'all' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-                }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
+                selectedFilter === 'all' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+              }`}>
                 {projectsList.length}
               </span>
-            </Button>
+            </SpecularButton>
 
-            <Button
-              type="button"
-              variant={selectedFilter === 'retail' ? 'default' : 'outline'}
-              size="lg"
-              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'retail'
-                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
-                : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
-                }`}
+            <SpecularButton
+              size="md"
+              radius={24}
+              lineColor={selectedFilter === 'retail' ? '#FF1E27' : '#64748B'}
+              baseColor={selectedFilter === 'retail' ? '#521014' : '#14141c'}
+              intensity={selectedFilter === 'retail' ? 1.3 : 0.8}
+              shineSize={12}
+              shineFade={35}
+              thickness={1.5}
+              followMouse
+              autoAnimate
+              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
+                selectedFilter === 'retail'
+                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                  : 'text-[#94A3B8]'
+              }`}
               onClick={() => { setSelectedFilter('retail'); setIsExpanded(false); }}
-              aria-label={isAr ? "فلترة مشاريع المحلات والبيع بالتجزئة" : "Filter by retail projects"}
+              ariaLabel={isAr ? "فلترة مشاريع المحلات والبيع بالتجزئة" : "Filter by retail projects"}
             >
               <i className="fa-solid fa-bag-shopping" aria-hidden="true"></i>
               <span>{t('filter_retail')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'retail' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-                }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
+                selectedFilter === 'retail' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+              }`}>
                 {projectsList.filter(p => p.category === 'retail').length}
               </span>
-            </Button>
+            </SpecularButton>
 
-            <Button
-              type="button"
-              variant={selectedFilter === 'dining' ? 'default' : 'outline'}
-              size="lg"
-              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'dining'
-                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
-                : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
-                }`}
+            <SpecularButton
+              size="md"
+              radius={24}
+              lineColor={selectedFilter === 'dining' ? '#FF1E27' : '#64748B'}
+              baseColor={selectedFilter === 'dining' ? '#521014' : '#14141c'}
+              intensity={selectedFilter === 'dining' ? 1.3 : 0.8}
+              shineSize={12}
+              shineFade={35}
+              thickness={1.5}
+              followMouse
+              autoAnimate
+              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
+                selectedFilter === 'dining'
+                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                  : 'text-[#94A3B8]'
+              }`}
               onClick={() => { setSelectedFilter('dining'); setIsExpanded(false); }}
-              aria-label={isAr ? "فلترة مشاريع المطاعم والكافيهات" : "Filter by dining projects"}
+              ariaLabel={isAr ? "فلترة مشاريع المطاعم والكافيهات" : "Filter by dining projects"}
             >
               <i className="fa-solid fa-utensils" aria-hidden="true"></i>
               <span>{t('filter_dining')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'dining' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-                }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
+                selectedFilter === 'dining' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+              }`}>
                 {projectsList.filter(p => p.category === 'dining').length}
               </span>
-            </Button>
+            </SpecularButton>
 
-            <Button
-              type="button"
-              variant={selectedFilter === 'showrooms' ? 'default' : 'outline'}
-              size="lg"
-              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'showrooms'
-                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
-                : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
-                }`}
+            <SpecularButton
+              size="md"
+              radius={24}
+              lineColor={selectedFilter === 'showrooms' ? '#FF1E27' : '#64748B'}
+              baseColor={selectedFilter === 'showrooms' ? '#521014' : '#14141c'}
+              intensity={selectedFilter === 'showrooms' ? 1.3 : 0.8}
+              shineSize={12}
+              shineFade={35}
+              thickness={1.5}
+              followMouse
+              autoAnimate
+              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
+                selectedFilter === 'showrooms'
+                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                  : 'text-[#94A3B8]'
+              }`}
               onClick={() => { setSelectedFilter('showrooms'); setIsExpanded(false); }}
-              aria-label={isAr ? "فلترة مشاريع المعارض والسيارات" : "Filter by showroom projects"}
+              ariaLabel={isAr ? "فلترة مشاريع المعارض والسيارات" : "Filter by showroom projects"}
             >
               <i className="fa-solid fa-car" aria-hidden="true"></i>
               <span>{t('filter_showrooms')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'showrooms' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-                }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
+                selectedFilter === 'showrooms' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+              }`}>
                 {projectsList.filter(p => p.category === 'showrooms').length}
               </span>
-            </Button>
+            </SpecularButton>
           </div>
 
           {/* Infinite Marquee Ticker */}

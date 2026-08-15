@@ -37,15 +37,25 @@ export default function NotFound() {
             </div>
           </Link>
           
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-white/[0.1] bg-white/[0.04] text-xs font-bold text-[#94A3B8] hover:text-white hover:border-white/20 transition-all"
+          <SpecularButton
+            size="sm"
+            radius={12}
+            lineColor="#FF1E27"
+            baseColor="#14141c"
+            intensity={1.0}
+            shineSize={10}
+            shineFade={30}
+            thickness={1.2}
+            followMouse
+            autoAnimate
+            onClick={() => router.push('/')}
+            className="px-3.5 py-1.5 text-xs font-bold text-[#94A3B8] hover:text-white cursor-pointer"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
             <span>{isAr ? 'الرئيسية' : 'Home'}</span>
-          </Link>
+          </SpecularButton>
         </div>
       </header>
 

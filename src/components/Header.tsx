@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
+import SpecularButton from './SpecularButton';
 
 export default function Header() {
   const { language, setLanguage, t, isMounted } = useLanguage();
@@ -193,34 +194,52 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* Right Action Controls: Shadcn Blog Button + Language Switcher */}
+          {/* Right Action Controls: SpecularButton Blog + Language Switcher */}
           <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
             
             {/* Direct Blog Access Button */}
-            <Link
-              href="/blog"
-              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer h-8 sm:h-9 shadow-sm whitespace-nowrap touch-manipulation active:scale-[0.98] ${
+            <SpecularButton
+              size="sm"
+              radius={12}
+              lineColor={pathname.startsWith('/blog') ? '#FF1E27' : '#94A3B8'}
+              baseColor={pathname.startsWith('/blog') ? '#521014' : '#14141c'}
+              intensity={pathname.startsWith('/blog') ? 1.3 : 0.8}
+              shineSize={10}
+              shineFade={30}
+              thickness={1.2}
+              followMouse
+              autoAnimate
+              onClick={() => router.push('/blog')}
+              className={`h-8 sm:h-9 px-2.5 sm:px-4 text-xs font-semibold cursor-pointer ${
                 pathname.startsWith('/blog')
-                  ? 'bg-gradient-to-b from-[#FF2B33] to-[#D31019] text-white border border-white/20 border-t-white/35 shadow-[0_2px_10px_rgba(211,16,25,0.45)]'
-                  : 'bg-white/[0.04] hover:bg-white/[0.08] text-white hover:text-white border border-white/[0.12] hover:border-white/25 backdrop-blur-md'
+                  ? 'text-white shadow-[0_2px_10px_rgba(211,16,25,0.45)]'
+                  : 'text-white'
               }`}
-              aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
+              ariaLabel={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
             >
               <i className="fa-solid fa-newspaper text-xs text-[#FF1E27]"></i>
               <span className="text-[11px] sm:text-xs">{isAr ? 'المقالات' : 'Blog'}</span>
-            </Link>
+            </SpecularButton>
 
             {/* Language Switcher */}
-            <button
-              type="button"
+            <SpecularButton
+              size="sm"
+              radius={12}
+              lineColor="#FF1E27"
+              baseColor="#14141c"
+              intensity={1.0}
+              shineSize={10}
+              shineFade={30}
+              thickness={1.2}
+              followMouse
+              autoAnimate
               onClick={toggleLanguage}
-              className="inline-flex items-center justify-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm h-8 sm:h-9 whitespace-nowrap touch-manipulation active:scale-[0.98] backdrop-blur-md"
-              aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
-              title={isAr ? 'Switch to English' : 'التحويل للعربية'}
+              className="h-8 sm:h-9 px-2 sm:px-3 text-white text-xs font-semibold cursor-pointer"
+              ariaLabel={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-sm"></i>
               <span className="mobile-lang-text hidden sm:inline font-bold">{isAr ? 'EN' : 'العربية'}</span>
-            </button>
+            </SpecularButton>
           </div>
 
         </div>
