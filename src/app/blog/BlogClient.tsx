@@ -72,38 +72,54 @@ export default function BlogClient({ articles }: BlogClientProps) {
     <div className="min-h-screen bg-[#0A0A0C] text-white flex flex-col selection:bg-[#FF1E27] selection:text-white" dir={isMounted ? (isAr ? 'rtl' : 'ltr') : 'ltr'}>
       <Header />
 
-      {/* ── Top Hero Section with Kinetic Glow & Interactive Controls ── */}
-      <section className="relative pt-32 pb-16 px-4 sm:px-6 overflow-hidden border-b border-white/[0.08] bg-[#050507]">
-        {/* Background Ambient Radial Glow */}
+      {/* ── Top Hero Section with Kinetic Glow & Centered Statement ── */}
+      <section className="relative pt-32 sm:pt-36 pb-20 px-4 sm:px-6 overflow-hidden border-b border-white/[0.08] bg-[#07070A] flex flex-col items-center justify-center text-center">
+        {/* Subtle Tech Grid & Ambient Radial Glow Layers */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:28px_28px] opacity-70" />
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[750px] h-[350px] bg-[#FF1E27]/12 blur-[140px] rounded-full" />
-          <div className="absolute top-1/4 start-1/4 w-[300px] h-[200px] bg-red-600/10 blur-[100px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#FF1E27]/12 blur-[150px] rounded-full" />
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[450px] h-[250px] bg-red-600/10 blur-[110px] rounded-full" />
         </div>
 
-        <div className="max-w-6xl mx-auto relative z-10 text-center space-y-7">
-          {/* Animated Pulse Tag */}
-          <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-[#FF1E27]/10 border border-[#FF1E27]/30 text-[#FF1E27] text-xs font-bold uppercase tracking-widest shadow-[0_0_25px_rgba(255,30,39,0.2)] mx-auto">
-            <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse" />
+        <div className="max-w-5xl mx-auto relative z-10 flex flex-col items-center justify-center text-center space-y-8 w-full">
+          {/* Animated Pulse Tag Badge */}
+          <div className="inline-flex items-center justify-center gap-2.5 px-4 py-1.5 rounded-full bg-[#FF1E27]/10 border border-[#FF1E27]/30 text-[#FF1E27] text-xs font-bold uppercase tracking-widest shadow-[0_0_25px_rgba(255,30,39,0.25)] mx-auto backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-ping" />
             <span>{isAr ? 'مركز المعرفة والأبحاث الهندسية' : 'Engineering Knowledge & Technical Studies'}</span>
           </div>
 
-          {/* Symmetrical Hero Title */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-[1.15] tracking-tight max-w-4xl mx-auto">
-            {isAr ? (
-              <>أحدث الدراسات الهندسية في <br /><span className="text-[#FF1E27] drop-shadow-[0_0_35px_rgba(255,30,39,0.4)]">MEP & BIM Modeling</span></>
-            ) : (
-              <>Technical Insights & Standards in <br /><span className="text-[#FF1E27] drop-shadow-[0_0_35px_rgba(255,30,39,0.4)]">MEP & BIM Modeling</span></>
-            )}
-          </h1>
+          {/* Perfectly Centered & Responsive Kinetic Title */}
+          <div className="space-y-4 max-w-4xl mx-auto flex flex-col items-center justify-center text-center">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-[4rem] font-black text-white leading-[1.15] tracking-tight text-center mx-auto">
+              {isAr ? (
+                <>
+                  <span>الريادة الهندسية ونمذجة الـ BIM</span>
+                  <br />
+                  <span className="text-[#FF1E27] drop-shadow-[0_0_40px_rgba(255,30,39,0.45)]">
+                    MEP & BIM Modeling
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span>Technical Insights & Standards in</span>
+                  <br />
+                  <span className="text-[#FF1E27] drop-shadow-[0_0_40px_rgba(255,30,39,0.45)]">
+                    MEP & BIM Modeling
+                  </span>
+                </>
+              )}
+            </h1>
 
-          <p className="text-sm sm:text-base md:text-lg text-[#94A3B8] max-w-2xl mx-auto leading-relaxed font-normal">
-            {isAr
-              ? 'دراسات معتمدة تغطي الكود المصري للحريق، اشتراطات الحماية المدنية، كفاءة أنظمة التكييف والتهوية، والتنسيق الرقمي بنماذج Revit BIM.'
-              : 'Certified engineering articles on Egyptian Fire Codes, Civil Defense regulations, HVAC & Electrical designs, and coordinated Revit BIM execution.'}
-          </p>
+            {/* Perfectly Centered Supporting Statement */}
+            <p className="text-sm sm:text-base md:text-lg text-[#94A3B8] max-w-3xl mx-auto leading-relaxed font-normal text-center">
+              {isAr
+                ? 'دراسات معتمدة تغطي الكود المصري للحريق، اشتراطات الحماية المدنية، كفاءة أنظمة التكييف والتهوية، والتنسيق الرقمي بنماذج Revit BIM.'
+                : 'Certified engineering articles on Egyptian Fire Codes, Civil Defense regulations, HVAC & Electrical designs, and coordinated Revit BIM execution.'}
+            </p>
+          </div>
 
-          {/* Interactive Metric Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-3xl mx-auto pt-2">
+          {/* Interactive Metric Cards (Centered Grid) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-3xl w-full mx-auto pt-2">
             {[
               { val: `${articles.length}+`, label: isAr ? 'دراسة هندسية' : 'Technical Studies', icon: 'fa-solid fa-book-bookmark' },
               { val: '100%', label: isAr ? 'كود مصري معتمد' : 'Egyptian Codes', icon: 'fa-solid fa-certificate' },
@@ -112,9 +128,9 @@ export default function BlogClient({ articles }: BlogClientProps) {
             ].map((stat, i) => (
               <div
                 key={i}
-                className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md hover:border-[#FF1E27]/40 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300 shadow-sm text-center group cursor-default"
+                className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md hover:border-[#FF1E27]/40 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300 shadow-sm text-center flex flex-col items-center justify-center group cursor-default"
               >
-                <div className="text-[#FF1E27] text-sm mb-1 opacity-80 group-hover:scale-110 transition-transform">
+                <div className="text-[#FF1E27] text-sm mb-1.5 opacity-80 group-hover:scale-110 transition-transform">
                   <i className={stat.icon}></i>
                 </div>
                 <div className="text-xl sm:text-2xl font-black text-white">{stat.val}</div>
@@ -123,15 +139,15 @@ export default function BlogClient({ articles }: BlogClientProps) {
             ))}
           </div>
 
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto pt-3">
-            <div className="relative flex items-center">
+          {/* Polished Glass Search Bar (Centered) */}
+          <div className="w-full max-w-2xl mx-auto pt-3">
+            <div className="relative flex items-center w-full">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={isAr ? 'ابحث في موضوعات التكييف، الحريق، الكهرباء، أو الـ BIM...' : 'Search HVAC, Firefighting, Electrical, or BIM topics...'}
-                className="w-full bg-[#131317] border border-white/10 rounded-2xl py-3.5 px-5 ps-12 text-sm text-white placeholder:text-[#64748B] focus:border-[#FF1E27] focus:ring-2 focus:ring-[#FF1E27]/25 outline-none shadow-xl transition-all"
+                className="w-full bg-[#131317]/90 backdrop-blur-xl border border-white/10 rounded-2xl py-3.5 px-5 ps-12 text-sm text-white placeholder:text-[#64748B] focus:border-[#FF1E27] focus:ring-2 focus:ring-[#FF1E27]/25 outline-none shadow-2xl transition-all"
               />
               <svg className="w-5 h-5 text-[#94A3B8] absolute start-4 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -148,8 +164,8 @@ export default function BlogClient({ articles }: BlogClientProps) {
             </div>
           </div>
 
-          {/* Category Filter Bar (Using .project-filter-btn design system) */}
-          <div className="projects-filter-bar !mb-0 !gap-2 pt-2">
+          {/* Category Filter Bar (Centered) */}
+          <div className="projects-filter-bar !mb-0 !gap-2.5 pt-2 flex flex-wrap items-center justify-center mx-auto">
             {categories.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
