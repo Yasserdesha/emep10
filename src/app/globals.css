@@ -39,6 +39,8 @@
 /* SHADCN THEME PRESET VARIABLES */
 /* ========================================================================= */
 :root {
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-cairo: 'Cairo', system-ui, -apple-system, sans-serif;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0.008 326);
   --popover: oklch(1 0 0);
