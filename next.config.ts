@@ -46,17 +46,7 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // Hashed static assets – safe to cache forever (URL changes on each build)
-      {
-        source: '/_next/static/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      // Public images / fonts / icons
+      // Public images / fonts / icons (24h cache, safe since filenames are stable)
       {
         source: '/:path*.(svg|jpg|jpeg|png|webp|avif|gif|ico|woff|woff2|ttf|eot)',
         headers: [

@@ -11,7 +11,7 @@ interface SafeImageProps {
   onClick?: () => void;
 }
 
-const DEFAULT_FALLBACK = 'https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/proj_1786597773542_article_bim_revit_mep_1786596972626.png';
+const DEFAULT_FALLBACK = '/assets/projects/portfolio-2_page-0004.jpg';
 
 export default function SafeImage({
   src,
