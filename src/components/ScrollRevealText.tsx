@@ -21,15 +21,15 @@ export function ScrollRevealText({
 
   useEffect(() => {
     setMounted(true);
+
     const handleScroll = () => {
       if (!containerRef.current) return;
       
       const rect = containerRef.current.getBoundingClientRect();
-      const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+      const windowHeight = window.innerHeight || 800;
       
-      const startOffset = windowHeight * 0.9;
+      const startOffset = windowHeight * 0.95;
       const endOffset = windowHeight * 0.1;
-      
       const totalDistance = startOffset - endOffset;
       const currentPosition = startOffset - rect.top;
       
@@ -37,21 +37,25 @@ export function ScrollRevealText({
       setProgress(newProgress);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Immediately check on mount in case element is already in view
     handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const safeText = typeof text === "string" ? text : "";
-  const words = safeText ? safeText.split(" ") : [];
+  const safeText = typeof text === "string" ? text.trim() : "";
+  // Split on spaces, filter empty strings
+  const words = safeText ? safeText.split(/\s+/).filter(Boolean) : [];
 
+  // SSR / not mounted: render plain text so it's readable immediately
   if (!mounted || words.length === 0) {
     return (
       <Component 
         ref={containerRef as any} 
         id={id}
         className={`font-bold leading-relaxed text-white tracking-tight ${className}`}
+        style={{ opacity: 1 }}
       >
         {safeText}
       </Component>
@@ -63,27 +67,39 @@ export function ScrollRevealText({
       ref={containerRef as any}
       id={id}
       className={`font-bold leading-relaxed text-white tracking-tight ${className}`}
+      // Ensure words wrap naturally regardless of LTR/RTL
+      style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
     >
       {words.map((word, index) => {
-        const appearProgress = progress * (words.length + 1);
-        const wordAppearProgress = Math.max(0, Math.min(1, appearProgress - index));
-        const wordOpacity = Math.max(0.2, wordAppearProgress);
-        const wordBlur = (1 - wordAppearProgress) * 12;
+        const totalWords = words.length;
+        // Each word reveals when scroll progress passes its threshold
+        const wordThreshold = index / totalWords;
+        const wordAppearProgress = Math.max(
+          0,
+          Math.min(1, (progress - wordThreshold) / (1 / totalWords))
+        );
+
+        // Minimum opacity 0.25 so text is ALWAYS readable even without scroll
+        const wordOpacity = progress === 0 ? 1 : Math.max(0.25, wordAppearProgress);
+        const wordBlur = progress === 0 ? 0 : (1 - wordAppearProgress) * 10;
+        const wordY = progress === 0 ? 0 : (1 - wordAppearProgress) * 5;
         
         return (
-          <span
-            key={index}
-            className="inline-block transition-all duration-150 ease-out"
-            style={{
-              opacity: wordOpacity,
-              filter: `blur(${wordBlur}px)`,
-              transform: `translateY(${(1 - wordAppearProgress) * 6}px)`,
-              marginRight: "0.22em",
-              marginLeft: "0.22em",
-            }}
-          >
-            {word}
-          </span>
+          <React.Fragment key={index}>
+            <span
+              className="inline-block transition-all duration-200 ease-out"
+              style={{
+                opacity: wordOpacity,
+                filter: wordBlur > 0.1 ? `blur(${wordBlur}px)` : "none",
+                transform: wordY > 0.1 ? `translateY(${wordY}px)` : "none",
+                willChange: "opacity, filter, transform",
+              }}
+            >
+              {word}
+            </span>
+            {/* Always render a real space between words */}
+            {index < words.length - 1 && " "}
+          </React.Fragment>
         );
       })}
     </Component>

@@ -231,12 +231,12 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
         <div className="container relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center">
           <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[#FF1E27]/10 border border-[#FF1E27]/30 text-[#FF1E27] text-xs sm:text-sm font-bold uppercase tracking-widest mb-6 shadow-[0_0_20px_rgba(255,30,39,0.15)] mx-auto">
             <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse"></span>
-            <span>{isAr ? 'التميز الهندسي ونمذجة معلومات المباني الرقمية' : 'Engineering Excellence & Digital BIM'}</span>
+            <span>{isAr ? 'الريادة الهندسية ونمذجة الـ BIM' : 'Engineering Excellence & Digital BIM'}</span>
           </div>
           <ScrollRevealText
             text={
               isAr
-                ? "مرحباً بكم في E-MEP؛ وجهتكم المتكاملة للحلول الكهروميكانيكية المتقدمة ونمذجة معلومات المباني (BIM)، حيث نجمع بين الدقة الهندسية والاحترافية بأعلى معايير الجودة."
+                ? "مرحباً بكم في E-MEP؛ وجهتكم المتكاملة للحلول الكهروميكانيكية المتقدمة ونمذجة الـ BIM، حيث نجمع بين الدقة الهندسية والاحترافية بأعلى معايير الجودة."
                 : "Pioneering high-precision electromechanical engineering and advanced BIM modeling with uncompromised quality standards across major developments."
             }
             className="text-xl sm:text-2xl md:text-3xl lg:text-[2.5rem] font-black max-w-4xl mx-auto leading-relaxed md:leading-snug text-center tracking-tight"
