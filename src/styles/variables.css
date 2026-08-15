@@ -252,8 +252,8 @@ a.btn-whatsapp:hover {
   background: rgba(255, 30, 39, 0.9);
 }
 
-/* /* ========================================================================= */
-/* HEADER NAVIGATION (MATCHING SCREENSHOT 2 EXACTLY) */
+/* ========================================================================= */
+/* HEADER NAVIGATION (MATCHING SPECULAR BUTTON STYLE IN EVERYTHING) */
 /* ========================================================================= */
 .nav-tab-btn {
   display: inline-flex !important;
@@ -261,12 +261,16 @@ a.btn-whatsapp:hover {
   justify-content: center !important;
   height: 38px !important;
   padding: 0 16px !important;
-  border-radius: 8px !important;
+  border-radius: 12px !important;
   font-size: 0.85rem !important;
   font-weight: 700 !important;
-  color: #CBD5E1 !important;
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #FFFFFF !important;
+  background: rgba(211, 16, 25, 0.22) !important;
+  border: 1.5px solid rgba(255, 30, 39, 0.6) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 15px rgba(211, 16, 25, 0.3) !important;
   cursor: pointer !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   white-space: nowrap !important;
@@ -277,19 +281,19 @@ a.btn-whatsapp:hover {
 
 .nav-tab-btn:hover {
   color: #FFFFFF !important;
-  background: rgba(255, 255, 255, 0.09) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-  transform: translateY(-1px) !important;
+  background: rgba(211, 16, 25, 0.45) !important;
+  border-color: #FF1E27 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 25px rgba(211, 16, 25, 0.6), 0 0 18px rgba(255, 30, 39, 0.45) !important;
+  transform: translateY(-2px) scale(1.02) !important;
 }
 
 .nav-tab-btn.active {
   color: #FFFFFF !important;
-  background: #E50914 !important;
-  background: linear-gradient(180deg, #FF1E27 0%, #D31019 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.5) !important;
-  box-shadow: 0 4px 18px rgba(229, 9, 20, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
-  border-radius: 8px !important;
+  background: linear-gradient(180deg, #FF2B33 0%, #D31019 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 4px 22px rgba(229, 9, 20, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 0 15px rgba(255, 30, 39, 0.5) !important;
+  border-radius: 12px !important;
   transform: translateY(-1px) !important;
 }
 
