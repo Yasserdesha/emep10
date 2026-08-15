@@ -221,14 +221,16 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               />
             </div>
             
-            <button 
+            <Button 
               type="button" 
-              className="hero-cta-btn btn btn-primary focus:ring-2 focus:ring-[#FF1E27] outline-none" 
+              variant="default"
+              size="lg"
+              className="hero-cta-btn rounded-full px-8 py-6 text-base font-bold shadow-2xl shadow-[#FF1E27]/40 hover:shadow-[#FF1E27]/65 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer" 
               onClick={handleScrollToContact}
             >
               <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
               <span>{t('hero_btn_contact')}</span>
-            </button>
+            </Button>
           </div>
         </section>
       </div>

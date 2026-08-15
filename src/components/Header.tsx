@@ -216,7 +216,7 @@ export default function Header() {
               title={isAr ? 'Switch to English' : 'التحويل للعربية'}
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-sm"></i>
-              <span className="hidden sm:inline font-bold">{isAr ? 'EN' : 'العربية'}</span>
+              <span className="mobile-lang-text hidden sm:inline font-bold">{isAr ? 'EN' : 'العربية'}</span>
             </button>
           </div>
 

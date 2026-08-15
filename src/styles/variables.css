@@ -208,3 +208,15 @@ a.btn-whatsapp:hover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(37, 211, 102, 0.55) !important;
   transform: translateY(-1px);
 }
+
+@media (max-width: 640px) {
+  .mobile-lang-text {
+    display: none !important;
+  }
+}
+@media (min-width: 641px) {
+  .mobile-lang-text {
+    display: inline !important;
+  }
+}
+
