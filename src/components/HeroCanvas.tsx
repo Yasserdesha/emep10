@@ -107,7 +107,7 @@ export default function HeroCanvas() {
       if (!isSubscribed) return;
       const diff = stateRef.current.targetFrameIndex - stateRef.current.currentFrameIndex;
       if (Math.abs(diff) > 0.02) {
-        stateRef.current.currentFrameIndex += diff * 0.25;
+        stateRef.current.currentFrameIndex += diff * 0.35;
         renderFrame(stateRef.current.currentFrameIndex);
         animId = requestAnimationFrame(animate);
       } else {
@@ -125,7 +125,7 @@ export default function HeroCanvas() {
       }
     };
 
-    // 4. Scroll Progress Listener for Mobile & Desktop
+    // 4. Scroll Progress Listener for Mobile & Desktop (Guarantees all 35 frames display completely before unpinning)
     const handleScroll = () => {
       const track = document.getElementById('heroTrack');
       if (!track) return;
@@ -136,7 +136,9 @@ export default function HeroCanvas() {
 
       if (totalScrollableDistance > 0) {
         const scrolledDistance = -rect.top;
-        const progress = Math.max(0, Math.min(1, scrolledDistance / totalScrollableDistance));
+        // Reach frame 35 at 85% of scroll distance, so all images are displayed well before leaving the hero
+        const rawProgress = Math.max(0, scrolledDistance / totalScrollableDistance);
+        const progress = Math.min(1, rawProgress / 0.85);
         const nextTarget = Math.min(TOTAL_FRAMES - 1, Math.round(progress * (TOTAL_FRAMES - 1)));
 
         if (nextTarget !== stateRef.current.targetFrameIndex) {

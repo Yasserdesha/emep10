@@ -247,7 +247,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
       </div>
 
       {/* Cinematic Kinetic Statement Section (Inspired by Mono Philosophy & Technology Section) */}
-      <section className="py-14 sm:py-24 bg-[#050507] border-y border-white/[0.06] relative overflow-hidden flex items-center justify-center">
+      <section className="py-10 sm:py-16 bg-[#050507] border-y border-white/[0.06] relative overflow-hidden flex items-center justify-center">
         <div className="container relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center">
           <ElectricBorder
             color="#FF1E27"
