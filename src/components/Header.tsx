@@ -137,33 +137,33 @@ export default function Header() {
           aria-hidden="true"
         />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           
           {/* Brand Logo & Name */}
           <button
             type="button"
             onClick={() => handleNavigate('hero')}
-            className="flex items-center gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0 touch-manipulation active:scale-[0.98] transition-transform"
+            className="flex items-center gap-2 sm:gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0 touch-manipulation active:scale-[0.98] transition-transform"
             aria-label="E-MEP Homepage"
           >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg sm:rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
               <Image 
                 src="/logo/logo.png" 
                 alt="E-MEP Logo" 
-                width={28} 
-                height={28} 
-                style={{ width: '28px', height: '28px', objectFit: 'contain' }} 
+                width={26} 
+                height={26} 
+                style={{ width: '26px', height: '26px', objectFit: 'contain' }} 
                 priority 
               />
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="font-black text-base sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
+              <div className="flex items-center gap-1 sm:gap-1.5">
+                <span className="font-black text-sm sm:text-lg tracking-wider text-white group-hover:text-[#FF1E27] transition-colors leading-none">
                   E-MEP
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
               </div>
-              <span className="text-[8px] sm:text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
+              <span className="text-[7px] sm:text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
                 Electromechanical
               </span>
             </div>
@@ -194,12 +194,12 @@ export default function Header() {
           </nav>
 
           {/* Right Action Controls: Shadcn Blog Button + Language Switcher */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
             
-            {/* Direct Blog Access Button (Shadcn Outline / Glass Variant) */}
+            {/* Direct Blog Access Button */}
             <Link
               href="/blog"
-              className={`inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer h-9 shadow-sm whitespace-nowrap touch-manipulation active:scale-[0.98] ${
+              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer h-8 sm:h-9 shadow-sm whitespace-nowrap touch-manipulation active:scale-[0.98] ${
                 pathname.startsWith('/blog')
                   ? 'bg-gradient-to-b from-[#FF2B33] to-[#D31019] text-white border border-white/20 border-t-white/35 shadow-[0_2px_10px_rgba(211,16,25,0.45)]'
                   : 'bg-white/[0.04] hover:bg-white/[0.08] text-white hover:text-white border border-white/[0.12] hover:border-white/25 backdrop-blur-md'
@@ -207,14 +207,14 @@ export default function Header() {
               aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
             >
               <i className="fa-solid fa-newspaper text-xs text-[#FF1E27]"></i>
-              <span>{isAr ? 'المقالات' : 'Blog'}</span>
+              <span className="text-[11px] sm:text-xs">{isAr ? 'المقالات' : 'Blog'}</span>
             </Link>
 
-            {/* Language Switcher (Shadcn Outline Variant - Icon only on mobile, text on desktop) */}
+            {/* Language Switcher */}
             <button
               type="button"
               onClick={toggleLanguage}
-              className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm h-9 whitespace-nowrap touch-manipulation active:scale-[0.98] backdrop-blur-md"
+              className="inline-flex items-center justify-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm h-8 sm:h-9 whitespace-nowrap touch-manipulation active:scale-[0.98] backdrop-blur-md"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
               title={isAr ? 'Switch to English' : 'التحويل للعربية'}
             >
@@ -230,13 +230,13 @@ export default function Header() {
       {/* 2. MOBILE BOTTOM NAVIGATION DOCK (Shadcn Mobile Glass Surface) */}
       {/* ========================================================================= */}
       <nav 
-        className="lg:hidden fixed inset-x-3 sm:inset-x-6 z-40 bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-2 px-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)] select-none"
+        className="lg:hidden fixed inset-x-2 sm:inset-x-6 z-40 max-w-md mx-auto bg-[#0D0D12]/95 backdrop-blur-2xl border border-white/[0.12] rounded-2xl py-1.5 px-1 shadow-[0_12px_40px_rgba(0,0,0,0.9)] select-none"
         style={{
-          bottom: 'max(0.75rem, env(safe-area-inset-bottom, 0.75rem))'
+          bottom: 'max(0.5rem, env(safe-area-inset-bottom, 0.5rem))'
         }}
         aria-label="Mobile Navigation Dock"
       >
-        <div className="grid grid-cols-5 w-full items-center justify-items-center">
+        <div className="grid grid-cols-5 w-full items-center justify-items-center gap-0.5">
           {mobileBottomItems.map((item) => {
             const isActive = isHomePage && activeSection === item.id;
               
@@ -247,14 +247,14 @@ export default function Header() {
                 onClick={() => handleNavigate(item.id)}
                 aria-label={t(item.i18nKey)}
                 title={t(item.i18nKey)}
-                className={`flex flex-col items-center justify-center w-12 h-11 rounded-xl transition-all cursor-pointer touch-manipulation active:scale-[0.95] ${
+                className={`flex flex-col items-center justify-center w-full max-w-[56px] h-11 rounded-xl transition-all cursor-pointer touch-manipulation active:scale-[0.95] ${
                   isActive 
                     ? 'text-white bg-gradient-to-b from-[#FF2B33]/25 to-[#D31019]/30 border border-[#FF1E27]/40 shadow-[0_0_15px_rgba(255,30,39,0.35)] font-bold' 
                     : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
-                <i className={`${item.icon} text-lg mb-0.5 ${isActive ? 'text-[#FF1E27]' : ''}`} aria-hidden="true"></i>
-                <span className="text-[9px] font-bold leading-none tracking-tight whitespace-nowrap">
+                <i className={`${item.icon} text-base sm:text-lg mb-0.5 ${isActive ? 'text-[#FF1E27]' : ''}`} aria-hidden="true"></i>
+                <span className="text-[8.5px] sm:text-[9.5px] font-bold leading-none tracking-tight whitespace-nowrap">
                   {t(item.i18nKey)}
                 </span>
               </button>

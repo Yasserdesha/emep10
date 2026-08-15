@@ -547,12 +547,13 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 {t('contact_desc')}
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+              <div className="contact-channels">
+                {/* Email */}
                 <a href="mailto:Info@emep-egy.com" className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300">
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-envelope" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_email_label')}</span>
-                    <span className="channel-value truncate">Info@emep-egy.com</span>
+                    <span className="channel-value">Info@emep-egy.com</span>
                   </div>
                 </a>
 
@@ -566,7 +567,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   <div className="channel-icon whatsapp-glow flex-shrink-0"><i className="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_whatsapp_label1')}</span>
-                    <span className="channel-value truncate">{t('channel_whatsapp_val1')}</span>
+                    <span className="channel-value">{t('channel_whatsapp_val1')}</span>
                   </div>
                 </a>
 
@@ -583,7 +584,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   <div className="channel-icon whatsapp-glow flex-shrink-0"><i className="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_whatsapp_label2')}</span>
-                    <span className="channel-value truncate">{t('channel_whatsapp_val2')}</span>
+                    <span className="channel-value">{t('channel_whatsapp_val2')}</span>
                   </div>
                 </a>
 
@@ -595,7 +596,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-phone" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_phone_label1')}</span>
-                    <span className="channel-value truncate">{t('channel_phone_val1')}</span>
+                    <span className="channel-value">{t('channel_phone_val1')}</span>
                   </div>
                 </a>
 
@@ -607,7 +608,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-phone" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_phone_label2')}</span>
-                    <span className="channel-value truncate">{t('channel_phone_val2')}</span>
+                    <span className="channel-value">{t('channel_phone_val2')}</span>
                   </div>
                 </a>
 
@@ -621,7 +622,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-location-dot" aria-hidden="true"></i></div>
                   <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_address_label')}</span>
-                    <span className="channel-value text-xs sm:text-sm font-bold line-clamp-1">{t('channel_address_val')}</span>
+                    <span className="channel-value text-xs sm:text-sm font-bold">{t('channel_address_val')}</span>
                   </div>
                 </a>
               </div>
