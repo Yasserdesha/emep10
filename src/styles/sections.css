@@ -269,6 +269,7 @@ html[dir="rtl"] .bim-badge-overlay { right: auto; left: 1rem; }
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   transition: all var(--transition-fast);
+  -webkit-user-select: none;
   user-select: none;
   touch-action: manipulation;
 }
