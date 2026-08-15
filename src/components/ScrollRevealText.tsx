@@ -67,8 +67,8 @@ export function ScrollRevealText({
       ref={containerRef as any}
       id={id}
       className={`font-bold leading-relaxed text-white tracking-tight ${className}`}
-      // Ensure words wrap naturally regardless of LTR/RTL
-      style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+      // Ensure words wrap naturally and symmetrically regardless of LTR/RTL on mobile
+      style={{ wordBreak: "break-word", overflowWrap: "break-word", textWrap: "balance" as any }}
     >
       {words.map((word, index) => {
         const totalWords = words.length;

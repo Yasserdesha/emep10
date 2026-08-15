@@ -134,14 +134,30 @@ html[dir="rtl"],
 html[dir="rtl"] body {
   font-family: var(--font-cairo), system-ui, -apple-system, sans-serif !important;
   letter-spacing: 0 !important;
-  text-align: right;
+  text-align: start;
 }
 
 html[lang="en"],
 html[dir="ltr"],
 html[dir="ltr"] body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif !important;
-  text-align: left;
+  text-align: start;
+  letter-spacing: -0.012em;
+}
+
+/* Universal Mobile Typography Harmony */
+h1, h2, h3, h4, h5, h6,
+.section-title,
+.section-subtitle,
+.section-desc {
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+p {
+  text-wrap: pretty;
+  overflow-wrap: break-word;
 }
 
 body {
