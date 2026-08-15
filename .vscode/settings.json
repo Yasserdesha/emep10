@@ -39,6 +39,9 @@
     "-webkit-tap-highlight-color",
     "-webkit-text-size-adjust"
   ],
+  "webhint.enable": false,
+  "microsoft-edge-tools.webhint": false,
+  "microsoft-edge-tools.showCompatIssues": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.validate.enable": true,
   "javascript.validate.enable": true

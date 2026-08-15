@@ -3,15 +3,9 @@
     "development"
   ],
   "hints": {
-    "compat-api/css": [
-      "default",
-      {
-        "ignore": [
-          "user-select",
-          "-webkit-text-size-adjust",
-          "scrollbar-width"
-        ]
-      }
-    ]
+    "compat-api/css": "off",
+    "compat-api/html": "off",
+    "typescript-config/consistent-casing": "off",
+    "typescript-config/target": "off"
   }
 }
