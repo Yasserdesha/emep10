@@ -22,6 +22,9 @@
 
 .eb-canvas {
   display: block;
+  max-width: none !important;
+  max-height: none !important;
+  pointer-events: none;
 }
 
 .eb-content {
@@ -52,20 +55,20 @@
 
 .eb-glow-1 {
   border: 1.5px solid var(--electric-border-color);
-  opacity: 0.55;
+  opacity: 0.65;
   filter: blur(1.5px);
 }
 
 .eb-glow-2 {
   border: 2px solid var(--electric-border-color);
-  opacity: 0.35;
+  opacity: 0.45;
   filter: blur(5px);
 }
 
 .eb-background-glow {
   z-index: -1;
-  transform: scale(1.04);
+  transform: scale(1.05);
   filter: blur(24px);
-  opacity: 0.25;
-  background: radial-gradient(circle at center, var(--electric-border-color) 0%, rgba(255, 30, 39, 0.2) 45%, transparent 70%);
+  opacity: 0.35;
+  background: radial-gradient(circle at center, var(--electric-border-color) 0%, rgba(255, 30, 39, 0.25) 50%, transparent 70%);
 }

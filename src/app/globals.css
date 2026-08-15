@@ -184,7 +184,12 @@ section, header, footer, main {
   box-sizing: border-box;
 }
 
-img, video, canvas, svg {
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+canvas:not(.eb-canvas):not(.specular-button__fx canvas) {
   max-width: 100%;
 }
 
@@ -217,6 +222,26 @@ img, video, canvas, svg {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #FF1E27;
+}
+
+/* Custom scrollbar utility for independent CMS panel scrolling */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 30, 39, 0.5) rgba(19, 19, 23, 0.8);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(19, 19, 23, 0.8);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 30, 39, 0.5);
+  border-radius: 3px;
 }
 
 /* ========================================================================= */

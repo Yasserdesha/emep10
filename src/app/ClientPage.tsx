@@ -205,10 +205,10 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           <div className="hero-centered-logo-overlay">
             <ElectricBorder
               color="#FF1E27"
-              speed={1}
-              chaos={0.12}
-              thickness={2}
-              borderRadius={20}
+              speed={1.2}
+              chaos={0.14}
+              thickness={2.5}
+              borderRadius={24}
               className="max-w-fit mx-auto"
             >
               <div className="hero-logo-white-glass">
@@ -219,6 +219,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   height={150}
                   className="hero-pure-logo"
                   style={{ width: '150px', height: '150px', aspectRatio: '1/1' }}
+                  priority
                 />
               </div>
             </ElectricBorder>
@@ -246,19 +247,19 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
       </div>
 
       {/* Cinematic Kinetic Statement Section (Inspired by Mono Philosophy & Technology Section) */}
-      <section className="py-12 sm:py-24 bg-[#050507] border-y border-white/[0.06] relative overflow-hidden flex items-center justify-center">
+      <section className="py-14 sm:py-24 bg-[#050507] border-y border-white/[0.06] relative overflow-hidden flex items-center justify-center">
         <div className="container relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center">
           <ElectricBorder
             color="#FF1E27"
             speed={1.2}
             chaos={0.14}
-            thickness={1.5}
+            thickness={2}
             borderRadius={9999}
-            className="max-w-fit mx-auto mb-5 sm:mb-6"
+            className="max-w-fit mx-auto mb-6 sm:mb-8"
           >
-            <div className="inline-flex items-center justify-center gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#0A0A0C]/90 text-[#FF1E27] text-[11px] sm:text-sm font-bold uppercase tracking-wider sm:tracking-widest max-w-[92vw]">
+            <div className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-[#0A0A0C]/90 text-[#FF1E27] text-xs sm:text-sm font-bold uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse flex-shrink-0"></span>
-              <span className="truncate">{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM'}</span>
+              <span className="whitespace-nowrap">{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM'}</span>
             </div>
           </ElectricBorder>
           <ScrollRevealText
