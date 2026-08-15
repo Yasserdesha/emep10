@@ -211,21 +211,21 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           <HeroCanvas />
           <div className="hero-centered-logo-overlay">
             <div className="hero-logo-white-glass">
-              <Image 
-                src="/logo/logo.png" 
-                alt={isAr ? "شعار شركة E-MEP للأنظمة الكهروميكانيكية" : "E-MEP Electromechanical Works Official Brand Logo"} 
+              <Image
+                src="/logo/logo.png"
+                alt={isAr ? "شعار شركة E-MEP للأنظمة الكهروميكانيكية" : "E-MEP Electromechanical Works Official Brand Logo"}
                 width={150}
                 height={150}
-                className="hero-pure-logo" 
+                className="hero-pure-logo"
                 style={{ width: '150px', height: '150px', aspectRatio: '1/1' }}
               />
             </div>
-            
-            <Button 
-              type="button" 
+
+            <Button
+              type="button"
               variant="default"
               size="lg"
-              className="hero-cta-btn rounded-full px-8 py-6 text-base font-bold shadow-2xl shadow-[#FF1E27]/40 hover:shadow-[#FF1E27]/65 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer" 
+              className="hero-cta-btn rounded-full px-8 py-6 text-base font-bold shadow-2xl shadow-[#FF1E27]/40 hover:shadow-[#FF1E27]/65 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
               onClick={handleScrollToContact}
             >
               <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
@@ -242,9 +242,9 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse"></span>
             <span>{isAr ? 'الريادة الهندسية والتحول الرقمي' : 'Engineering Excellence & Digital BIM'}</span>
           </div>
-          <ScrollRevealText 
+          <ScrollRevealText
             text={
-              isAr 
+              isAr
                 ? "نبتكر معايير هندسية متقدمة في تنفيذ مقاولات الكهروميكانيك ونمذجة الـ BIM بأعلى درجات الدقة والاحترافية عبر كبرى المشروعات الإنشائية."
                 : "Pioneering high-precision electromechanical engineering and advanced BIM modeling with uncompromised quality standards across major developments."
             }
@@ -288,7 +288,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
         <div className="container">
           <div className="glass-panel bim-banner-card">
             <div className="grid grid-2 align-center">
-              
+
               <div className="bim-content">
                 <div className="section-tag"><span>{t('bim_tag')}</span></div>
                 <h2 className="section-title" id="bim-title-heading">
@@ -299,15 +299,15 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 </p>
                 <div className="bim-checklist">
                   <div className="check-item">
-                    <i className="fa-solid fa-circle-check" aria-hidden="true"></i> 
+                    <i className="fa-solid fa-circle-check" aria-hidden="true"></i>
                     <span>{t('bim_c1')}</span>
                   </div>
                   <div className="check-item">
-                    <i className="fa-solid fa-circle-check" aria-hidden="true"></i> 
+                    <i className="fa-solid fa-circle-check" aria-hidden="true"></i>
                     <span>{t('bim_c2')}</span>
                   </div>
                   <div className="check-item">
-                    <i className="fa-solid fa-circle-check" aria-hidden="true"></i> 
+                    <i className="fa-solid fa-circle-check" aria-hidden="true"></i>
                     <span>{t('bim_c3')}</span>
                   </div>
                 </div>
@@ -315,13 +315,13 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
 
               <div className="bim-visual">
                 <div className="bim-frame-preview group">
-                  <FadeImage 
-                    src="/Animated background images/compressed/frame-035.webp" 
-                    alt={isAr ? "مخطط كهروميكانيكي ثلاثي الأبعاد BIM Revit" : "BIM Revit Electromechanical 3D Engineering Model"} 
+                  <FadeImage
+                    src="/Animated background images/compressed/frame-035.webp"
+                    alt={isAr ? "مخطط كهروميكانيكي ثلاثي الأبعاد BIM Revit" : "BIM Revit Electromechanical 3D Engineering Model"}
                     width={600}
                     height={400}
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="bim-image group-hover:scale-105 transition-transform duration-700 ease-out" 
+                    className="bim-image group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                   <div className="bim-badge-overlay">
                     <i className="fa-solid fa-vr-cardboard text-[#FF1E27]" aria-hidden="true"></i>
@@ -354,19 +354,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               type="button"
               variant={selectedFilter === 'all' ? 'default' : 'outline'}
               size="lg"
-              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
-                selectedFilter === 'all' 
-                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]' 
-                  : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
-              }`}
+              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'all'
+                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
+                }`}
               onClick={() => { setSelectedFilter('all'); setIsExpanded(false); }}
               aria-label={isAr ? "عرض جميع المشاريع" : "Filter by all projects"}
             >
               <i className="fa-solid fa-border-all" aria-hidden="true"></i>
               <span>{t('filter_all')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                selectedFilter === 'all' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-              }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'all' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+                }`}>
                 {projectsList.length}
               </span>
             </Button>
@@ -375,19 +373,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               type="button"
               variant={selectedFilter === 'retail' ? 'default' : 'outline'}
               size="lg"
-              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
-                selectedFilter === 'retail' 
-                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]' 
-                  : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
-              }`}
+              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'retail'
+                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
+                }`}
               onClick={() => { setSelectedFilter('retail'); setIsExpanded(false); }}
               aria-label={isAr ? "فلترة مشاريع المحلات والبيع بالتجزئة" : "Filter by retail projects"}
             >
               <i className="fa-solid fa-bag-shopping" aria-hidden="true"></i>
               <span>{t('filter_retail')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                selectedFilter === 'retail' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-              }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'retail' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+                }`}>
                 {projectsList.filter(p => p.category === 'retail').length}
               </span>
             </Button>
@@ -396,19 +392,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               type="button"
               variant={selectedFilter === 'dining' ? 'default' : 'outline'}
               size="lg"
-              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
-                selectedFilter === 'dining' 
-                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]' 
-                  : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
-              }`}
+              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'dining'
+                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
+                }`}
               onClick={() => { setSelectedFilter('dining'); setIsExpanded(false); }}
               aria-label={isAr ? "فلترة مشاريع المطاعم والكافيهات" : "Filter by dining projects"}
             >
               <i className="fa-solid fa-utensils" aria-hidden="true"></i>
               <span>{t('filter_dining')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                selectedFilter === 'dining' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-              }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'dining' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+                }`}>
                 {projectsList.filter(p => p.category === 'dining').length}
               </span>
             </Button>
@@ -417,19 +411,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               type="button"
               variant={selectedFilter === 'showrooms' ? 'default' : 'outline'}
               size="lg"
-              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
-                selectedFilter === 'showrooms' 
-                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]' 
-                  : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
-              }`}
+              className={`rounded-full px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'showrooms'
+                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                : 'border-white/[0.1] bg-white/[0.03] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]'
+                }`}
               onClick={() => { setSelectedFilter('showrooms'); setIsExpanded(false); }}
               aria-label={isAr ? "فلترة مشاريع المعارض والسيارات" : "Filter by showroom projects"}
             >
               <i className="fa-solid fa-car" aria-hidden="true"></i>
               <span>{t('filter_showrooms')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                selectedFilter === 'showrooms' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-              }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'showrooms' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+                }`}>
                 {projectsList.filter(p => p.category === 'showrooms').length}
               </span>
             </Button>
@@ -454,17 +446,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           {/* Projects Grid */}
           <div className="projects-grid" id="projectsContainer">
             {visibleProjects.map((p) => (
-              <div 
-                className="project-card glass-panel group bg-[#111116]/85 border border-white/[0.08] hover:border-[#FF1E27]/50 rounded-2xl overflow-hidden hover:shadow-[0_16px_40px_rgba(0,0,0,0.7),0_0_30px_rgba(211,16,25,0.2)] transition-all duration-400 flex flex-col" 
+              <div
+                className="project-card glass-panel group bg-[#111116]/85 border border-white/[0.08] hover:border-[#FF1E27]/50 rounded-2xl overflow-hidden hover:shadow-[0_16px_40px_rgba(0,0,0,0.7),0_0_30px_rgba(211,16,25,0.2)] transition-all duration-400 flex flex-col"
                 key={p.id}
               >
-                <div 
-                  className="project-img-wrapper relative h-60 overflow-hidden cursor-pointer" 
+                <div
+                  className="project-img-wrapper relative h-60 overflow-hidden cursor-pointer"
                   onClick={() => setSelectedProject(p)}
                 >
-                  <FadeImage 
-                    src={p.image} 
-                    alt={isAr ? p.titleAr : p.titleEn} 
+                  <FadeImage
+                    src={p.image}
+                    alt={isAr ? p.titleAr : p.titleEn}
                     fill
                     sizes="(max-width: 480px) 440px, (max-width: 768px) 600px, (max-width: 1200px) 480px, 360px"
                     className="object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
@@ -473,7 +465,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                     {isAr ? p.catAr : p.catEn}
                   </span>
                   <div className="project-hover-overlay absolute inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Button 
+                    <Button
                       variant="default"
                       size="sm"
                       className="rounded-full shadow-lg shadow-[#FF1E27]/30 pointer-events-none"
@@ -483,7 +475,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                   <div>
                     <h3 className="project-title text-lg font-bold text-white group-hover:text-[#FF1E27] transition-colors line-clamp-1 mb-2">
@@ -500,7 +492,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                       {isAr ? 'تم التسليم والتشغيل' : 'Delivered & Operational'}
                     </span>
                     <span className="flex items-center gap-1.5 font-mono text-white/70">
-                      <i className="fa-solid fa-bolt text-[#FF1E27]" aria-hidden="true"></i> 
+                      <i className="fa-solid fa-bolt text-[#FF1E27]" aria-hidden="true"></i>
                       MEP Scope
                     </span>
                   </div>
@@ -512,7 +504,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           {/* Show More / Show Less Toggle Button with Shadcn styling */}
           {filteredProjects.length > 3 && (
             <div className="flex justify-center mt-12" id="projectsLoadMoreWrap">
-              <Button 
+              <Button
                 type="button"
                 variant="default"
                 size="lg"
@@ -530,8 +522,8 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               >
                 <i className={`fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'}`} aria-hidden="true"></i>
                 <span id="loadMoreBtnText">
-                  {isExpanded 
-                    ? t('btn_show_less') 
+                  {isExpanded
+                    ? t('btn_show_less')
                     : `${t('btn_show_more')} (+${remainingCount})`}
                 </span>
               </Button>
@@ -544,7 +536,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
       <section className="contact-section section-padding" id="contact" aria-labelledby="contact-title-heading">
         <div className="container">
           <div className="grid grid-2 gap-xl">
-            
+
             {/* Contact Info Col */}
             <div className="contact-info-col">
               <div className="section-tag"><span>{t('contact_tag')}</span></div>
@@ -620,7 +612,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 </a>
 
                 {/* Headquarters Address */}
-                <a 
+                <a
                   href="https://maps.app.goo.gl/3kx4MnDFTmaykXjCA?g_st=ac"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -781,37 +773,37 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             <div className="footer-contact-col">
               <h3>{t('footer_col_contact')}</h3>
               <p className="mb-2"><i className="fa-solid fa-envelope red-text" aria-hidden="true"></i> Info@emep-egy.com</p>
-              
+
               {/* WhatsApp Eng. Osama Mohamed */}
-              <a 
-                href="https://wa.me/201111079467?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry." 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://wa.me/201111079467?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry."
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-[#25D366] transition-colors block mb-1.5"
               >
                 <p className="flex items-center gap-2 text-sm">
                   <i className="fa-brands fa-whatsapp whatsapp-text text-base flex-shrink-0" aria-hidden="true"></i>
-                  <span>{isAr ? 'مهندس أسامة محمد (01111079467)' : 'Eng. Osama Mohamed (01111079467)'}</span>
+                  <span>{isAr ? 'مهندس أسامة محمد  ' : 'Eng. Osama Mohamed  '}</span>
                 </p>
               </a>
 
               {/* WhatsApp Eng. Ali Rabie */}
-              <a 
-                href="https://wa.me/201030834372?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry." 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://wa.me/201030834372?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry."
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-[#25D366] transition-colors block mb-2"
               >
                 <p className="flex items-center gap-2 text-sm">
                   <i className="fa-brands fa-whatsapp whatsapp-text text-base flex-shrink-0" aria-hidden="true"></i>
-                  <span>{isAr ? 'مهندس علي ربيع (01030834372)' : 'Eng. Ali Rabie (01030834372)'}</span>
+                  <span>{isAr ? 'مهندس علي ربيع  ' : 'Eng. Ali Rabie  '}</span>
                 </p>
               </a>
 
               <a href="https://maps.app.goo.gl/3kx4MnDFTmaykXjCA?g_st=ac" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF1E27] transition-colors block">
                 <p className="flex items-start gap-2 text-sm"><i className="fa-solid fa-location-dot red-text text-base flex-shrink-0 mt-1" aria-hidden="true"></i> <span>{t('channel_address_val')}</span></p>
               </a>
-              
+
               <div className="footer-social-row flex items-center gap-2.5 mt-4">
                 <a
                   href="https://www.facebook.com/profile.php?id=100087241140432"
@@ -848,7 +840,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             <p suppressHydrationWarning className="text-xs text-[#94A3B8]">
               &copy; {new Date().getFullYear()} E-MEP Electromechanical Works. All rights reserved.
             </p>
-            
+
             {/* Design & Development Copyright Attribution by YASSER MAHMOUD */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-md shadow-sm hover:border-[#1877F2]/50 hover:shadow-[0_0_20px_rgba(24,119,242,0.25)] transition-all duration-300">
               <span className="text-xs text-[#94A3B8]">
@@ -868,10 +860,10 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             </div>
 
             <div style={{ marginTop: '0.25rem' }}>
-              <button 
+              <button
                 type="button"
-                onClick={() => router.push('/accessibility')} 
-                className="footer-nav-item cursor-pointer bg-transparent border-0 text-[#94A3B8] hover:text-white transition-colors" 
+                onClick={() => router.push('/accessibility')}
+                className="footer-nav-item cursor-pointer bg-transparent border-0 text-[#94A3B8] hover:text-white transition-colors"
                 style={{ fontSize: '0.8rem', opacity: 0.8 }}
               >
                 {isAr ? 'إمكانية الوصول' : 'Accessibility Statement'}
@@ -883,8 +875,8 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
 
       {/* Project details lightbox modal */}
       {selectedProject && (
-        <div 
-          className="project-modal-backdrop active" 
+        <div
+          className="project-modal-backdrop active"
           id="projectLightboxModal"
           role="dialog"
           aria-modal="true"
@@ -895,18 +887,18 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           }}
         >
           <div className="project-modal-content glass-panel">
-            <button 
-              type="button" 
-              className="project-modal-close" 
+            <button
+              type="button"
+              className="project-modal-close"
               onClick={() => setSelectedProject(null)}
               aria-label={isAr ? "إغلاق النافذة" : "Close modal"}
             >
               &times;
             </button>
             <div className="project-modal-img-wrap">
-              <Image 
-                src={selectedProject.image} 
-                alt={isAr ? selectedProject.titleAr : selectedProject.titleEn} 
+              <Image
+                src={selectedProject.image}
+                alt={isAr ? selectedProject.titleAr : selectedProject.titleEn}
                 width={800}
                 height={550}
                 style={{ objectFit: 'contain', width: '100%', height: 'auto' }}
@@ -933,7 +925,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   }}
                   className="rounded-full shadow-lg shadow-[#FF1E27]/30 px-6 font-bold cursor-pointer"
                 >
-                  <i className="fa-solid fa-paper-plane" aria-hidden="true"></i> 
+                  <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
                   <span>{isAr ? 'اطلب مشروع مشابه' : 'Request Similar Project'}</span>
                 </Button>
               </div>

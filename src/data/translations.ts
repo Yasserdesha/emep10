@@ -20,7 +20,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     about_title: "Recognized Excellence in Electromechanical Contracting",
     about_desc1: "Founded in 2019, backed with profound experience in the field of MEP engineering, <strong>E-MEP</strong> has established a recognized standard of contribution in the construction industry across Egypt and the region.",
     about_desc2: "Built on our founding pillars — <em>Integrity, Honesty, Authenticity, and Devotion</em> — E-MEP has earned high praise from clients and success partners. We are in constant pursuit to thrive, exceed expectations, and embrace technological advancements in HVAC, Plumbing, Electrical, Firefighting, and Low Current systems.",
-    
+
     // Mission, Vision & Values Cards
     mission_title: "Our Mission",
     mission_desc: "Pursuing regionally recognized existence as a major contributor in electromechanical engineering across all building types, delivering significant value by adopting new trends and challenging conventional practices.",
@@ -79,13 +79,13 @@ export const translations: { [lang: string]: TranslationDict } = {
     contact_desc: "Reach out to our engineering team directly via Email, Phone, or WhatsApp. We are ready to review your project blueprints and provide professional technical consultation.",
     channel_email_label: "Official General Email",
     channel_whatsapp_label: "WhatsApp Support",
-    channel_whatsapp_val: "Eng. Osama Mohamed (01111079467) / Eng. Ali Rabie (01030834372)",
+    channel_whatsapp_val: "Eng. Osama Mohamed   / Eng. Ali Rabie ",
     channel_whatsapp_label1: "Eng. Osama Mohamed (WhatsApp)",
     channel_whatsapp_val1: "01111079467",
     channel_whatsapp_label2: "Eng. Ali Rabie (WhatsApp)",
     channel_whatsapp_val2: "01030834372",
     channel_phone_label: "Direct Engineering Lines",
-    channel_phone_val: "Eng. Osama Mohamed (01111079467) / Eng. Ali Rabie (01030834372)",
+    channel_phone_val: "Eng. Osama Mohamed   / Eng. Ali Rabie ",
     channel_phone_label1: "Eng. Osama Mohamed (Direct Phone)",
     channel_phone_val1: "01111079467",
     channel_phone_label2: "Eng. Ali Rabie (Direct Phone)",
@@ -127,7 +127,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     about_title: "الريادة والتميز في مقاولات واستشارات الكهروميكانيك",
     about_desc1: "تأسست شركة <strong>E-MEP</strong> عام 2019 متكئة على خبرات هندسية عميقة، واستطاعت خلال مسيرتها ترسيخ معايير هندسية مرموقة ومشهود لها في سوق التشييد والبناء المصري والإقليمي.",
     about_desc2: "ترتكز مقومات E-MEP على أربعة أعمدة جوهرية: <em>النزاهة، الصدق، الأصالة، والإخلاص</em>. وتسعى الشركة باستمرار للتطور وتجاوز التوقعات عبر احتضان التكنولوجيا الحديثة في مجالات التكييف، السباكة، الكهرباء، مكافحة الحريق، والتيار الخفيف.",
-    
+
     // Mission, Vision & Values Cards
     mission_title: "رسالتنا",
     mission_desc: "السعي نحو ترسيخ تواجد إقليمي معترف به كأحد المساهمين الأساسيين في تنفيذ أعمال الكهروميكانيك بكافة أنواع المباني، وتقديم قيمة هندسية مضافة عبر تبني اتجاهات حديثة وتحدي المفاهيم التقليدية.",
