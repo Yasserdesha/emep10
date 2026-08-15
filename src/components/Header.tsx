@@ -38,38 +38,41 @@ export default function Header() {
 
   // ScrollSpy & Progress Tracker
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalDocHeight > 0) {
-        const progress = Math.min(100, Math.max(0, (currentScrollY / totalDocHeight) * 100));
-        setScrollProgress(progress);
-      }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
+          if (totalDocHeight > 0) {
+            const progress = Math.min(100, Math.max(0, (currentScrollY / totalDocHeight) * 100));
+            setScrollProgress(progress);
+          }
 
-      if (!isHomePage) return;
+          if (isHomePage) {
+            const scrollPos = currentScrollY + 250;
+            const sections = [
+              { id: 'hero', el: document.getElementById('heroTrack') },
+              { id: 'about', el: document.getElementById('about') },
+              { id: 'services', el: document.getElementById('services') },
+              { id: 'bim', el: document.getElementById('bim') },
+              { id: 'projects', el: document.getElementById('projects') },
+              { id: 'contact', el: document.getElementById('contact') },
+            ];
 
-      const scrollPos = currentScrollY + 250;
-      const sections = [
-        { id: 'hero', el: document.getElementById('heroTrack') },
-        { id: 'about', el: document.getElementById('about') },
-        { id: 'services', el: document.getElementById('services') },
-        { id: 'bim', el: document.getElementById('bim') },
-        { id: 'projects', el: document.getElementById('projects') },
-        { id: 'contact', el: document.getElementById('contact') },
-      ];
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const { id, el } = sections[i];
-        if (el && scrollPos >= el.offsetTop) {
-          setActiveSection(id);
-          if (typeof window !== 'undefined') {
-            const targetHash = id === 'hero' ? '' : `#${id}`;
-            if (window.location.hash !== targetHash && !(id === 'hero' && !window.location.hash)) {
-              window.history.replaceState(null, '', id === 'hero' ? window.location.pathname : `#${id}`);
+            for (let i = sections.length - 1; i >= 0; i--) {
+              const { id, el } = sections[i];
+              if (el && scrollPos >= el.offsetTop) {
+                setActiveSection(id);
+                break;
+              }
             }
           }
-          break;
-        }
+
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

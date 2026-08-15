@@ -547,12 +547,12 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 {t('contact_desc')}
               </p>
 
-              <div className="contact-channels">
-                <a href="mailto:Info@emep-egy.com" className="channel-card glass-panel">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+                <a href="mailto:Info@emep-egy.com" className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300">
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-envelope" aria-hidden="true"></i></div>
-                  <div className="channel-text">
+                  <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_email_label')}</span>
-                    <span className="channel-value">Info@emep-egy.com</span>
+                    <span className="channel-value truncate">Info@emep-egy.com</span>
                   </div>
                 </a>
 
@@ -561,12 +561,12 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   href="https://wa.me/201111079467?text=Hello%20E-MEP%20Engineering%20Team,%20I%20have%20a%20project%20inquiry."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="channel-card glass-panel"
+                  className="channel-card glass-panel hover:border-[#25D366]/50 hover:shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all duration-300"
                 >
-                  <div className="channel-icon red-glow flex-shrink-0"><i className="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
-                  <div className="channel-text">
+                  <div className="channel-icon whatsapp-glow flex-shrink-0"><i className="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+                  <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_whatsapp_label1')}</span>
-                    <span className="channel-value">{t('channel_whatsapp_val1')}</span>
+                    <span className="channel-value truncate">{t('channel_whatsapp_val1')}</span>
                   </div>
                 </a>
 
@@ -578,36 +578,36 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   id="whatsapp-link"
                   data-testid="whatsapp-link"
                   data-phone="01030834372"
-                  className="channel-card glass-panel"
+                  className="channel-card glass-panel hover:border-[#25D366]/50 hover:shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all duration-300"
                 >
-                  <div className="channel-icon red-glow flex-shrink-0"><i className="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
-                  <div className="channel-text">
+                  <div className="channel-icon whatsapp-glow flex-shrink-0"><i className="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+                  <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_whatsapp_label2')}</span>
-                    <span className="channel-value">{t('channel_whatsapp_val2')}</span>
+                    <span className="channel-value truncate">{t('channel_whatsapp_val2')}</span>
                   </div>
                 </a>
 
                 {/* Phone Line 1 */}
                 <a
                   href="tel:+201111079467"
-                  className="channel-card glass-panel"
+                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300"
                 >
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-phone" aria-hidden="true"></i></div>
-                  <div className="channel-text">
+                  <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_phone_label1')}</span>
-                    <span className="channel-value">{t('channel_phone_val1')}</span>
+                    <span className="channel-value truncate">{t('channel_phone_val1')}</span>
                   </div>
                 </a>
 
                 {/* Phone Line 2 */}
                 <a
                   href="tel:+201030834372"
-                  className="channel-card glass-panel"
+                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300"
                 >
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-phone" aria-hidden="true"></i></div>
-                  <div className="channel-text">
+                  <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_phone_label2')}</span>
-                    <span className="channel-value">{t('channel_phone_val2')}</span>
+                    <span className="channel-value truncate">{t('channel_phone_val2')}</span>
                   </div>
                 </a>
 
@@ -616,69 +616,65 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   href="https://maps.app.goo.gl/3kx4MnDFTmaykXjCA?g_st=ac"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="channel-card glass-panel"
+                  className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300"
                 >
                   <div className="channel-icon red-glow flex-shrink-0"><i className="fa-solid fa-location-dot" aria-hidden="true"></i></div>
-                  <div className="channel-text">
+                  <div className="channel-text min-w-0">
                     <span className="channel-label">{t('channel_address_label')}</span>
-                    <span className="channel-value">{t('channel_address_val')}</span>
+                    <span className="channel-value text-xs sm:text-sm font-bold line-clamp-1">{t('channel_address_val')}</span>
                   </div>
                 </a>
               </div>
 
-              {/* Social Media Channels Grid - Modern Luxury Glass Badges */}
+              {/* Social Media Channels Grid - Modern Solid Brand Buttons */}
               <div className="mt-8 pt-6 border-t border-white/[0.08]">
                 <h3 className="text-xs font-bold text-[#94A3B8] mb-4 uppercase tracking-widest flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27]"></span>
                   <span>{t('social_heading')}</span>
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {/* Facebook Button */}
                   <a
                     href="https://www.facebook.com/profile.php?id=100087241140432"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="glass-panel group p-3.5 rounded-2xl flex items-center gap-3 border border-white/[0.08] hover:border-[#1877F2]/60 hover:bg-[#1877F2]/10 hover:shadow-[0_0_25px_rgba(24,119,242,0.3)] transition-all duration-300 cursor-pointer"
-                    aria-label="Facebook Official Page"
+                    className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-[#1A77F2] hover:bg-[#166fe5] border border-[#005fd8] shadow-[0_4px_20px_rgba(26,119,242,0.35)] hover:shadow-[0_6px_25px_rgba(26,119,242,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                    aria-label="Facebook Page"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-[#1877F2]/15 text-[#1877F2] group-hover:bg-[#1877F2] group-hover:text-white flex items-center justify-center text-base transition-all duration-300 shadow-sm flex-shrink-0">
-                      <i className="fa-brands fa-facebook-f"></i>
-                    </div>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-xs font-bold text-white group-hover:text-[#1877F2] transition-colors truncate">Facebook</span>
-                      <span className="text-[10px] text-[#94A3B8] truncate">@e_mep_official</span>
-                    </div>
+                    <svg aria-label="Facebook logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="flex-shrink-0">
+                      <path fill="white" d="M8 12h5V8c0-6 4-7 11-6v5c-4 0-5 0-5 3v2h5l-1 6h-4v12h-6V18H8z" />
+                    </svg>
+                    <span>Facebook</span>
                   </a>
 
-                  <a
-                    href="https://www.instagram.com/e__mep/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="glass-panel group p-3.5 rounded-2xl flex items-center gap-3 border border-white/[0.08] hover:border-[#E4405F]/60 hover:bg-[#E4405F]/10 hover:shadow-[0_0_25px_rgba(228,64,95,0.3)] transition-all duration-300 cursor-pointer"
-                    aria-label="Instagram Official Account"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-[#E4405F]/15 text-[#E4405F] group-hover:bg-gradient-to-tr group-hover:from-[#F58529] group-hover:via-[#DD2A7B] group-hover:to-[#8134AF] group-hover:text-white flex items-center justify-center text-base transition-all duration-300 shadow-sm flex-shrink-0">
-                      <i className="fa-brands fa-instagram"></i>
-                    </div>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-xs font-bold text-white group-hover:text-[#E4405F] transition-colors truncate">Instagram</span>
-                      <span className="text-[10px] text-[#94A3B8] truncate">@e__mep</span>
-                    </div>
-                  </a>
-
+                  {/* LinkedIn Button */}
                   <a
                     href="https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="glass-panel group p-3.5 rounded-2xl flex items-center gap-3 border border-white/[0.08] hover:border-[#0A66C2]/60 hover:bg-[#0A66C2]/10 hover:shadow-[0_0_25px_rgba(10,102,194,0.3)] transition-all duration-300 cursor-pointer"
-                    aria-label="LinkedIn Official Profile"
+                    className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-[#0967C2] hover:bg-[#0855a0] border border-[#0059b3] shadow-[0_4px_20px_rgba(9,103,194,0.35)] hover:shadow-[0_6px_25px_rgba(9,103,194,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                    aria-label="LinkedIn Profile"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-[#0A66C2]/15 text-[#0A66C2] group-hover:bg-[#0A66C2] group-hover:text-white flex items-center justify-center text-base transition-all duration-300 shadow-sm flex-shrink-0">
-                      <i className="fa-brands fa-linkedin-in"></i>
-                    </div>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-xs font-bold text-white group-hover:text-[#0A66C2] transition-colors truncate">LinkedIn</span>
-                      <span className="text-[10px] text-[#94A3B8] truncate">E-MEP Works</span>
-                    </div>
+                    <svg aria-label="LinkedIn logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="flex-shrink-0">
+                      <path fill="white" d="M26.111,3H5.889c-1.595,0-2.889,1.293-2.889,2.889V26.111c0,1.595,1.293,2.889,2.889,2.889H26.111c1.595,0,2.889-1.293,2.889-2.889V5.889c0-1.595-1.293-2.889-2.889-2.889ZM10.861,25.389h-3.877V12.87h3.877v12.519Zm-1.957-14.158c-1.267,0-2.293-1.034-2.293-2.31s1.026-2.31,2.293-2.31,2.292,1.034,2.292,2.31-1.026,2.31-2.292,2.31Zm16.485,14.158h-3.858v-6.571c0-1.802-.685-2.809-2.111-2.809-1.551,0-2.362,1.048-2.362,2.809v6.571h-3.718V12.87h3.718v1.686s1.118-2.069,3.775-2.069,4.556,1.621,4.556,4.975v7.926Z" fillRule="evenodd" />
+                    </svg>
+                    <span>LinkedIn</span>
+                  </a>
+
+                  {/* Instagram Button */}
+                  <a
+                    href="https://www.instagram.com/e__mep/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-95 border border-[#DD2A7B]/50 shadow-[0_4px_20px_rgba(221,42,123,0.35)] hover:shadow-[0_6px_25px_rgba(221,42,123,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                    aria-label="Instagram Account"
+                  >
+                    <svg aria-label="Instagram logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                    </svg>
+                    <span>Instagram</span>
                   </a>
                 </div>
               </div>
@@ -804,33 +800,44 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 <p className="flex items-start gap-2 text-sm"><i className="fa-solid fa-location-dot red-text text-base flex-shrink-0 mt-1" aria-hidden="true"></i> <span>{t('channel_address_val')}</span></p>
               </a>
 
-              <div className="footer-social-row flex items-center gap-2.5 mt-4">
+              <div className="footer-social-row flex flex-wrap items-center gap-2 mt-4">
                 <a
                   href="https://www.facebook.com/profile.php?id=100087241140432"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/[0.04] border border-white/10 hover:border-[#1877F2] hover:bg-[#1877F2] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 shadow-md cursor-pointer hover:scale-110 active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs text-white bg-[#1A77F2] hover:bg-[#166fe5] border border-[#005fd8] shadow-sm hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
                   aria-label="Facebook Page"
                 >
-                  <i className="fa-brands fa-facebook-f"></i>
+                  <svg aria-label="Facebook logo" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <path fill="white" d="M8 12h5V8c0-6 4-7 11-6v5c-4 0-5 0-5 3v2h5l-1 6h-4v12h-6V18H8z" />
+                  </svg>
+                  <span>Facebook</span>
                 </a>
                 <a
                   href="https://www.instagram.com/e__mep/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/[0.04] border border-white/10 hover:border-[#E4405F] hover:bg-gradient-to-tr hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 shadow-md cursor-pointer hover:scale-110 active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-95 border border-[#DD2A7B]/50 shadow-sm hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
                   aria-label="Instagram Account"
                 >
-                  <i className="fa-brands fa-instagram"></i>
+                  <svg aria-label="Instagram logo" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                  </svg>
+                  <span>Instagram</span>
                 </a>
                 <a
                   href="https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/[0.04] border border-white/10 hover:border-[#0A66C2] hover:bg-[#0A66C2] text-[#94A3B8] hover:text-white flex items-center justify-center text-sm transition-all duration-300 shadow-md cursor-pointer hover:scale-110 active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs text-white bg-[#0967C2] hover:bg-[#0855a0] border border-[#0059b3] shadow-sm hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
                   aria-label="LinkedIn Profile"
                 >
-                  <i className="fa-brands fa-linkedin-in"></i>
+                  <svg aria-label="LinkedIn logo" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <path fill="white" d="M26.111,3H5.889c-1.595,0-2.889,1.293-2.889,2.889V26.111c0,1.595,1.293,2.889,2.889,2.889H26.111c1.595,0,2.889-1.293,2.889-2.889V5.889c0-1.595-1.293-2.889-2.889-2.889ZM10.861,25.389h-3.877V12.87h3.877v12.519Zm-1.957-14.158c-1.267,0-2.293-1.034-2.293-2.31s1.026-2.31,2.293-2.31,2.292,1.034,2.292,2.31-1.026,2.31-2.292,2.31Zm16.485,14.158h-3.858v-6.571c0-1.802-.685-2.809-2.111-2.809-1.551,0-2.362,1.048-2.362,2.809v6.571h-3.718V12.87h3.718v1.686s1.118-2.069,3.775-2.069,4.556,1.621,4.556,4.975v7.926Z" fillRule="evenodd" />
+                  </svg>
+                  <span>LinkedIn</span>
                 </a>
               </div>
             </div>
