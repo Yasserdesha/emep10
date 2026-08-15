@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
-import { verifySessionToken } from '../admin/login/route';
+import { verifyAdminAuth } from '@/lib/auth';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import initialArticles from '@/data/articles.json';
 
@@ -9,13 +9,7 @@ const DEFAULT_ARTICLE_IMAGE = 'https://dpptnkehkzolqrifbagx.supabase.co/storage/
 
 // Verify admin authorization
 function isAuthorized(req: NextRequest): boolean {
-  const cookieToken = req.cookies.get('admin_token')?.value;
-  if (cookieToken && verifySessionToken(cookieToken)) {
-    return true;
-  }
-  const authHeader = req.headers.get('Authorization');
-  const adminPassword = process.env.ADMIN_PASSWORD || 'E@mep301997';
-  return Boolean(authHeader && authHeader === `Bearer ${adminPassword}`);
+  return verifyAdminAuth(req);
 }
 
 let inMemoryArticles: any[] | null = null;

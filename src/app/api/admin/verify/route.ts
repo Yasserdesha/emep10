@@ -1,20 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifySessionToken } from '../login/route';
+import { verifyAdminAuth } from '@/lib/auth';
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.cookies.get('admin_token')?.value;
-    const authHeader = req.headers.get('Authorization');
-    const adminPassword = process.env.ADMIN_PASSWORD || 'E@mep301997';
+    const isAuthenticated = verifyAdminAuth(req);
 
-    const isValidHeader = Boolean(
-      authHeader && 
-      adminPassword && 
-      authHeader === `Bearer ${adminPassword}`
-    );
-    const isValidCookie = Boolean(token && verifySessionToken(token));
-
-    if (!isValidCookie && !isValidHeader) {
+    if (!isAuthenticated) {
       return NextResponse.json({ authenticated: false }, { status: 401 });
     }
 

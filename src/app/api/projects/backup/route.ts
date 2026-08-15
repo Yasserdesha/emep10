@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
-import { verifySessionToken } from '../../admin/login/route';
+import { verifyAdminAuth } from '@/lib/auth';
 
 const getJsonPath = () => path.join(process.cwd(), 'src/data/projects.json');
 
 function isAuthorized(req: NextRequest): boolean {
-  const cookieToken = req.cookies.get('admin_token')?.value;
-  if (cookieToken && verifySessionToken(cookieToken)) {
-    return true;
-  }
-  const authHeader = req.headers.get('Authorization');
-  const adminPassword = process.env.ADMIN_PASSWORD || 'emepadmin2026';
-  return authHeader === `Bearer ${adminPassword}`;
+  return verifyAdminAuth(req);
 }
 
 const defaultBrandLogos = [

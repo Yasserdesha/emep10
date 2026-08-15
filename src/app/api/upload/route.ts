@@ -1,22 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
-import { verifySessionToken } from '../admin/login/route';
+import { verifyAdminAuth } from '@/lib/auth';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // Helper to verify admin authorization via HttpOnly session cookie or Bearer header
 function isAuthorized(req: NextRequest): boolean {
-  const cookieToken = req.cookies.get('admin_token')?.value;
-  if (cookieToken && verifySessionToken(cookieToken)) {
-    return true;
-  }
-  const authHeader = req.headers.get('Authorization');
-  const adminPassword = process.env.ADMIN_PASSWORD || 'E@mep301997';
-  return Boolean(
-    authHeader && 
-    adminPassword && 
-    authHeader === `Bearer ${adminPassword}`
-  );
+  return verifyAdminAuth(req);
 }
 
 export async function POST(req: NextRequest) {

@@ -1,37 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { generateSessionToken, verifySessionToken } from '@/lib/auth';
+
+export { generateSessionToken, verifySessionToken };
 
 // In-memory rate limiting map for brute-force protection
 const loginAttempts = new Map<string, { count: number; lockUntil: number }>();
 
 const MAX_ATTEMPTS = 5;
 const LOCK_TIME_MS = 15 * 60 * 1000; // 15 minutes lock
-
-function getJwtSecret(): string {
-  return process.env.ADMIN_JWT_SECRET || process.env.admin_jwt_secret || 'EMEP_SUPER_SECRET_JWT_KEY_2026_PRODUCTION_SECURE';
-}
-
-export function generateSessionToken(): string {
-  const timestamp = Date.now();
-  const random = crypto.randomBytes(16).toString('hex');
-  const payload = `admin:${timestamp}:${random}`;
-  const signature = crypto.createHmac('sha256', getJwtSecret()).update(payload).digest('hex');
-  return `${payload}.${signature}`;
-}
-
-export function verifySessionToken(token: string): boolean {
-  try {
-    if (!token || typeof token !== 'string') return false;
-    const parts = token.split('.');
-    if (parts.length !== 2) return false;
-    const [payload, signature] = parts;
-    const expectedSignature = crypto.createHmac('sha256', getJwtSecret()).update(payload).digest('hex');
-    return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
-  } catch {
-    return false;
-  }
-}
 
 export async function POST(req: NextRequest) {
   try {
