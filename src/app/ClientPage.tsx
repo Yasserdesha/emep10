@@ -236,7 +236,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               followMouse
               autoAnimate
               onClick={handleScrollToContact}
-              className="shadow-2xl shadow-[#FF1E27]/40 px-8 py-5 text-base font-bold cursor-pointer"
+              className="shadow-2xl shadow-[#FF1E27]/40 px-5 sm:px-8 py-3.5 sm:py-5 text-sm sm:text-base font-bold cursor-pointer max-w-[90vw]"
             >
               <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
               <span>{t('hero_btn_contact')}</span>
@@ -246,7 +246,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
       </div>
 
       {/* Cinematic Kinetic Statement Section (Inspired by Mono Philosophy & Technology Section) */}
-      <section className="py-14 sm:py-24 bg-[#050507] border-y border-white/[0.06] relative overflow-hidden flex items-center justify-center">
+      <section className="py-12 sm:py-24 bg-[#050507] border-y border-white/[0.06] relative overflow-hidden flex items-center justify-center">
         <div className="container relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center">
           <ElectricBorder
             color="#FF1E27"
@@ -254,11 +254,11 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             chaos={0.14}
             thickness={1.5}
             borderRadius={9999}
-            className="max-w-fit mx-auto mb-6"
+            className="max-w-fit mx-auto mb-5 sm:mb-6"
           >
-            <div className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full bg-[#0A0A0C]/90 text-[#FF1E27] text-xs sm:text-sm font-bold uppercase tracking-widest">
-              <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse"></span>
-              <span>{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM'}</span>
+            <div className="inline-flex items-center justify-center gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#0A0A0C]/90 text-[#FF1E27] text-[11px] sm:text-sm font-bold uppercase tracking-wider sm:tracking-widest max-w-[92vw]">
+              <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse flex-shrink-0"></span>
+              <span className="truncate">{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM'}</span>
             </div>
           </ElectricBorder>
           <ScrollRevealText
