@@ -9,15 +9,13 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
   display: "swap",
-  preload: false,
 });
 
 const cairo = Cairo({
   variable: "--font-cairo",
-  subsets: ["arabic"],
+  subsets: ["arabic", "latin"],
   weight: ["400", "600", "700"],
   display: "swap",
-  preload: false,
 });
 
 export const metadata: Metadata = {
