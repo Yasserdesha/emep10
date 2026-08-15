@@ -4,6 +4,8 @@
   position: relative;
   border-radius: 20px;
   overflow: hidden;
+  isolation: isolate;
+  contain: paint;
   background: transparent;
   border: none;
   cursor: pointer;
