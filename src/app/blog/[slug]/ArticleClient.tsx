@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import SafeImage from '@/components/SafeImage';
 import { useLanguage } from '@/components/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -308,6 +309,8 @@ export default function ArticleClient({ article, relatedArticles }: ArticleClien
           </section>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 }
