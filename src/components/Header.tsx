@@ -142,16 +142,16 @@ export default function Header() {
           <button
             type="button"
             onClick={() => handleNavigate('hero')}
-            className="flex items-center gap-2 sm:gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0 touch-manipulation active:scale-[0.98] transition-transform"
+            className="flex items-center gap-1.5 sm:gap-3 text-start group cursor-pointer focus:outline-none flex-shrink-0 touch-manipulation active:scale-[0.98] transition-transform"
             aria-label="E-MEP Homepage"
           >
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg sm:rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-300 flex items-center justify-center flex-shrink-0">
               <Image 
                 src="/logo/logo.png" 
                 alt="E-MEP Logo" 
-                width={26} 
-                height={26} 
-                style={{ width: '26px', height: '26px', objectFit: 'contain' }} 
+                width={24} 
+                height={24} 
+                style={{ width: '24px', height: '24px', objectFit: 'contain' }} 
                 priority 
               />
             </div>
@@ -162,7 +162,7 @@ export default function Header() {
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
               </div>
-              <span className="text-[7px] sm:text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
+              <span className="hidden sm:inline-block text-[7px] sm:text-[9px] font-semibold text-[#94A3B8] tracking-widest uppercase mt-0.5 leading-none">
                 Electromechanical
               </span>
             </div>
@@ -196,7 +196,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => router.push('/blog')}
-              className={`h-9 px-3.5 rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
+              className={`h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
                 pathname.startsWith('/blog')
                   ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border-white/25 border-t-white/40 shadow-[0_2px_12px_rgba(211,16,25,0.45)]'
                   : '!text-white/90 !bg-white/[0.06] hover:!bg-white/[0.12] border-white/10 hover:border-white/20'
@@ -204,18 +204,18 @@ export default function Header() {
               aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
             >
               <i className="fa-solid fa-newspaper text-xs text-[#FF1E27]"></i>
-              <span className="text-xs font-bold">{isAr ? 'المقالات' : 'Blog'}</span>
+              <span className="text-[11px] sm:text-xs font-bold">{isAr ? 'المقالات' : 'Blog'}</span>
             </button>
 
             {/* Language Switcher */}
             <button
               type="button"
               onClick={toggleLanguage}
-              className="h-9 px-3 rounded-xl text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
+              className="h-8 sm:h-9 px-2 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
-              <i className="fa-solid fa-globe text-[#FF1E27] text-xs sm:text-sm"></i>
-              <span className="font-bold text-xs">{isAr ? 'EN' : 'عربي'}</span>
+              <i className="fa-solid fa-globe text-[#FF1E27] text-xs"></i>
+              <span className="font-bold">{isAr ? 'EN' : 'عربي'}</span>
             </button>
           </div>
 
