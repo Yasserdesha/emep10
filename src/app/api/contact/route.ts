@@ -42,6 +42,19 @@ export async function POST(req: NextRequest) {
 
     let emailSent = false;
 
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+    const safeName = escapeHtml(name.trim());
+    const safeEmail = escapeHtml(email.trim());
+    const safeService = escapeHtml((service || 'عام').trim());
+    const safeMessage = escapeHtml(message.trim());
+
     if (smtpHost && smtpUser && smtpPass) {
       try {
         const transporter = nodemailer.createTransport({
@@ -57,19 +70,19 @@ export async function POST(req: NextRequest) {
         await transporter.sendMail({
           from: `"E-MEP Website Inquiries" <${smtpUser}>`,
           to: recipientEmail,
-          replyTo: email,
-          subject: `[موقع E-MEP] استفسار هندسي جديد: ${service} - ${name}`,
+          replyTo: email.trim(),
+          subject: `[موقع E-MEP] استفسار هندسي جديد: ${safeService} - ${safeName}`,
           html: `
             <div style="font-family: Arial, sans-serif; direction: rtl; text-align: right; background-color: #0A0A0C; color: #F8FAFC; padding: 25px; border-radius: 10px;">
               <h2 style="color: #FF1E27; border-bottom: 2px solid #FF1E27; padding-bottom: 10px;">
                 طلب استفسار هندسي جديد عبر الموقع الرسمي
               </h2>
-              <p><strong>اسم العميل / الشركة:</strong> ${name}</p>
-              <p><strong>البريد الإلكتروني للعميل:</strong> <a href="mailto:${email}" style="color: #3B82F6;">${email}</a></p>
-              <p><strong>نطاق الخدمة المطلوبة:</strong> ${service}</p>
+              <p><strong>اسم العميل / الشركة:</strong> ${safeName}</p>
+              <p><strong>البريد الإلكتروني للعميل:</strong> <a href="mailto:${safeEmail}" style="color: #3B82F6;">${safeEmail}</a></p>
+              <p><strong>نطاق الخدمة المطلوبة:</strong> ${safeService}</p>
               <div style="background-color: #1A1A22; padding: 15px; border-right: 4px solid #FF1E27; margin-top: 15px; border-radius: 5px;">
                 <h4 style="margin-top: 0; color: #94A3B8;">تفاصيل الرسالة:</h4>
-                <p style="white-space: pre-wrap; color: #FFFFFF;">${message}</p>
+                <p style="white-space: pre-wrap; color: #FFFFFF;">${safeMessage}</p>
               </div>
               <p style="font-size: 12px; color: #64748B; margin-top: 20px;">
                 تم الإرسال والتحقق التلقائي من نموذج اتصل بنا في E-MEP Electromechanical Works.

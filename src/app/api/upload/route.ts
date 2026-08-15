@@ -28,18 +28,26 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;
 
+    // Validate file presence
     if (!file) {
       return NextResponse.json({ message: 'No file uploaded' }, { status: 400 });
     }
 
-    // Validate file type (must be image)
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ message: 'Uploaded file must be an image' }, { status: 400 });
+    // Strict file size limit (5MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json({ message: 'File size exceeds the 5MB limit' }, { status: 400 });
+    }
+
+    // Strict allowed image MIME types
+    const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/svg+xml'];
+    if (!ALLOWED_MIME_TYPES.includes(file.type.toLowerCase())) {
+      return NextResponse.json({ message: 'Only standard image formats (JPEG, PNG, WebP, AVIF, SVG) are permitted' }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const sanitizeFilename = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const sanitizeFilename = file.name.replace(/[^a-zA-Z0-9.-]/g, '_').toLowerCase();
     const filename = `proj_${Date.now()}_${sanitizeFilename}`;
 
     // 1. Try Supabase Storage upload first if configured
