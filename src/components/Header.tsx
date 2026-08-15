@@ -170,34 +170,25 @@ export default function Header() {
             </div>
           </button>
 
-          {/* Desktop Navigation Links (SpecularButton 3D Rim Light) */}
+          {/* Desktop Navigation Links (Shadcn Glassmorphic 3D Nav Pills) */}
           <nav className="hidden lg:flex items-center" aria-label="Desktop Navigation">
-            <ul className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-md">
+            <ul className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
               {desktopNavItems.map((item) => {
                 const isActive = isHomePage && activeSection === item.id;
                 return (
                   <li key={item.id}>
-                    <SpecularButton
-                      size="sm"
-                      radius={12}
-                      lineColor={isActive ? "#FF1E27" : "#64748B"}
-                      baseColor={isActive ? "#521014" : "#14141c"}
-                      intensity={isActive ? 1.3 : 0.7}
-                      shineSize={10}
-                      shineFade={30}
-                      thickness={1.2}
-                      followMouse
-                      autoAnimate
+                    <button
+                      type="button"
                       onClick={() => handleNavigate(item.id)}
-                      className={`h-8 px-3 text-xs font-semibold cursor-pointer transition-all duration-200 ${
-                        isActive
-                          ? "text-white shadow-[0_0_15px_rgba(255,30,39,0.35)]"
-                          : "text-[#94A3B8] hover:text-white"
+                      className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap touch-manipulation select-none outline-none focus:outline-none ${
+                        isActive 
+                          ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border border-white/20 border-t-white/35 shadow-[0_2px_12px_rgba(211,16,25,0.5)] scale-[1.02]' 
+                          : '!text-[#94A3B8] hover:!text-white hover:!bg-white/[0.08] active:!bg-white/[0.12]'
                       }`}
-                      ariaLabel={t(item.i18nKey)}
+                      aria-label={t(item.i18nKey)}
                     >
-                      <span>{t(item.i18nKey)}</span>
-                    </SpecularButton>
+                      {t(item.i18nKey)}
+                    </button>
                   </li>
                 );
               })}
@@ -211,10 +202,10 @@ export default function Header() {
             <button
               type="button"
               onClick={() => router.push('/blog')}
-              className={`h-8 sm:h-9 px-2.5 sm:px-4 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 border active:scale-95 touch-manipulation ${
+              className={`h-8 sm:h-9 px-3 sm:px-3.5 rounded-xl border transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none ${
                 pathname.startsWith('/blog')
-                  ? 'text-white bg-gradient-to-b from-[#FF2B33] to-[#D31019] border-white/25 shadow-[0_2px_12px_rgba(211,16,25,0.45)]'
-                  : 'text-white/90 bg-white/[0.06] hover:bg-white/[0.12] border-white/10 hover:border-white/20'
+                  ? '!text-white !bg-gradient-to-b from-[#FF2B33] to-[#D31019] border-white/25 shadow-[0_2px_12px_rgba(211,16,25,0.45)]'
+                  : '!text-white/90 !bg-white/[0.06] hover:!bg-white/[0.12] border-white/10 hover:border-white/20'
               }`}
               aria-label={isAr ? 'الانتقال إلى المدونة والمقالات' : 'Go to Blog Articles'}
             >
@@ -226,7 +217,7 @@ export default function Header() {
             <button
               type="button"
               onClick={toggleLanguage}
-              className="h-8 sm:h-9 px-2.5 sm:px-3 rounded-xl text-xs font-bold text-white bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation"
+              className="h-8 sm:h-9 px-2.5 sm:px-3 rounded-xl text-xs font-bold !text-white !bg-white/[0.06] hover:!bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-sm touch-manipulation outline-none focus:outline-none"
               aria-label={`Switch language to ${isAr ? 'English' : 'العربية'}`}
             >
               <i className="fa-solid fa-globe text-[#FF1E27] text-xs sm:text-sm"></i>
@@ -258,13 +249,13 @@ export default function Header() {
                 onClick={() => handleNavigate(item.id)}
                 aria-label={t(item.i18nKey)}
                 title={t(item.i18nKey)}
-                className={`flex flex-col items-center justify-center w-full max-w-[56px] h-11 rounded-xl transition-all cursor-pointer touch-manipulation active:scale-[0.95] ${
+                className={`flex flex-col items-center justify-center w-full max-w-[56px] h-11 rounded-xl transition-all cursor-pointer touch-manipulation select-none outline-none focus:outline-none active:scale-[0.95] ${
                   isActive 
-                    ? 'text-white bg-gradient-to-b from-[#FF2B33]/25 to-[#D31019]/30 border border-[#FF1E27]/40 shadow-[0_0_15px_rgba(255,30,39,0.35)] font-bold' 
-                    : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
+                    ? '!text-white !bg-gradient-to-b from-[#FF2B33]/25 to-[#D31019]/35 border border-[#FF1E27]/50 shadow-[0_0_16px_rgba(255,30,39,0.4)] font-bold' 
+                    : '!text-[#94A3B8] hover:!text-white hover:!bg-white/[0.06] active:!bg-white/[0.1]'
                 }`}
               >
-                <i className={`${item.icon} text-base sm:text-lg mb-0.5 ${isActive ? 'text-[#FF1E27]' : ''}`} aria-hidden="true"></i>
+                <i className={`${item.icon} text-base sm:text-lg mb-0.5 ${isActive ? '!text-[#FF1E27]' : ''}`} aria-hidden="true"></i>
                 <span className="text-[8.5px] sm:text-[9.5px] font-bold leading-none tracking-tight whitespace-nowrap">
                   {t(item.i18nKey)}
                 </span>

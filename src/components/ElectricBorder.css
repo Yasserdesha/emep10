@@ -3,12 +3,13 @@
   --electric-border-color: #FF1E27;
   position: relative;
   border-radius: inherit;
-  overflow: visible;
+  overflow: hidden;
   isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 .eb-canvas-container {
@@ -18,12 +19,15 @@
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 3;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .eb-canvas {
   display: block;
-  max-width: none !important;
-  max-height: none !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
   pointer-events: none;
 }
 
