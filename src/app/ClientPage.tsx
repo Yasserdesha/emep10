@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ScrollRevealText from '@/components/ScrollRevealText';
 import FadeImage from '@/components/FadeImage';
+import AboutSection from '@/components/AboutSection';
 
 const ContactForm = dynamic(() => import('@/components/ContactForm'), {
   loading: () => <div className="h-64 flex items-center justify-center text-[#94A3B8]">Loading contact form...</div>,
@@ -249,152 +250,8 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="about-section section-padding relative overflow-hidden" id="about" aria-labelledby="about-title-heading">
-        {/* Floating Trust & Performance Metrics Strip (Kinetic Bento Stats) */}
-        <div className="container mb-14 relative z-20">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-            <div className="group p-5 sm:p-6 rounded-2xl bg-[#111116]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-400 cursor-default">
-              <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
-                2019+
-              </div>
-              <div className="text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-2 group-hover:text-white transition-colors">
-                {isAr ? 'سنة التأسيس والخبرة' : 'Founded Year'}
-              </div>
-            </div>
-
-            <div className="group p-5 sm:p-6 rounded-2xl bg-[#111116]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-400 cursor-default">
-              <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
-                100+
-              </div>
-              <div className="text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-2 group-hover:text-white transition-colors">
-                {isAr ? 'مشروع هندسي مكتمل' : 'Completed Projects'}
-              </div>
-            </div>
-
-            <div className="group p-5 sm:p-6 rounded-2xl bg-[#111116]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-400 cursor-default">
-              <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
-                LOD 500
-              </div>
-              <div className="text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-2 group-hover:text-white transition-colors">
-                {isAr ? 'دقة نمذجة الـ BIM' : 'BIM Precision'}
-              </div>
-            </div>
-
-            <div className="group p-5 sm:p-6 rounded-2xl bg-[#111116]/90 border border-white/[0.08] backdrop-blur-xl text-center shadow-xl hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.25)] hover:-translate-y-1.5 transition-all duration-400 cursor-default">
-              <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#FF1E27] font-mono group-hover:scale-105 transition-transform duration-300">
-                100%
-              </div>
-              <div className="text-xs text-[#94A3B8] font-bold uppercase tracking-wider mt-2 group-hover:text-white transition-colors">
-                {isAr ? 'مطابقة للأكواد الهندسية' : 'Code Compliance'}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="container relative z-10">
-          <div className="grid grid-2 align-center gap-10">
-            
-            <div className="about-image-column">
-              <div className="brand-showcase-box glass-panel white-logo-bg shadow-2xl rounded-3xl p-8 md:p-12 relative overflow-hidden group hover:border-[#FF1E27]/40 hover:shadow-[0_0_50px_rgba(255,30,39,0.25)] transition-all duration-500">
-                <div className="absolute -top-24 -left-24 w-48 h-48 bg-[#FF1E27]/15 rounded-full blur-3xl group-hover:bg-[#FF1E27]/25 transition-all" />
-                <Image 
-                  src="/logo/logo.png" 
-                  alt={isAr ? "علامة الجودة الكهروميكانيكية E-MEP" : "E-MEP High Quality Standard MEP"} 
-                  width={220}
-                  height={220}
-                  className="about-logo-hero mx-auto object-contain group-hover:scale-105 transition-transform duration-500" 
-                />
-                <div className="badge-tag mt-4 flex items-center justify-center gap-2" role="status">
-                  <i className="fa-solid fa-shield-halved text-[#FF1E27]" aria-hidden="true"></i>
-                  <span className="font-bold">{t('about_tag')}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="about-text-column">
-              <div className="section-tag mb-3">
-                <span>{t('about_section_tag')}</span>
-              </div>
-              
-              <ScrollRevealText 
-                as="h2"
-                id="about-title-heading"
-                text={t('about_title')}
-                className="section-title text-2xl sm:text-3xl md:text-4xl font-extrabold mb-5 text-white leading-tight"
-              />
-
-              <p 
-                className="section-desc mb-4 text-[#94A3B8] leading-relaxed text-sm md:text-base"
-                dangerouslySetInnerHTML={{ __html: t('about_desc1') }}
-              />
-              <p 
-                className="section-desc mb-6 text-[#94A3B8] leading-relaxed text-sm md:text-base"
-                dangerouslySetInnerHTML={{ __html: t('about_desc2') }}
-              />
-
-              <div className="about-features-list grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-6">
-                <div className="feature-card group bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.08] hover:border-[#FF1E27]/40 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="feature-icon group-hover:scale-110 group-hover:bg-[#FF1E27]/20 transition-all"><i className="fa-solid fa-fan" aria-hidden="true"></i></div>
-                  <div className="feature-info">
-                    <h3 className="font-bold text-sm text-white group-hover:text-[#FF1E27] transition-colors">{t('feat_hvac_title')}</h3>
-                    <p className="text-xs text-[#94A3B8] mt-1">{t('feat_hvac_desc')}</p>
-                  </div>
-                </div>
-
-                <div className="feature-card group bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.08] hover:border-[#FF1E27]/40 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="feature-icon group-hover:scale-110 group-hover:bg-[#FF1E27]/20 transition-all"><i className="fa-solid fa-bolt" aria-hidden="true"></i></div>
-                  <div className="feature-info">
-                    <h3 className="font-bold text-sm text-white group-hover:text-[#FF1E27] transition-colors">{t('feat_elec_title')}</h3>
-                    <p className="text-xs text-[#94A3B8] mt-1">{t('feat_elec_desc')}</p>
-                  </div>
-                </div>
-
-                <div className="feature-card group bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.08] hover:border-[#FF1E27]/40 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="feature-icon group-hover:scale-110 group-hover:bg-[#FF1E27]/20 transition-all"><i className="fa-solid fa-faucet-drip" aria-hidden="true"></i></div>
-                  <div className="feature-info">
-                    <h3 className="font-bold text-sm text-white group-hover:text-[#FF1E27] transition-colors">{t('feat_plumb_title')}</h3>
-                    <p className="text-xs text-[#94A3B8] mt-1">{t('feat_plumb_desc')}</p>
-                  </div>
-                </div>
-
-                <div className="feature-card group bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.08] hover:border-[#FF1E27]/40 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="feature-icon group-hover:scale-110 group-hover:bg-[#FF1E27]/20 transition-all"><i className="fa-solid fa-fire-extinguisher" aria-hidden="true"></i></div>
-                  <div className="feature-info">
-                    <h3 className="font-bold text-sm text-white group-hover:text-[#FF1E27] transition-colors">{t('feat_fire_title')}</h3>
-                    <p className="text-xs text-[#94A3B8] mt-1">{t('feat_fire_desc')}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Pillars Grid (Elevated Bento Vision/Mission Cards) */}
-          <div className="pillars-grid grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-            <div className="pillar-card group glass-panel bg-[#111116]/90 border border-white/[0.08] hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.2)] p-8 rounded-2xl hover:-translate-y-1.5 transition-all duration-400 relative overflow-hidden">
-              <div className="h-1 w-full absolute top-0 left-0 bg-gradient-to-r from-transparent via-[#FF1E27] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="pillar-icon red-glow text-[#FF1E27] mb-4 text-2xl group-hover:scale-110 transition-transform"><i className="fa-solid fa-bullseye" aria-hidden="true"></i></div>
-              <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#FF1E27] transition-colors">{t('mission_title')}</h3>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">{t('mission_desc')}</p>
-            </div>
-
-            <div className="pillar-card group glass-panel bg-[#111116]/90 border border-white/[0.08] hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.2)] p-8 rounded-2xl hover:-translate-y-1.5 transition-all duration-400 relative overflow-hidden">
-              <div className="h-1 w-full absolute top-0 left-0 bg-gradient-to-r from-transparent via-[#FF1E27] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="pillar-icon red-glow text-[#FF1E27] mb-4 text-2xl group-hover:scale-110 transition-transform"><i className="fa-solid fa-eye" aria-hidden="true"></i></div>
-              <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#FF1E27] transition-colors">{t('vision_title')}</h3>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">{t('vision_desc')}</p>
-            </div>
-
-            <div className="pillar-card group glass-panel bg-[#111116]/90 border border-white/[0.08] hover:border-[#FF1E27]/50 hover:shadow-[0_12px_35px_rgba(211,16,25,0.2)] p-8 rounded-2xl hover:-translate-y-1.5 transition-all duration-400 relative overflow-hidden">
-              <div className="h-1 w-full absolute top-0 left-0 bg-gradient-to-r from-transparent via-[#FF1E27] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="pillar-icon red-glow text-[#FF1E27] mb-4 text-2xl group-hover:scale-110 transition-transform"><i className="fa-solid fa-gem" aria-hidden="true"></i></div>
-              <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#FF1E27] transition-colors">{t('values_title')}</h3>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">{t('values_desc')}</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* About Section (Interactive High-End Engineering Showcase) */}
+      <AboutSection />
 
       {/* Services Section */}
       <section className="services-section section-padding bg-darker" id="services" aria-labelledby="services-title-heading">
