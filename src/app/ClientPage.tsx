@@ -252,7 +252,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           >
             <div className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-[#0A0A0C]/90 text-[#FF1E27] text-xs sm:text-sm font-bold uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-[#FF1E27] animate-pulse flex-shrink-0"></span>
-              <span className="whitespace-nowrap">{isAr ? 'التميز الهندسي ونمذجة الـ BIM الرقمية' : 'Engineering Excellence & Digital BIM Modeling'}</span>
+              <span className="whitespace-nowrap">{isAr ? 'مرحباً بكم في E-MEP' : 'Welcome to E-MEP'}</span>
             </div>
           </ElectricBorder>
           <ScrollRevealText
@@ -374,19 +374,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               thickness={1.5}
               followMouse
               autoAnimate
-              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
-                selectedFilter === 'all'
-                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
-                  : 'text-[#94A3B8]'
-              }`}
+              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'all'
+                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                : 'text-[#94A3B8]'
+                }`}
               onClick={() => { setSelectedFilter('all'); setIsExpanded(false); }}
               ariaLabel={isAr ? "عرض جميع المشاريع" : "Filter by all projects"}
             >
               <i className="fa-solid fa-border-all" aria-hidden="true"></i>
               <span>{t('filter_all')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                selectedFilter === 'all' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-              }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'all' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+                }`}>
                 {projectsList.length}
               </span>
             </SpecularButton>
@@ -402,19 +400,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               thickness={1.5}
               followMouse
               autoAnimate
-              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
-                selectedFilter === 'retail'
-                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
-                  : 'text-[#94A3B8]'
-              }`}
+              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'retail'
+                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                : 'text-[#94A3B8]'
+                }`}
               onClick={() => { setSelectedFilter('retail'); setIsExpanded(false); }}
               ariaLabel={isAr ? "فلترة مشاريع المحلات والبيع بالتجزئة" : "Filter by retail projects"}
             >
               <i className="fa-solid fa-bag-shopping" aria-hidden="true"></i>
               <span>{t('filter_retail')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                selectedFilter === 'retail' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-              }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'retail' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+                }`}>
                 {projectsList.filter(p => p.category === 'retail').length}
               </span>
             </SpecularButton>
@@ -430,19 +426,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               thickness={1.5}
               followMouse
               autoAnimate
-              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
-                selectedFilter === 'dining'
-                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
-                  : 'text-[#94A3B8]'
-              }`}
+              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'dining'
+                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                : 'text-[#94A3B8]'
+                }`}
               onClick={() => { setSelectedFilter('dining'); setIsExpanded(false); }}
               ariaLabel={isAr ? "فلترة مشاريع المطاعم والكافيهات" : "Filter by dining projects"}
             >
               <i className="fa-solid fa-utensils" aria-hidden="true"></i>
               <span>{t('filter_dining')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                selectedFilter === 'dining' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-              }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'dining' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+                }`}>
                 {projectsList.filter(p => p.category === 'dining').length}
               </span>
             </SpecularButton>
@@ -458,19 +452,17 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
               thickness={1.5}
               followMouse
               autoAnimate
-              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${
-                selectedFilter === 'showrooms'
-                  ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
-                  : 'text-[#94A3B8]'
-              }`}
+              className={`px-5 py-2.5 font-bold transition-all duration-300 cursor-pointer ${selectedFilter === 'showrooms'
+                ? 'shadow-[0_0_20px_rgba(255,30,39,0.35)] scale-[1.02]'
+                : 'text-[#94A3B8]'
+                }`}
               onClick={() => { setSelectedFilter('showrooms'); setIsExpanded(false); }}
               ariaLabel={isAr ? "فلترة مشاريع المعارض والسيارات" : "Filter by showroom projects"}
             >
               <i className="fa-solid fa-car" aria-hidden="true"></i>
               <span>{t('filter_showrooms')}</span>
-              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                selectedFilter === 'showrooms' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
-              }`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'showrooms' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
+                }`}>
                 {projectsList.filter(p => p.category === 'showrooms').length}
               </span>
             </SpecularButton>
@@ -606,7 +598,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
 
               <div className="contact-channels">
                 {/* Email */}
-                <button 
+                <button
                   type="button"
                   onClick={() => window.location.href = 'mailto:Info@emep-egy.com'}
                   className="channel-card glass-panel hover:border-[#FF1E27]/50 hover:shadow-[0_0_20px_rgba(211,16,25,0.25)] transition-all duration-300 w-full text-start cursor-pointer"
@@ -687,7 +679,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 </button>
               </div>
 
-              {/* Social Media Channels Grid - Modern 3D Premium Brand Buttons */}
+              {/* Social Media Channels Grid - Modern Brand Buttons */}
               <div className="mt-8 pt-6 border-t border-white/[0.08]">
                 <h3 className="text-xs sm:text-sm font-bold text-white mb-4 uppercase tracking-wider flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
@@ -695,52 +687,52 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {/* Facebook Button */}
-                  <button
+                  <Button
+                    variant="outline"
                     type="button"
                     onClick={() => window.open('https://www.facebook.com/profile.php?id=100087241140432', '_blank', 'noopener,noreferrer')}
-                    className="relative group overflow-hidden inline-flex items-center justify-between px-4 py-3.5 rounded-2xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#1877F2] to-[#0D5EC9] border border-white/20 border-t-white/40 shadow-[0_4px_20px_rgba(24,119,242,0.4),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_8px_28px_rgba(24,119,242,0.65),inset_0_1px_0_rgba(255,255,255,0.5)] hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 cursor-pointer"
+                    className="!border-[#0866fe] !text-[#0866fe] hover:bg-[#0866fe]/10 h-11 w-full cursor-pointer transition-all duration-300 hover:scale-[1.02] rounded-xl"
                     aria-label="Facebook Page"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                        <i className="fa-brands fa-square-facebook text-xl text-white" aria-hidden="true"></i>
-                      </div>
-                      <span className="font-extrabold tracking-wide">Facebook</span>
-                    </div>
-                    <i className="fa-solid fa-arrow-up-right-from-square text-xs text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
-                  </button>
+                    <img
+                      src="https://cdn.shadcnstudio.com/ss-assets/brand-logo/facebook-icon.png?width=20&height=20&format=auto"
+                      alt="Facebook Icon"
+                      className="size-5"
+                    />
+                    <span className="flex flex-1 justify-center font-bold">Facebook</span>
+                  </Button>
 
                   {/* LinkedIn Button */}
-                  <button
+                  <Button
+                    variant="outline"
                     type="button"
                     onClick={() => window.open('https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422', '_blank', 'noopener,noreferrer')}
-                    className="relative group overflow-hidden inline-flex items-center justify-between px-4 py-3.5 rounded-2xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#0A66C2] to-[#004182] border border-white/20 border-t-white/40 shadow-[0_4px_20px_rgba(10,102,194,0.4),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_8px_28px_rgba(10,102,194,0.65),inset_0_1px_0_rgba(255,255,255,0.5)] hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 cursor-pointer"
+                    className="!border-[#0a66c2] !text-[#0a66c2] hover:bg-[#0a66c2]/10 h-11 w-full cursor-pointer transition-all duration-300 hover:scale-[1.02] rounded-xl"
                     aria-label="LinkedIn Profile"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                        <i className="fa-brands fa-square-linkedin text-xl text-white" aria-hidden="true"></i>
-                      </div>
-                      <span className="font-extrabold tracking-wide">LinkedIn</span>
-                    </div>
-                    <i className="fa-solid fa-arrow-up-right-from-square text-xs text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
-                  </button>
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg"
+                      alt="LinkedIn Icon"
+                      className="size-5"
+                    />
+                    <span className="flex flex-1 justify-center font-bold">LinkedIn</span>
+                  </Button>
 
                   {/* Instagram Button */}
-                  <button
+                  <Button
+                    variant="outline"
                     type="button"
                     onClick={() => window.open('https://www.instagram.com/e__mep/', '_blank', 'noopener,noreferrer')}
-                    className="relative group overflow-hidden inline-flex items-center justify-between px-4 py-3.5 rounded-2xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] border border-white/25 border-t-white/45 shadow-[0_4px_20px_rgba(221,42,123,0.4),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_8px_28px_rgba(221,42,123,0.65),inset_0_1px_0_rgba(255,255,255,0.5)] hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 cursor-pointer"
+                    className="!border-[#e1306c] !text-[#e1306c] hover:bg-[#e1306c]/10 h-11 w-full cursor-pointer transition-all duration-300 hover:scale-[1.02] rounded-xl"
                     aria-label="Instagram Account"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                        <i className="fa-brands fa-instagram text-xl text-white" aria-hidden="true"></i>
-                      </div>
-                      <span className="font-extrabold tracking-wide">Instagram</span>
-                    </div>
-                    <i className="fa-solid fa-arrow-up-right-from-square text-xs text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
-                  </button>
+                    <img
+                      src="https://cdn.shadcnstudio.com/ss-assets/brand-logo/instagram-icon.png?width=20&height=20&format=auto"
+                      alt="Instagram Icon"
+                      className="size-5"
+                    />
+                    <span className="flex flex-1 justify-center font-bold">Instagram</span>
+                  </Button>
                 </div>
               </div>
             </div>

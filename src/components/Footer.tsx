@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/LanguageContext';
+import { Button } from '@/components/ui/button';
 
 export default function Footer() {
   const { t, language, isMounted } = useLanguage();
@@ -155,36 +156,51 @@ export default function Footer() {
             </button>
 
             {/* Official Social Buttons */}
-            <div className="footer-social-row flex flex-wrap items-center gap-2 pt-2">
-              <button
+            <div className="footer-social-row flex flex-wrap items-center gap-2.5 pt-2">
+              <Button
+                variant="outline"
                 type="button"
                 onClick={() => openExternal('https://www.facebook.com/profile.php?id=100087241140432')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs text-white bg-[#1A77F2] hover:bg-[#166fe5] border border-[#005fd8] shadow-sm hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+                className="!border-[#0866fe] !text-[#0866fe] hover:bg-[#0866fe]/10 h-8 px-3 text-xs font-semibold cursor-pointer transition-all duration-200 hover:scale-105 rounded-lg"
                 aria-label="Facebook Page"
               >
-                <i className="fa-brands fa-square-facebook text-base flex-shrink-0" aria-hidden="true"></i>
+                <img
+                  src="https://cdn.shadcnstudio.com/ss-assets/brand-logo/facebook-icon.png?width=16&height=16&format=auto"
+                  alt="Facebook Icon"
+                  className="size-4"
+                />
                 <span>Facebook</span>
-              </button>
+              </Button>
 
-              <button
+              <Button
+                variant="outline"
                 type="button"
                 onClick={() => openExternal('https://www.instagram.com/e__mep/')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-95 border border-[#DD2A7B]/50 shadow-sm hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+                className="!border-[#e1306c] !text-[#e1306c] hover:bg-[#e1306c]/10 h-8 px-3 text-xs font-semibold cursor-pointer transition-all duration-200 hover:scale-105 rounded-lg"
                 aria-label="Instagram Account"
               >
-                <i className="fa-brands fa-instagram text-base flex-shrink-0" aria-hidden="true"></i>
+                <img
+                  src="https://cdn.shadcnstudio.com/ss-assets/brand-logo/instagram-icon.png?width=16&height=16&format=auto"
+                  alt="Instagram Icon"
+                  className="size-4"
+                />
                 <span>Instagram</span>
-              </button>
+              </Button>
 
-              <button
+              <Button
+                variant="outline"
                 type="button"
                 onClick={() => openExternal('https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs text-white bg-[#0967C2] hover:bg-[#0855a0] border border-[#0059b3] shadow-sm hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+                className="!border-[#0a66c2] !text-[#0a66c2] hover:bg-[#0a66c2]/10 h-8 px-3 text-xs font-semibold cursor-pointer transition-all duration-200 hover:scale-105 rounded-lg"
                 aria-label="LinkedIn Profile"
               >
-                <i className="fa-brands fa-square-linkedin text-base flex-shrink-0" aria-hidden="true"></i>
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg"
+                  alt="LinkedIn Icon"
+                  className="size-4"
+                />
                 <span>LinkedIn</span>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
