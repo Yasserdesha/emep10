@@ -126,6 +126,7 @@ export function AboutSection() {
                 alt={isAr ? "علامة الجودة الكهروميكانيكية E-MEP" : "E-MEP High Quality Standard MEP"} 
                 width={220}
                 height={220}
+                priority
                 className="about-logo-hero mx-auto object-contain group-hover:scale-105 transition-transform duration-500" 
               />
               <div className="badge-tag mt-6 flex items-center justify-center gap-2" role="status">
