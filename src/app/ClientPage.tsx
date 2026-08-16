@@ -701,9 +701,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                     className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-[#1A77F2] hover:bg-[#166fe5] border border-[#005fd8] shadow-[0_4px_20px_rgba(26,119,242,0.35)] hover:shadow-[0_6px_25px_rgba(26,119,242,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
                     aria-label="Facebook Page"
                   >
-                    <svg aria-label="Facebook logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="flex-shrink-0">
-                      <path fill="white" d="M8 12h5V8c0-6 4-7 11-6v5c-4 0-5 0-5 3v2h5l-1 6h-4v12h-6V18H8z" />
-                    </svg>
+                    <i className="fa-brands fa-square-facebook text-lg flex-shrink-0" aria-hidden="true"></i>
                     <span>Facebook</span>
                   </button>
 
@@ -714,9 +712,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                     className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-[#0967C2] hover:bg-[#0855a0] border border-[#0059b3] shadow-[0_4px_20px_rgba(9,103,194,0.35)] hover:shadow-[0_6px_25px_rgba(9,103,194,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
                     aria-label="LinkedIn Profile"
                   >
-                    <svg aria-label="LinkedIn logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="flex-shrink-0">
-                      <path fill="white" d="M26.111,3H5.889c-1.595,0-2.889,1.293-2.889,2.889V26.111c0,1.595,1.293,2.889,2.889,2.889H26.111c1.595,0,2.889-1.293,2.889-2.889V5.889c0-1.595-1.293-2.889-2.889-2.889ZM10.861,25.389h-3.877V12.87h3.877v12.519Zm-1.957-14.158c-1.267,0-2.293-1.034-2.293-2.31s1.026-2.31,2.293-2.31,2.292,1.034,2.292,2.31-1.026,2.31-2.292,2.31Zm16.485,14.158h-3.858v-6.571c0-1.802-.685-2.809-2.111-2.809-1.551,0-2.362,1.048-2.362,2.809v6.571h-3.718V12.87h3.718v1.686s1.118-2.069,3.775-2.069,4.556,1.621,4.556,4.975v7.926Z" fillRule="evenodd" />
-                    </svg>
+                    <i className="fa-brands fa-square-linkedin text-lg flex-shrink-0" aria-hidden="true"></i>
                     <span>LinkedIn</span>
                   </button>
 
@@ -727,11 +723,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                     className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-95 border border-[#DD2A7B]/50 shadow-[0_4px_20px_rgba(221,42,123,0.35)] hover:shadow-[0_6px_25px_rgba(221,42,123,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
                     aria-label="Instagram Account"
                   >
-                    <svg aria-label="Instagram logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
-                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-                    </svg>
+                    <i className="fa-brands fa-instagram text-lg flex-shrink-0" aria-hidden="true"></i>
                     <span>Instagram</span>
                   </button>
                 </div>
