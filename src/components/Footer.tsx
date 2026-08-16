@@ -37,13 +37,15 @@ export default function Footer() {
           {/* Col 1: Brand Info */}
           <div className="space-y-4">
             <div className="footer-logo-wrap flex items-center gap-3">
-              <Image
-                src="/logo/logo.png"
-                alt="E-MEP Logo"
-                width={36}
-                height={36}
-                className="footer-logo object-contain"
-              />
+              <div className="w-10 h-10 bg-white rounded-xl p-1 shadow-[0_0_15px_rgba(255,255,255,0.15)] flex items-center justify-center flex-shrink-0">
+                <Image
+                  src="/logo/logo.png"
+                  alt="E-MEP Logo"
+                  width={30}
+                  height={30}
+                  className="footer-logo object-contain"
+                />
+              </div>
               <span className="footer-logo-text font-black text-xl tracking-tight text-white">
                 E-MEP
               </span>
