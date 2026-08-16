@@ -687,10 +687,10 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 </button>
               </div>
 
-              {/* Social Media Channels Grid - Modern Solid Brand Buttons */}
+              {/* Social Media Channels Grid - Modern 3D Premium Brand Buttons */}
               <div className="mt-8 pt-6 border-t border-white/[0.08]">
-                <h3 className="text-xs font-bold text-[#94A3B8] mb-4 uppercase tracking-widest flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF1E27]"></span>
+                <h3 className="text-xs sm:text-sm font-bold text-white mb-4 uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#FF1E27] shadow-[0_0_8px_#FF1E27]"></span>
                   <span>{t('social_heading')}</span>
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -698,33 +698,48 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                   <button
                     type="button"
                     onClick={() => window.open('https://www.facebook.com/profile.php?id=100087241140432', '_blank', 'noopener,noreferrer')}
-                    className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-[#1A77F2] hover:bg-[#166fe5] border border-[#005fd8] shadow-[0_4px_20px_rgba(26,119,242,0.35)] hover:shadow-[0_6px_25px_rgba(26,119,242,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                    className="relative group overflow-hidden inline-flex items-center justify-between px-4 py-3.5 rounded-2xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#1877F2] to-[#0D5EC9] border border-white/20 border-t-white/40 shadow-[0_4px_20px_rgba(24,119,242,0.4),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_8px_28px_rgba(24,119,242,0.65),inset_0_1px_0_rgba(255,255,255,0.5)] hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 cursor-pointer"
                     aria-label="Facebook Page"
                   >
-                    <i className="fa-brands fa-square-facebook text-lg flex-shrink-0" aria-hidden="true"></i>
-                    <span>Facebook</span>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <i className="fa-brands fa-square-facebook text-xl text-white" aria-hidden="true"></i>
+                      </div>
+                      <span className="font-extrabold tracking-wide">Facebook</span>
+                    </div>
+                    <i className="fa-solid fa-arrow-up-right-from-square text-xs text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
                   </button>
 
                   {/* LinkedIn Button */}
                   <button
                     type="button"
                     onClick={() => window.open('https://www.linkedin.com/in/e-mep-electromechanical-works-3559b2422', '_blank', 'noopener,noreferrer')}
-                    className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-[#0967C2] hover:bg-[#0855a0] border border-[#0059b3] shadow-[0_4px_20px_rgba(9,103,194,0.35)] hover:shadow-[0_6px_25px_rgba(9,103,194,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                    className="relative group overflow-hidden inline-flex items-center justify-between px-4 py-3.5 rounded-2xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#0A66C2] to-[#004182] border border-white/20 border-t-white/40 shadow-[0_4px_20px_rgba(10,102,194,0.4),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_8px_28px_rgba(10,102,194,0.65),inset_0_1px_0_rgba(255,255,255,0.5)] hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 cursor-pointer"
                     aria-label="LinkedIn Profile"
                   >
-                    <i className="fa-brands fa-square-linkedin text-lg flex-shrink-0" aria-hidden="true"></i>
-                    <span>LinkedIn</span>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <i className="fa-brands fa-square-linkedin text-xl text-white" aria-hidden="true"></i>
+                      </div>
+                      <span className="font-extrabold tracking-wide">LinkedIn</span>
+                    </div>
+                    <i className="fa-solid fa-arrow-up-right-from-square text-xs text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
                   </button>
 
                   {/* Instagram Button */}
                   <button
                     type="button"
                     onClick={() => window.open('https://www.instagram.com/e__mep/', '_blank', 'noopener,noreferrer')}
-                    className="inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl font-bold text-xs text-white bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-95 border border-[#DD2A7B]/50 shadow-[0_4px_20px_rgba(221,42,123,0.35)] hover:shadow-[0_6px_25px_rgba(221,42,123,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                    className="relative group overflow-hidden inline-flex items-center justify-between px-4 py-3.5 rounded-2xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] border border-white/25 border-t-white/45 shadow-[0_4px_20px_rgba(221,42,123,0.4),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_8px_28px_rgba(221,42,123,0.65),inset_0_1px_0_rgba(255,255,255,0.5)] hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 cursor-pointer"
                     aria-label="Instagram Account"
                   >
-                    <i className="fa-brands fa-instagram text-lg flex-shrink-0" aria-hidden="true"></i>
-                    <span>Instagram</span>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <i className="fa-brands fa-instagram text-xl text-white" aria-hidden="true"></i>
+                      </div>
+                      <span className="font-extrabold tracking-wide">Instagram</span>
+                    </div>
+                    <i className="fa-solid fa-arrow-up-right-from-square text-xs text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
                   </button>
                 </div>
               </div>
