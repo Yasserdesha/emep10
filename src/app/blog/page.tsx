@@ -6,6 +6,29 @@ import BlogClient from './BlogClient';
 export const metadata: Metadata = {
   title: 'مدونة الهندسة الكهروميكانيكية وBIM | مقالات E-MEP المتخصصة',
   description: 'مقالات وأدلة هندسية شاملة حول الكود المصري للحماية المدنية، واشتراطات حريق المطاعم والمحلات، ونمذجة معلومات البناء BIM Revit.',
+  openGraph: {
+    type: 'website',
+    locale: 'ar_EG',
+    alternateLocale: 'en_US',
+    url: '/blog',
+    siteName: 'E-MEP Electromechanical Works',
+    title: 'مدونة الهندسة الكهروميكانيكية وBIM | E-MEP',
+    description: 'مقالات وأدلة هندسية شاملة حول الكود المصري للحماية المدنية ونمذجة الـ BIM.',
+    images: [
+      {
+        url: '/logo/logo.png',
+        width: 800,
+        height: 800,
+        alt: 'E-MEP Blog',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'مدونة الهندسة الكهروميكانيكية وBIM | E-MEP',
+    description: 'مقالات هندسية متخصصة من شركة E-MEP.',
+    images: ['/logo/logo.png'],
+  },
 };
 
 export const revalidate = 60; // ISR 60s

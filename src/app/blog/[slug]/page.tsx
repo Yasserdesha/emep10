@@ -149,13 +149,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await getArticleBySlug(slug);
   if (!article) return { title: 'المقال غير موجود | E-MEP' };
 
+  const title = `${article.titleAr} | مدونة E-MEP الهندسية`;
+  const description = article.summaryAr || article.summaryEn || 'مقال هندسي متخصص من شركة E-MEP للأعمال الكهروميكانيكية ونمذجة الـ BIM.';
+  const imageUrl = article.image || '/logo/logo.png';
+
   return {
-    title: `${article.titleAr} | مدونة E-MEP الهندسية`,
-    description: article.summaryAr,
+    title,
+    description,
     openGraph: {
-      title: article.titleAr,
-      description: article.summaryAr,
-      images: [{ url: article.image }],
+      type: 'article',
+      locale: 'ar_EG',
+      alternateLocale: 'en_US',
+      url: `/blog/${encodeURIComponent(article.slug)}`,
+      siteName: 'E-MEP Electromechanical Works',
+      title,
+      description,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.titleAr || 'E-MEP Article Cover',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [imageUrl],
     },
   };
 }
