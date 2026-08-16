@@ -78,6 +78,7 @@
   align-items: center;
   justify-content: center;
   animation: logoPulseFloat 4s ease-in-out infinite alternate;
+  will-change: transform;
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -94,11 +95,9 @@
 @keyframes logoPulseFloat {
   0% {
     transform: translateY(0px) scale(1);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1), 0 8px 20px rgba(0, 0, 0, 0.45);
   }
   100% {
     transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 15px 30px rgba(0, 0, 0, 0.6);
   }
 }
 
