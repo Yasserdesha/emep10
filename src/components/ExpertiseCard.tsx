@@ -141,15 +141,15 @@ export default function ExpertiseCard({ img, datSrc, titleKey, descKey }: Expert
 
         <div className="expertise-overlay pointer-events-none absolute inset-0"></div>
       </div>
-      <div className="expertise-content">
-        <div className="expertise-badge badge-live">
+      <div className="expertise-content flex flex-col items-center justify-end text-center p-4 sm:p-7 w-full h-full relative z-10 box-border">
+        <div className="expertise-badge badge-live mb-2.5 sm:mb-3 mx-auto">
           <span className="badge-dot"></span>
           <span>{t('badge_live')}</span>
         </div>
-        <h3 className="expertise-title font-bold text-lg text-white mb-2">
+        <h3 className="expertise-title font-extrabold text-base sm:text-xl text-white mb-2 text-center leading-snug">
           {t(titleKey)}
         </h3>
-        <p className="expertise-desc text-sm text-[#CBD5E1] mb-0">
+        <p className="expertise-desc text-xs sm:text-sm text-[#CBD5E1] text-center max-w-md mx-auto leading-relaxed">
           {t(descKey)}
         </p>
       </div>
