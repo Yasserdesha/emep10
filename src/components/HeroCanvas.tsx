@@ -70,20 +70,39 @@ export default function HeroCanvas() {
       ctx.drawImage(img, nx, ny, nw, nh);
     };
 
-    // 1. Immediate parallel preloading of all 35 lightweight WebP frames
-    for (let i = 0; i < TOTAL_FRAMES; i++) {
-      const img = new Image();
-      img.src = getFramePath(i);
-      img.onload = () => {
-        if (!isSubscribed) return;
-        if (i === 0 && stateRef.current.currentFrameIndex === 0) {
-          renderFrame(0);
-        }
-      };
-      images[i] = img;
-    }
-
+    // 1. Immediate loading of the First Frame for instant visual display
+    const img0 = new Image();
+    img0.src = getFramePath(0);
+    img0.onload = () => {
+      if (!isSubscribed) return;
+      if (stateRef.current.currentFrameIndex === 0) {
+        renderFrame(0);
+      }
+    };
+    images[0] = img0;
     imagesRef.current = images;
+
+    // 2. Defer preloading remaining 34 frames until initial paint is complete
+    let remainingLoaded = false;
+    const preloadRemaining = () => {
+      if (remainingLoaded || !isSubscribed) return;
+      remainingLoaded = true;
+
+      for (let i = 1; i < TOTAL_FRAMES; i++) {
+        const img = new Image();
+        img.src = getFramePath(i);
+        images[i] = img;
+      }
+    };
+
+    // Trigger preload on idle or after a short delay (1.2s)
+    const idleTimeout = setTimeout(() => {
+      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+        (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => preloadRemaining());
+      } else {
+        preloadRemaining();
+      }
+    }, 1200);
 
     // 2. Responsive Canvas Sizing with DPR cap for 60fps performance
     const resizeCanvas = () => {
@@ -127,6 +146,7 @@ export default function HeroCanvas() {
 
     // 4. Scroll Progress Listener for Mobile & Desktop (Guarantees all 35 frames display completely before unpinning)
     const handleScroll = () => {
+      preloadRemaining();
       const track = document.getElementById('heroTrack');
       if (!track) return;
 
@@ -162,6 +182,7 @@ export default function HeroCanvas() {
     // Cleanup
     return () => {
       isSubscribed = false;
+      clearTimeout(idleTimeout);
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resetHeroCanvas', handleReset);
