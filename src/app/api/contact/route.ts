@@ -26,8 +26,12 @@ export async function POST(req: NextRequest) {
     if (body.captchaToken === "invalidtoken") {
       return NextResponse.json({ message: 'Invalid captcha token' }, { status: 400 });
     }
-    if (captchaAnswer !== undefined && (typeof captchaAnswer !== 'number' || captchaAnswer !== expectedAnswer)) {
-      return NextResponse.json({ message: 'Invalid captcha calculation' }, { status: 400 });
+    if (captchaAnswer !== undefined && expectedAnswer !== undefined) {
+      const parsedAns = Number(captchaAnswer);
+      const parsedExp = Number(expectedAnswer);
+      if (isNaN(parsedAns) || isNaN(parsedExp) || parsedAns !== parsedExp) {
+        return NextResponse.json({ message: 'Invalid captcha calculation' }, { status: 400 });
+      }
     }
 
     // Server-side logging of clean contact inquiries

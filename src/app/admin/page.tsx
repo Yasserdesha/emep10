@@ -118,6 +118,7 @@ export default function AdminPage() {
 
   // Articles State (Blog CMS)
   const [articles, setArticles] = useState<Article[]>([]);
+  const [artSearchQuery, setArtSearchQuery] = useState('');
   const [artTitleAr, setArtTitleAr] = useState('');
   const [artTitleEn, setArtTitleEn] = useState('');
   const [artSummaryAr, setArtSummaryAr] = useState('');
@@ -143,9 +144,21 @@ export default function AdminPage() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch('/api/projects');
+      const res = await fetch(`/api/projects?_t=${Date.now()}`, { cache: 'no-store' });
       const data = await res.json();
-      if (data.projects) setProjects(data.projects);
+      if (data.projects) {
+        setProjects(data.projects.map((p: any) => ({
+          id: Number(p.id),
+          image: p.image || FALLBACK_IMG,
+          titleEn: p.titleEn || p.title_en || '',
+          titleAr: p.titleAr || p.title_ar || '',
+          category: p.category || 'retail',
+          catEn: p.catEn || p.cat_en || '',
+          catAr: p.catAr || p.cat_ar || '',
+          descEn: p.descEn || p.desc_en || '',
+          descAr: p.descAr || p.desc_ar || '',
+        })));
+      }
     } catch (err) {
       console.error('Fetch projects error:', err);
     }
@@ -153,9 +166,24 @@ export default function AdminPage() {
 
   const fetchArticles = async () => {
     try {
-      const res = await fetch('/api/articles');
+      const res = await fetch(`/api/articles?_t=${Date.now()}`, { cache: 'no-store' });
       const data = await res.json();
-      if (data.articles) setArticles(data.articles);
+      if (data.articles) {
+        setArticles(data.articles.map((a: any) => ({
+          id: Number(a.id),
+          slug: a.slug || a.cat_en || '',
+          titleEn: a.titleEn || a.title_en || '',
+          titleAr: a.titleAr || a.title_ar || '',
+          summaryEn: a.summaryEn || a.summary_en || '',
+          summaryAr: a.summaryAr || a.summary_ar || '',
+          contentEn: a.contentEn || a.content_en || '',
+          contentAr: a.contentAr || a.content_ar || '',
+          image: a.image || '',
+          author: a.author || 'E-MEP Engineering Team',
+          readTimeMin: Number(a.readTimeMin || a.read_time_min || 5),
+          createdAt: a.createdAt || a.created_at || new Date().toISOString(),
+        })));
+      }
     } catch (err) {
       console.error('Fetch articles error:', err);
     }
@@ -256,15 +284,15 @@ export default function AdminPage() {
 
   const handleArticleEditInit = (art: Article) => {
     setEditingArticle(art);
-    setArtTitleAr(art.titleAr);
-    setArtTitleEn(art.titleEn);
-    setArtSummaryAr(art.summaryAr);
-    setArtSummaryEn(art.summaryEn);
-    setArtContentAr(art.contentAr);
-    setArtContentEn(art.contentEn);
-    setArtImage(art.image);
-    setArtReadTime(art.readTimeMin);
-    setArtImageMode('url');
+    setArtTitleAr(art.titleAr || '');
+    setArtTitleEn(art.titleEn || '');
+    setArtSummaryAr(art.summaryAr || '');
+    setArtSummaryEn(art.summaryEn || '');
+    setArtContentAr(art.contentAr || art.contentEn || '');
+    setArtContentEn(art.contentEn || art.contentAr || '');
+    setArtImage(art.image || '');
+    setArtReadTime(art.readTimeMin || 5);
+    setArtImageMode(art.image ? 'url' : 'upload');
     setActiveTab('articles');
     window.scrollTo({ top: 200, behavior: 'smooth' });
   };
@@ -514,36 +542,42 @@ export default function AdminPage() {
     if (!confirm(isAr ? `هل أنت تأكد من حذف مشروع "${title}"؟` : `Are you sure you want to delete "${title}"?`)) return;
 
     try {
+      setProjects(prev => prev.filter(p => p.id !== id));
       const res = await fetch(`/api/projects?id=${id}`, { method: 'DELETE' });
       if (res.ok) {
         setStatusMessage({ type: 'success', text: isAr ? 'تم حذف المشروع بنجاح' : 'Project deleted successfully' });
-        fetchProjects();
       }
+      await fetchProjects();
     } catch (err) {
       console.error('Delete error:', err);
+      await fetchProjects();
     }
   };
 
   // Submit Article (Blog CMS) — handles both Create (POST) and Edit (PUT)
   const handleSubmitArticle = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!artTitleAr.trim()) {
-      setStatusMessage({ type: 'error', text: isAr ? 'يرجى كتابة عنوان المقال بالعربي على الأقل' : 'Arabic article title is required' });
+    if (!artTitleAr.trim() && !artTitleEn.trim()) {
+      setStatusMessage({ type: 'error', text: isAr ? 'يرجى كتابة عنوان المقال' : 'Article title is required' });
       return;
     }
-    if (!artContentAr.trim()) {
+    if (!artContentAr.trim() && !artContentEn.trim()) {
       setStatusMessage({ type: 'error', text: isAr ? 'يرجى كتابة محتوى المقال' : 'Article content is required' });
       return;
     }
     setIsSavingArticle(true);
     setStatusMessage(null);
+    const finalTitleAr = (artTitleAr || artTitleEn || '').trim();
+    const finalTitleEn = (artTitleEn || artTitleAr || '').trim();
+    const finalContentAr = (artContentAr || artContentEn || '').trim();
+    const finalContentEn = (artContentEn || artContentAr || '').trim();
     const payload = {
-      titleAr: artTitleAr,
-      titleEn: artTitleEn || artTitleAr,
-      summaryAr: artSummaryAr,
-      summaryEn: artSummaryEn,
-      contentAr: artContentAr,
-      contentEn: artContentEn,
+      titleAr: finalTitleAr,
+      titleEn: finalTitleEn,
+      summaryAr: artSummaryAr.trim(),
+      summaryEn: artSummaryEn.trim(),
+      contentAr: finalContentAr,
+      contentEn: finalContentEn,
       image: artImage || '',
       readTimeMin: artReadTime,
       author: 'E-MEP Engineering Team',
@@ -555,7 +589,7 @@ export default function AdminPage() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(isEdit ? { ...payload, id: editingArticle!.id } : payload),
+        body: JSON.stringify(isEdit ? { ...payload, id: editingArticle!.id, slug: editingArticle!.slug } : payload),
       });
       const data = await res.json();
       if (res.ok && (data.success || data.article)) {
@@ -566,7 +600,7 @@ export default function AdminPage() {
             : (isAr ? 'تم نشر المقال الهندسي بنجاح! ✅' : 'Article published successfully! ✅')
         });
         resetArticleForm();
-        fetchArticles();
+        await fetchArticles();
       } else {
         setStatusMessage({ type: 'error', text: data.message || (isAr ? 'حدث خطأ أثناء حفظ المقال' : 'Failed to save article') });
       }
@@ -582,21 +616,44 @@ export default function AdminPage() {
     if (!confirm(isAr ? `هل أنت تأكد من حذف مقال "${title}"؟` : `Delete article "${title}"?`)) return;
 
     try {
+      setArticles(prev => prev.filter(a => a.id !== id && String(a.slug) !== String(id)));
       const res = await fetch(`/api/articles?id=${id}`, { method: 'DELETE' });
       if (res.ok) {
         setStatusMessage({ type: 'success', text: isAr ? 'تم حذف المقال بنجاح' : 'Article deleted' });
-        fetchArticles();
       }
+      await fetchArticles();
     } catch (err) {
       console.error('Delete article error:', err);
+      await fetchArticles();
     }
   };
 
-  const filteredProjects = projects.filter(p => 
-    p.titleAr.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.titleEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.catAr.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProjects = projects.filter(p => {
+    const q = (searchQuery || '').trim().toLowerCase();
+    if (!q) return true;
+    const titleAr = (p.titleAr || '').toLowerCase();
+    const titleEn = (p.titleEn || '').toLowerCase();
+    const catAr = (p.catAr || '').toLowerCase();
+    const catEn = (p.catEn || '').toLowerCase();
+    const category = (p.category || '').toLowerCase();
+    const descAr = (p.descAr || '').toLowerCase();
+    const descEn = (p.descEn || '').toLowerCase();
+    const idStr = String(p.id || '');
+    return titleAr.includes(q) || titleEn.includes(q) || catAr.includes(q) || catEn.includes(q) || category.includes(q) || descAr.includes(q) || descEn.includes(q) || idStr === q;
+  });
+
+  const filteredArticles = articles.filter(a => {
+    const q = (artSearchQuery || '').trim().toLowerCase();
+    if (!q) return true;
+    const titleAr = (a.titleAr || '').toLowerCase();
+    const titleEn = (a.titleEn || '').toLowerCase();
+    const slug = (a.slug || '').toLowerCase();
+    const summaryAr = (a.summaryAr || '').toLowerCase();
+    const summaryEn = (a.summaryEn || '').toLowerCase();
+    const contentAr = (a.contentAr || '').toLowerCase();
+    const contentEn = (a.contentEn || '').toLowerCase();
+    return titleAr.includes(q) || titleEn.includes(q) || slug.includes(q) || summaryAr.includes(q) || summaryEn.includes(q) || contentAr.includes(q) || contentEn.includes(q);
+  });
 
   const stats = {
     totalProjects: projects.length,
@@ -1261,33 +1318,61 @@ export default function AdminPage() {
                     )}
                   </div>
 
-                  {/* Summary (optional) */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'ملخص المقال (عربي) — اختياري' : 'Article Summary (Arabic) — Optional'}
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={artSummaryAr}
-                      onChange={(e) => setArtSummaryAr(e.target.value)}
-                      placeholder="ملخص مختصر يظهر في قائمة المقالات..."
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
-                    />
+                  {/* Summary (Arabic & English) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-300 mb-1">
+                        {isAr ? 'ملخص المقال (عربي) — اختياري' : 'Summary (Arabic) — Optional'}
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={artSummaryAr}
+                        onChange={(e) => setArtSummaryAr(e.target.value)}
+                        placeholder="ملخص مختصر يظهر في قائمة المقالات..."
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-300 mb-1">
+                        {isAr ? 'ملخص المقال (إنجليزي) — اختياري' : 'Summary (English) — Optional'}
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={artSummaryEn}
+                        onChange={(e) => setArtSummaryEn(e.target.value)}
+                        placeholder="Brief summary for preview cards..."
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none"
+                      />
+                    </div>
                   </div>
 
-                  {/* Arabic content (required) */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      {isAr ? 'المحتوى الهندسي الكامل (عربي)' : 'Full Content (Arabic)'} <span className="text-[#FF1E27]">❊</span>
-                    </label>
-                    <textarea
-                      rows={6}
-                      value={artContentAr}
-                      onChange={(e) => setArtContentAr(e.target.value)}
-                      placeholder="اكتب المحتوى الهندسي التفصيلي للمقال هنا... يمكنك استخدام سطور جديدة للفقرات."
-                      required
-                      className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none leading-relaxed"
-                    />
+                  {/* Full Content (Arabic & English) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-300 mb-1">
+                        {isAr ? 'المحتوى الهندسي الكامل (عربي)' : 'Full Content (Arabic)'} <span className="text-[#FF1E27]">❊</span>
+                      </label>
+                      <textarea
+                        rows={6}
+                        value={artContentAr}
+                        onChange={(e) => setArtContentAr(e.target.value)}
+                        placeholder="اكتب المحتوى الهندسي التفصيلي للمقال هنا..."
+                        required={!artContentEn}
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none leading-relaxed"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-300 mb-1">
+                        {isAr ? 'المحتوى الهندسي (إنجليزي)' : 'Full Content (English)'}
+                      </label>
+                      <textarea
+                        rows={6}
+                        value={artContentEn}
+                        onChange={(e) => setArtContentEn(e.target.value)}
+                        placeholder="Full English engineering article text..."
+                        className="w-full bg-[#0A0A0C] border border-white/15 rounded-xl p-3 text-xs text-white focus:border-[#FF1E27] focus:outline-none leading-relaxed"
+                      />
+                    </div>
                   </div>
 
                   {/* Read time */}
@@ -1329,24 +1414,33 @@ export default function AdminPage() {
             {/* Articles List (6 cols) */}
             <div className="lg:col-span-6 space-y-4">
               <div className="bg-[#131317] border border-white/10 rounded-3xl p-6 shadow-2xl space-y-4">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
                   <h2 className="text-base font-extrabold text-white flex items-center gap-2">
                     <i className="fa-solid fa-newspaper text-[#FF1E27]"></i>
                     <span>{isAr ? 'المقالات الهندسية المنشورة' : 'Published Articles'} ({articles.length})</span>
                   </h2>
+                  <input
+                    type="text"
+                    value={artSearchQuery}
+                    onChange={(e) => setArtSearchQuery(e.target.value)}
+                    placeholder={isAr ? 'بحث في المقالات...' : 'Search articles...'}
+                    className="bg-[#0A0A0C] border border-white/15 rounded-xl px-4 py-2 text-xs text-white placeholder-gray-500 focus:border-[#FF1E27] focus:outline-none"
+                  />
                 </div>
 
                 <div className="space-y-3 max-h-[700px] overflow-y-auto pr-1">
-                  {articles.length === 0 ? (
+                  {filteredArticles.length === 0 ? (
                     <div className="py-12 flex flex-col items-center gap-3 text-center">
                       <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
                         <i className="fa-solid fa-newspaper text-gray-600 text-2xl"></i>
                       </div>
-                      <p className="text-sm font-bold text-gray-500">{isAr ? 'لا توجد مقالات منشورة بعد' : 'No articles published yet'}</p>
+                      <p className="text-sm font-bold text-gray-500">
+                        {artSearchQuery ? (isAr ? 'لا توجد نتائج للبحث' : 'No results found') : (isAr ? 'لا توجد مقالات منشورة بعد' : 'No articles published yet')}
+                      </p>
                       <p className="text-xs text-gray-600">{isAr ? 'انشر مقالك الأول من النموذج على اليسار' : 'Publish your first article from the form'}</p>
                     </div>
                   ) : (
-                    articles.map((art) => (
+                    filteredArticles.map((art) => (
                       <div key={art.id} className="bg-[#0A0A0C] border border-white/10 rounded-2xl p-4 hover:border-white/20 transition shadow-lg">
                         <div className="flex items-center justify-between gap-4">
                           <div className="flex items-center gap-4 min-w-0 flex-1">

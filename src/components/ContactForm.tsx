@@ -36,6 +36,13 @@ export default function ContactForm() {
     setCaptchaAnswer('');
   }, []);
 
+  const normalizeDigits = (str: string) => {
+    return (str || '')
+      .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d).toString())
+      .replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d).toString())
+      .trim();
+  };
+
   const validate = (): boolean => {
     const newErrors: { [key: string]: string } = {};
 
@@ -45,7 +52,7 @@ export default function ContactForm() {
         : 'Name must be at least 3 characters.';
     }
 
-    const emailRegex = /^[^s@]+@[^s@]+.[^s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
       newErrors.email = language === 'ar'
         ? 'يرجى إدخال بريد إلكتروني صالح.'
@@ -60,7 +67,9 @@ export default function ContactForm() {
 
     // Verify Captcha
     const expected = num1 + num2;
-    if (parseInt(captchaAnswer, 10) !== expected) {
+    const cleanAnswer = normalizeDigits(captchaAnswer);
+    const parsedAnswer = parseInt(cleanAnswer, 10);
+    if (isNaN(parsedAnswer) || parsedAnswer !== expected) {
       newErrors.captcha = language === 'ar'
         ? 'رمز التحقق غير صحيح، يرجى المحاولة مرة أخرى.'
         : 'Verification answer is incorrect. Please try again.';
@@ -99,18 +108,21 @@ export default function ContactForm() {
     setSubmitError('');
 
     try {
+      const cleanAnswer = normalizeDigits(captchaAnswer);
+      const parsedAnswer = parseInt(cleanAnswer, 10);
       const expectedAnswer = num1 + num2;
+
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name,
-          email,
-          service,
-          message,
-          captchaAnswer: parseInt(captchaAnswer, 10),
+          name: name.trim(),
+          email: email.trim(),
+          service: service.trim(),
+          message: message.trim(),
+          captchaAnswer: parsedAnswer,
           expectedAnswer,
         }),
       });
@@ -121,13 +133,17 @@ export default function ContactForm() {
       }
 
       // Success: Save form values in session storage for the thank-you page to utilize
-      sessionStorage.setItem('emep_inquiry', JSON.stringify({
-        name,
-        email,
-        service,
-        message,
-        method,
-      }));
+      try {
+        sessionStorage.setItem('emep_inquiry', JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          service: service.trim(),
+          message: message.trim(),
+          method,
+        }));
+      } catch (storageErr) {
+        console.warn('SessionStorage unavailable:', storageErr);
+      }
 
       // Redirect to thank you page
       router.push('/thank-you');

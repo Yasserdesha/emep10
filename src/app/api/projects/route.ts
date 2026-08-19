@@ -5,6 +5,9 @@ import path from 'path';
 import { verifyAdminAuth } from '@/lib/auth';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface ProjectItem {
   id: number;
   image: string;
@@ -85,7 +88,7 @@ export async function GET() {
         const projects = data.map(mapSupabaseToProjectItem);
         return NextResponse.json({ projects }, {
           headers: {
-            'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+            'Cache-Control': 'no-store, no-cache, must-revalidate',
           },
         });
       }
@@ -95,7 +98,7 @@ export async function GET() {
     const cleanProjects = (data.projects || []).filter((p: any) => p.category !== 'article');
     return NextResponse.json({ projects: cleanProjects }, {
       headers: {
-        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
       },
     });
   } catch (error: unknown) {

@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
 import { verifyAdminAuth } from '@/lib/auth';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import initialArticles from '@/data/articles.json';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const DEFAULT_ARTICLE_IMAGE = 'https://dpptnkehkzolqrifbagx.supabase.co/storage/v1/object/public/projects/proj_1786597773542_article_bim_revit_mep_1786596972626.png';
 
@@ -261,26 +265,28 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: 'Article ID or slug is required' }, { status: 400 });
     }
 
+    let updatedArticleData: any = null;
+
     if (isSupabaseConfigured() && supabase) {
       // 1. Try updating in articles table
       try {
         const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() };
-        if (titleAr) updateData.title_ar = titleAr;
-        if (titleEn || titleAr) updateData.title_en = titleEn || titleAr;
-        if (summaryAr) updateData.summary_ar = summaryAr;
-        if (summaryEn) updateData.summary_en = summaryEn;
-        if (contentAr) updateData.content_ar = contentAr;
-        if (contentEn) updateData.content_en = contentEn;
-        if (image) updateData.image = image;
-        if (author) updateData.author = author;
-        if (readTimeMin) updateData.read_time_min = Number(readTimeMin);
+        if (titleAr !== undefined) updateData.title_ar = titleAr;
+        if (titleEn !== undefined || titleAr !== undefined) updateData.title_en = titleEn || titleAr;
+        if (summaryAr !== undefined) updateData.summary_ar = summaryAr;
+        if (summaryEn !== undefined) updateData.summary_en = summaryEn;
+        if (contentAr !== undefined) updateData.content_ar = contentAr;
+        if (contentEn !== undefined) updateData.content_en = contentEn;
+        if (image !== undefined) updateData.image = image;
+        if (author !== undefined) updateData.author = author;
+        if (readTimeMin !== undefined) updateData.read_time_min = Number(readTimeMin);
 
         let query = supabase.from('articles').update(updateData);
         query = !isNaN(Number(id)) ? query.eq('id', Number(id)) : query.eq('slug', String(id));
         const { data, error } = await query.select();
 
         if (!error && data && data.length > 0) {
-          return NextResponse.json({ success: true, article: data[0], source: 'supabase-articles' });
+          updatedArticleData = data[0];
         }
       } catch (err) {
         // continue
@@ -289,12 +295,12 @@ export async function PUT(req: NextRequest) {
       // 2. Try updating in projects table (where category = 'article')
       try {
         const pUpdate: Record<string, unknown> = { updated_at: new Date().toISOString() };
-        if (titleAr) pUpdate.title_ar = titleAr;
-        if (titleEn || titleAr) pUpdate.title_en = titleEn || titleAr;
-        if (contentAr) pUpdate.desc_ar = contentAr;
-        if (summaryAr) pUpdate.desc_en = summaryAr;
-        if (image) pUpdate.image = image;
-        if (readTimeMin) pUpdate.cat_ar = String(readTimeMin);
+        if (titleAr !== undefined) pUpdate.title_ar = titleAr;
+        if (titleEn !== undefined || titleAr !== undefined) pUpdate.title_en = titleEn || titleAr;
+        if (contentAr !== undefined) pUpdate.desc_ar = contentAr;
+        if (summaryAr !== undefined) pUpdate.desc_en = summaryAr;
+        if (image !== undefined) pUpdate.image = image;
+        if (readTimeMin !== undefined) pUpdate.cat_ar = String(readTimeMin);
 
         let pQuery = supabase.from('projects').update(pUpdate).eq('category', 'article');
         pQuery = !isNaN(Number(id)) ? pQuery.eq('id', Number(id)) : pQuery.eq('cat_en', String(id));
@@ -302,50 +308,63 @@ export async function PUT(req: NextRequest) {
 
         if (!pRes.error && pRes.data && pRes.data.length > 0) {
           const row = pRes.data[0];
-          const formatted = {
-            id: Number(row.id),
-            slug: row.cat_en,
-            titleEn: row.title_en,
-            titleAr: row.title_ar,
-            summaryEn: row.desc_en,
-            summaryAr: row.desc_en,
-            contentEn: row.desc_en,
-            contentAr: row.desc_ar,
-            image: row.image,
-            author: 'E-MEP Engineering Team',
-            readTimeMin: Number(row.cat_ar) || 5,
-            createdAt: row.created_at,
-          };
-          return NextResponse.json({ success: true, article: formatted, source: 'supabase-projects' });
+          if (!updatedArticleData) {
+            updatedArticleData = {
+              id: Number(row.id),
+              slug: row.cat_en,
+              titleEn: row.title_en,
+              titleAr: row.title_ar,
+              summaryEn: row.desc_en,
+              summaryAr: row.desc_en,
+              contentEn: row.desc_en,
+              contentAr: row.desc_ar,
+              image: row.image,
+              author: 'E-MEP Engineering Team',
+              readTimeMin: Number(row.cat_ar) || 5,
+              createdAt: row.created_at,
+            };
+          }
         }
       } catch (err) {
         // continue
       }
     }
 
-    // Local JSON / In-Memory fallback
+    // Always update local memory and file storage to keep 100% in sync
     const localArticles = await getLocalArticles();
     const idx = localArticles.findIndex(
       (a: any) => String(a.id) === String(id) || String(a.slug) === String(id)
     );
 
+    let finalArticle: any = null;
+
     if (idx !== -1) {
       localArticles[idx] = {
         ...localArticles[idx],
-        ...(titleAr && { titleAr }),
+        ...(titleAr !== undefined && { titleAr }),
         titleEn: titleEn || titleAr || localArticles[idx].titleEn,
-        ...(summaryAr && { summaryAr }),
-        ...(summaryEn && { summaryEn }),
-        ...(contentAr && { contentAr }),
-        ...(contentEn && { contentEn }),
-        ...(image && { image }),
-        ...(readTimeMin && { readTimeMin: Number(readTimeMin) }),
+        ...(summaryAr !== undefined && { summaryAr }),
+        ...(summaryEn !== undefined && { summaryEn }),
+        ...(contentAr !== undefined && { contentAr }),
+        ...(contentEn !== undefined && { contentEn }),
+        ...(image !== undefined && { image }),
+        ...(readTimeMin !== undefined && { readTimeMin: Number(readTimeMin) }),
       };
+      finalArticle = localArticles[idx];
       await saveLocalArticles(localArticles);
-      return NextResponse.json({ success: true, article: localArticles[idx], source: 'local' });
+    } else if (updatedArticleData) {
+      finalArticle = updatedArticleData;
     }
 
-    return NextResponse.json({ success: true, message: 'Article updated', source: 'local' });
+    revalidatePath('/blog');
+    revalidatePath('/blog/[slug]', 'page');
+    revalidatePath('/api/articles');
+
+    return NextResponse.json({ 
+      success: true, 
+      article: finalArticle || updatedArticleData || { id, titleAr, titleEn, contentAr, contentEn }, 
+      source: updatedArticleData ? 'supabase' : 'local' 
+    });
   } catch (error: any) {
     console.error('Article update handler error:', error);
     return NextResponse.json({ message: error?.message || 'Error updating article' }, { status: 500 });
@@ -387,6 +406,10 @@ export async function DELETE(req: NextRequest) {
     const localArticles = await getLocalArticles();
     const filtered = localArticles.filter((a: any) => String(a.id) !== String(id) && String(a.slug) !== String(id));
     await saveLocalArticles(filtered);
+
+    revalidatePath('/blog');
+    revalidatePath('/blog/[slug]', 'page');
+    revalidatePath('/api/articles');
 
     return NextResponse.json({ success: true, message: 'Article deleted' });
   } catch (error) {

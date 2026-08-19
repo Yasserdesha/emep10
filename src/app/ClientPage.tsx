@@ -122,10 +122,14 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
 
   const isAr = isMounted && language === 'ar';
 
-  // Filter projects based on tab selection
+  // Filter projects based on tab selection (safe normalized comparison)
   const filteredProjects = selectedFilter === 'all'
     ? projectsList
-    : projectsList.filter(p => p.category === selectedFilter);
+    : projectsList.filter(p => {
+        const cat = (p.category || '').toLowerCase().trim();
+        const sel = (selectedFilter || '').toLowerCase().trim();
+        return cat === sel;
+      });
 
   // Show top 3 visible projects unless expanded
   const visibleProjects = isExpanded ? filteredProjects : filteredProjects.slice(0, 3);
@@ -362,10 +366,11 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
           </div>
 
           {/* Filter Bar with SpecularButton Architecture */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mb-10 max-w-4xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mb-10 max-w-4xl mx-auto" role="tablist" aria-label="Portfolio Category Filters">
             <SpecularButton
               size="md"
               radius={24}
+              id="filter-btn-all"
               lineColor={selectedFilter === 'all' ? '#FF1E27' : '#64748B'}
               baseColor={selectedFilter === 'all' ? '#521014' : '#14141c'}
               intensity={selectedFilter === 'all' ? 1.3 : 0.8}
@@ -380,6 +385,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 }`}
               onClick={() => { setSelectedFilter('all'); setIsExpanded(false); }}
               ariaLabel={isAr ? "عرض جميع المشاريع" : "Filter by all projects"}
+              data-filter="all"
             >
               <i className="fa-solid fa-border-all" aria-hidden="true"></i>
               <span>{t('filter_all')}</span>
@@ -392,6 +398,7 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
             <SpecularButton
               size="md"
               radius={24}
+              id="filter-btn-retail"
               lineColor={selectedFilter === 'retail' ? '#FF1E27' : '#64748B'}
               baseColor={selectedFilter === 'retail' ? '#521014' : '#14141c'}
               intensity={selectedFilter === 'retail' ? 1.3 : 0.8}
@@ -406,18 +413,20 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 }`}
               onClick={() => { setSelectedFilter('retail'); setIsExpanded(false); }}
               ariaLabel={isAr ? "فلترة مشاريع المحلات والبيع بالتجزئة" : "Filter by retail projects"}
+              data-filter="retail"
             >
               <i className="fa-solid fa-bag-shopping" aria-hidden="true"></i>
               <span>{t('filter_retail')}</span>
               <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'retail' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
                 }`}>
-                {projectsList.filter(p => p.category === 'retail').length}
+                {projectsList.filter(p => (p.category || '').toLowerCase() === 'retail').length}
               </span>
             </SpecularButton>
 
             <SpecularButton
               size="md"
               radius={24}
+              id="filter-btn-dining"
               lineColor={selectedFilter === 'dining' ? '#FF1E27' : '#64748B'}
               baseColor={selectedFilter === 'dining' ? '#521014' : '#14141c'}
               intensity={selectedFilter === 'dining' ? 1.3 : 0.8}
@@ -432,18 +441,20 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 }`}
               onClick={() => { setSelectedFilter('dining'); setIsExpanded(false); }}
               ariaLabel={isAr ? "فلترة مشاريع المطاعم والكافيهات" : "Filter by dining projects"}
+              data-filter="dining"
             >
               <i className="fa-solid fa-utensils" aria-hidden="true"></i>
               <span>{t('filter_dining')}</span>
               <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'dining' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
                 }`}>
-                {projectsList.filter(p => p.category === 'dining').length}
+                {projectsList.filter(p => (p.category || '').toLowerCase() === 'dining').length}
               </span>
             </SpecularButton>
 
             <SpecularButton
               size="md"
               radius={24}
+              id="filter-btn-showrooms"
               lineColor={selectedFilter === 'showrooms' ? '#FF1E27' : '#64748B'}
               baseColor={selectedFilter === 'showrooms' ? '#521014' : '#14141c'}
               intensity={selectedFilter === 'showrooms' ? 1.3 : 0.8}
@@ -458,12 +469,13 @@ export default function ClientPage({ initialProjects, brandLogos }: ClientPagePr
                 }`}
               onClick={() => { setSelectedFilter('showrooms'); setIsExpanded(false); }}
               ariaLabel={isAr ? "فلترة مشاريع المعارض والسيارات" : "Filter by showroom projects"}
+              data-filter="showrooms"
             >
               <i className="fa-solid fa-car" aria-hidden="true"></i>
               <span>{t('filter_showrooms')}</span>
               <span className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${selectedFilter === 'showrooms' ? 'bg-white/20 text-white' : 'bg-white/10 text-[#94A3B8]'
                 }`}>
-                {projectsList.filter(p => p.category === 'showrooms').length}
+                {projectsList.filter(p => (p.category || '').toLowerCase() === 'showrooms').length}
               </span>
             </SpecularButton>
           </div>
