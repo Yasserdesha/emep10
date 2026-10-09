@@ -30,9 +30,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Strict allowed image MIME types
-    const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/svg+xml'];
+    const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
     if (!ALLOWED_MIME_TYPES.includes(file.type.toLowerCase())) {
-      return NextResponse.json({ message: 'Only standard image formats (JPEG, PNG, WebP, AVIF, SVG) are permitted' }, { status: 400 });
+      return NextResponse.json({ message: 'Only standard image formats (JPEG, PNG, WebP, AVIF) are permitted' }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();

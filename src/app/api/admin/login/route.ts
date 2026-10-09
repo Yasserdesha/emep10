@@ -66,7 +66,11 @@ export async function POST(req: NextRequest) {
 
     // 2. Fallback authentication using ADMIN_PASSWORD if Supabase Auth wasn't used
     if (!isAuthenticated) {
-      const expectedPassword = process.env.ADMIN_PASSWORD || 'E@mep301997';
+      const expectedPassword = process.env.ADMIN_PASSWORD;
+      if (!expectedPassword) {
+        // Fail closed: admin login is disabled until ADMIN_PASSWORD is configured
+        return NextResponse.json({ message: 'خطأ في عملية التحقق من الهوية' }, { status: 500 });
+      }
       const hashA = crypto.createHash('sha256').update(password.trim()).digest();
       const hashB = crypto.createHash('sha256').update(expectedPassword).digest();
       const isMatch = crypto.timingSafeEqual(hashA, hashB);
